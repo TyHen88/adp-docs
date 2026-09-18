@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found · ADP Builder</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<!--
+  Deliberately self-contained: GitHub Pages serves this file for any depth under the
+  site, so a relative link to assets/adp.css would resolve differently per URL and
+  silently 404 as well. The few tokens it needs are inlined instead.
+  Its links are absolute for the same reason — this page is only ever served, never
+  opened from disk, so /adp-docs/ is the one root that always holds.
+-->
+<style>
+  :root {
+    --ink: #080808; --muted: #66645f; --canvas: #ffffff; --line: #deded9;
+    --action: #62517d; --action-hover: #514268; --action-ink: #4f367d; --focus: #8d72c7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #f2f1ee; --muted: #a5a29b; --canvas: #16161a; --line: #2c2c32;
+      --action: #b9a3e0; --action-hover: #cbb9ec; --action-ink: #cbb9ec;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
+      "Segoe UI", system-ui, "Noto Sans KR", "Malgun Gothic", sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 34rem; text-align: center; }
+  .mark {
+    width: 44px; height: 44px; margin: 0 auto 20px;
+    display: grid; place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #7657ac, #c5b0f4);
+    color: #fff; font-size: 0.8rem; font-weight: 800;
+  }
+  h1 { margin: 0 0 8px; font-size: 1.5rem; letter-spacing: -0.01em; }
+  p { margin: 0 0 24px; color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  a {
+    display: inline-flex; align-items: center; min-height: 40px; padding: 0 18px;
+    border-radius: 8px; font-size: 0.9375rem; font-weight: 600; text-decoration: none;
+  }
+  .primary { background: var(--action); color: var(--canvas); }
+  .primary:hover { background: var(--action-hover); }
+  .ghost { border: 1px solid var(--line); color: var(--action-ink); }
+  .ghost:hover { border-color: var(--action); }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="mark">ADP</div>
+  <h1>That page isn’t here</h1>
+  <p>The link may be out of date, or the page may have been renamed. The index lists every page in reading order.</p>
+  <div class="actions">
+    <a class="primary" href="/adp-docs/">Go to the index</a>
+    <a class="ghost" href="https://github.com/TyHen88/adp-docs">View the repository</a>
+  </div>
+</main>
+</body>
+</html>

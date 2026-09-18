@@ -54,6 +54,38 @@ target.html | Card title | One sentence of description
 
 Link between pages with the `.html` name, so the links work in both the rendered site and a Markdown viewer that resolves siblings.
 
+## Publishing
+
+The repository is the site — GitHub Pages serves this folder as-is from `main`, with no build
+step, because every page is already a plain file with relative links.
+
+| File | Why it is there |
+|---|---|
+| `.nojekyll` | Turns Jekyll off. Without it Pages runs the files through Jekyll, which skips anything it decides is a source file and can rewrite what it serves. |
+| `404.html` | Deliberately self-contained — Pages serves it for any depth under the site, so a relative `assets/adp.css` would resolve differently per URL and 404 as well. Its links are absolute for the same reason. |
+| `index.html` | The site root. Pages serves it for `/`. |
+
+To turn it on once: **Settings → Pages → Source: Deploy from a branch → `main` / `/ (root)`**.
+Every push to `main` republishes.
+
+⛔ **The published URL is a project site, so it is served under `/adp-docs/`, not `/`.** That is why
+`404.html` links to `/adp-docs/` and everything else stays relative. If the repository is ever
+renamed, that one absolute path in `404.html` is the thing that breaks.
+
+## The get-the-docs control
+
+The **Get the docs** button in the header offers the ZIP and the clone command. It is built and
+inserted by `assets/adp.js`, not written into the markup — because two families of pages share
+that header: the 30 pages `build_html.py` generates, and the 15 hand-written ones under
+`works-process/`. Injecting it means one implementation instead of 45 copies to age separately.
+
+⛔ **The repository URL lives only in `assets/adp.js`** (and once as prose in `index.md`). Do not
+paste it into a page.
+
+⚠ **Keep the `execCommand` fallback in the copy handler.** This folder is meant to be readable
+straight off disk, and on `file://` there is no secure context, so `navigator.clipboard` is
+absent — that branch is the only one that runs.
+
 ## What these documents are and are not
 
 They **describe** the system. They are not its decision record. Where something is contested, the canonical sources are `CLAUDE.md`, `docs/artifacts.md`, `docs/data-model.md`, `docs/coding-conventions.md`, `docs/mockup-conventions.md` and `docs/superpowers/specs/*.md` — each page names the relevant one.

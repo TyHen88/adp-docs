@@ -99,6 +99,21 @@ git.html | Git layer | The one runner, the locks, the worktrees, and the only fo
 
 ---
 
+## Take these documents with you
+
+Every page here is a plain file with relative links, so the whole folder works offline — no server, no build step. The **Get the docs** button in the header offers the same two routes from any page.
+
+- [Download everything as a ZIP](https://github.com/TyHen88/adp-docs/archive/refs/heads/main.zip) — all pages, the Markdown sources, the screenshots.
+- Or clone the repository:
+
+```bash
+git clone https://github.com/TyHen88/adp-docs.git
+```
+
+Unpack or clone it, open `index.html`, and you get exactly what you are reading now. The published copy lives at [tyhen88.github.io/adp-docs](https://tyhen88.github.io/adp-docs/).
+
+---
+
 ## About these documents
 
 - **Source of truth is the Markdown.** Every `NN-name.html` in this folder is generated from `NN-name.md` by `tools/build_html.py`. Do not hand-edit the HTML.

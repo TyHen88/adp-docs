@@ -115,6 +115,23 @@ python docs/adp/tools/build_html.py --lint     # exit 1 if a baked page is malfo
 <p>One extra: a <code> </code>`<code>cards </code> fence renders a card grid, one card per line:</p>
 <pre><code class="language-text">target.html | Card title | One sentence of description</code></pre>
 <p>Link between pages with the <code>.html</code> name, so the links work in both the rendered site and a Markdown viewer that resolves siblings.</p>
+<h2 id="publishing">Publishing<a class="anchor" href="#publishing" aria-hidden="true">#</a></h2>
+<p>The repository is the site — GitHub Pages serves this folder as-is from <code>main</code>, with no build step, because every page is already a plain file with relative links.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>Why it is there</th>
+</tr></thead><tbody>
+<tr><td><code>.nojekyll</code></td><td>Turns Jekyll off. Without it Pages runs the files through Jekyll, which skips anything it decides is a source file and can rewrite what it serves.</td></tr>
+<tr><td><code>404.html</code></td><td>Deliberately self-contained — Pages serves it for any depth under the site, so a relative <code>assets/adp.css</code> would resolve differently per URL and 404 as well. Its links are absolute for the same reason.</td></tr>
+<tr><td><code>index.html</code></td><td>The site root. Pages serves it for <code>/</code>.</td></tr>
+</tbody></table></div>
+<p>To turn it on once: <strong>Settings → Pages → Source: Deploy from a branch → <code>main</code> / <code>/ (root)</code></strong>. Every push to <code>main</code> republishes.</p>
+<p>⛔ <strong>The published URL is a project site, so it is served under <code>/adp-docs/</code>, not <code>/</code>.</strong> That is why <code>404.html</code> links to <code>/adp-docs/</code> and everything else stays relative. If the repository is ever renamed, that one absolute path in <code>404.html</code> is the thing that breaks.</p>
+<h2 id="the-get-the-docs-control">The get-the-docs control<a class="anchor" href="#the-get-the-docs-control" aria-hidden="true">#</a></h2>
+<p>The <strong>Get the docs</strong> button in the header offers the ZIP and the clone command. It is built and inserted by <code>assets/adp.js</code>, not written into the markup — because two families of pages share that header: the 30 pages <code>build_html.py</code> generates, and the 15 hand-written ones under <code>works-process/</code>. Injecting it means one implementation instead of 45 copies to age separately.</p>
+<p>⛔ <strong>The repository URL lives only in <code>assets/adp.js</code></strong> (and once as prose in <code>index.md</code>). Do not paste it into a page.</p>
+<p>⚠ <strong>Keep the <code>execCommand</code> fallback in the copy handler.</strong> This folder is meant to be readable straight off disk, and on <code>file://</code> there is no secure context, so <code>navigator.clipboard</code> is absent — that branch is the only one that runs.</p>
 <h2 id="what-these-documents-are-and-are-not">What these documents are and are not<a class="anchor" href="#what-these-documents-are-and-are-not" aria-hidden="true">#</a></h2>
 <p>They <strong>describe</strong> the system. They are not its decision record. Where something is contested, the canonical sources are <code>CLAUDE.md</code>, <code>docs/artifacts.md</code>, <code>docs/data-model.md</code>, <code>docs/coding-conventions.md</code>, <code>docs/mockup-conventions.md</code> and <code>docs/superpowers/specs/*.md</code> — each page names the relevant one.</p>
 <p>Language: English prose, with the Korean names kept wherever they appear in the code, the UI or the domain (<code>FRD 작업하기</code>, <code>개발요청서</code>, <code>그린존</code>). A name that appears on screen is never silently translated; the <a href="23-glossary.html">glossary</a> carries the mapping.</p>

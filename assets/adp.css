@@ -153,6 +153,116 @@ a:hover { color: var(--action-hover); }
 
 .nav-toggle { display: none; }
 
+/* ---------- get the docs ---------- */
+
+/*
+  Injected into the topbar by adp.js so the generated pages and the hand-written
+  works-process/ pages get the same control from one place.
+  The panel colours come from the tokens above, so it follows the theme toggle.
+*/
+
+.getdocs { position: relative; }
+
+.getdocs__trigger { white-space: nowrap; }
+.getdocs__narrow { display: none; }
+
+.getdocs__panel {
+  position: absolute;
+  top: calc(100% + var(--s2));
+  right: 0;
+  z-index: 50;
+  width: 304px;
+  padding: var(--s4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  background: var(--canvas);
+  box-shadow: var(--shadow);
+}
+.getdocs__panel[hidden] { display: none; }
+
+.getdocs__lead {
+  margin: 0 0 var(--s4);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+.getdocs__lead code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--soft);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--ink);
+}
+
+/*
+  White text would drop to ~1.9:1 on the dark theme's light lilac --action.
+  --canvas inverts with the theme and clears 6.9:1 in light and 8.2:1 in dark.
+*/
+.getdocs__zip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  border-radius: var(--r-control);
+  background: var(--action);
+  color: var(--canvas);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.getdocs__zip:hover { background: var(--action-hover); color: var(--canvas); }
+
+.getdocs__or {
+  margin: var(--s4) 0 var(--s2);
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.getdocs__cmd {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: var(--r-control);
+  background: var(--soft);
+  overflow: hidden;
+}
+
+.getdocs__cmd code {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink);
+  /* Wraps rather than scrolls: you should be able to read what the Copy button takes. */
+  overflow-wrap: anywhere;
+}
+
+.getdocs__copy {
+  flex: none;
+  padding: 0 11px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: var(--canvas);
+  color: var(--action-ink);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.getdocs__copy:hover { background: var(--action-soft); }
+
+.getdocs__repo {
+  display: inline-block;
+  margin-top: var(--s3);
+  font-size: 0.8125rem;
+}
+
 /* ---------- layout ---------- */
 
 .layout {
@@ -378,4 +488,29 @@ a:hover { color: var(--action-hover); }
   .sidebar.is-open { display: block; }
   .main { padding: var(--s6) var(--s4) var(--s12); }
   .doc h1 { font-size: 1.65rem; }
+}
+
+/*
+  Three buttons plus the brand overflow a 375px topbar, so the label shortens first
+  and the breadcrumb — which the page's own h1 repeats directly below — drops next.
+*/
+@media (max-width: 900px) {
+  .getdocs__wide { display: none; }
+  .getdocs__narrow { display: inline; }
+}
+
+@media (max-width: 640px) {
+  .topbar__crumb { display: none; }
+  /*
+    Anchored to the trigger this lands 2px off the left edge with 93px dead to the
+    right, because the theme toggle sits between it and the corner. Below 640px it
+    spans the viewport instead; 53px is the topbar height the sidebar already assumes.
+  */
+  .getdocs__panel {
+    position: fixed;
+    top: 53px;
+    right: var(--s3);
+    left: var(--s3);
+    width: auto;
+  }
 }
