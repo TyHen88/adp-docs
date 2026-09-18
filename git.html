@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git · ADP Builder</title>
+<meta name="description" content="Reference documentation — docs/adp/. Describes the system as built, not as planned.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Git</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html" aria-current="page"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Platform</p>
+      <h1>Git</h1>
+      <blockquote><p>Reference documentation — <code>docs/adp/</code>. Describes the system as built, not as planned. The code is the source of truth; this file points at it. Verified against the tree on 2026-09-17.</p></blockquote>
+<h2 id="1-what-this-is">1. What this is<a class="anchor" href="#1-what-this-is" aria-hidden="true">#</a></h2>
+<p>Git is not a screen. It is the layer every artifact feature stands on: the planning repository arrives as a clone, each FRD gets its own worktree, finished work becomes a commit, and only four places in the whole product are allowed to push.</p>
+<p>Builder never reads the operational source system. It only ever touches <strong>one repository per Group</strong> — the planning team's GitLab repository — and it touches it through exactly one Java class.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Layer</th>
+<th>What it is</th>
+<th>Where</th>
+</tr></thead><tbody>
+<tr><td><strong>Clone</strong></td><td>The server's copy of the planning repository, on its default branch. One per Group.</td><td><code>&lt;data-root&gt;/projects/&lt;id&gt;/clone</code></td></tr>
+<tr><td><strong>Worktrees</strong></td><td>Checkouts sharing the clone's object store. One per FRD, SRT, merge or check.</td><td><code>&lt;data-root&gt;/projects/&lt;id&gt;/worktrees/…</code></td></tr>
+<tr><td><strong>Refs</strong></td><td>Branches (<code>frd/…</code>, <code>srt/…</code>) and Builder's private refs (<code>refs/builder/…</code>)</td><td>inside the clone</td></tr>
+<tr><td><strong>Remote</strong></td><td>GitLab. Reached only via a token-bearing URL, never a configured remote.</td><td>—</td></tr>
+</tbody></table></div>
+<p><strong>There is no configured <code>origin</code> in any of this.</strong> Every <code>fetch</code> and <code>push</code> passes a full authenticated URL as an argument. That is deliberate — see §3.</p>
+<h2 id="2-one-runner-gitcommand">2. One runner: <code>GitCommand</code><a class="anchor" href="#2-one-runner-gitcommand" aria-hidden="true">#</a></h2>
+<p>Every git process in the product starts in <code>git/GitCommand.java</code>. Sixteen classes call it; none of them build a <code>ProcessBuilder</code> of their own.</p>
+<pre><code class="language-java">GitResult run(Path workingDir, Duration timeout, String... args)
+GitResult runIsolated(Path workingDir, Duration timeout, String... args)   // §2.2</code></pre>
+<p><code>GitResult</code> is <code>record(int exitCode, String stdout, String stderr)</code> with <code>succeeded()</code> meaning <code>exitCode == 0</code>.</p>
+<p><strong>A non-zero exit is not an exception.</strong> It is a value the caller inspects. This matters because several callers depend on <em>which</em> non-zero code came back: <code>git diff --cached --quiet</code> returns <code>1</code> for "there are staged changes" and that is the success path, while anything other than <code>0</code> or <code>1</code> is a real failure. <code>FrdWorkspace.commitChanges</code> and <code>IaPublisher</code> both branch on exactly this.</p>
+<p><code>GitException</code> is thrown for only three things: git could not be started, git exceeded its timeout, or the waiting thread was interrupted.</p>
+<h3 id="21-every-invocation-gets--c-credentialhelper">2.1 Every invocation gets <code>-c credential.helper=</code><a class="anchor" href="#21-every-invocation-gets--c-credentialhelper" aria-hidden="true">#</a></h3>
+<p><code>GitCommand.command(...)</code> prepends it to every single git call, no exceptions.</p>
+<pre><code class="language-text">git -c credential.helper= &lt;args…&gt;</code></pre>
+<p><strong>This was a real outage, not a precaution.</strong> Windows git defaults to <code>credential.helper=manager</code>. Because Builder puts the token in the URL, the helper has nothing to do — but git still runs <code>git credential-manager store</code> <em>after authenticating successfully</em>, to save the token. When that subprocess died it took the <strong>already-successful clone</strong> down with it as exit code 128. <code>GIT_TRACE</code> caught the last line:</p>
+<pre><code class="language-text">trace: run_command: &#x27;git credential-manager store&#x27;    ← ends here, exit 128</code></pre>
+<p>There is a second reason not to revert it: with the helper on, the planning repository's token is <strong>silently written into the server's credential store</strong>. Nobody asked for that, and it contradicts the point of sealing the token into the database.</p>
+<p>Two traps in one line:</p>
+<ul>
+<li><strong>The empty value is the mechanism.</strong> <code>-c credential.helper=</code> is git's documented way to clear every previously configured helper.
+</li>
+<li><strong>Do not name one.</strong> <code>-c credential.helper=none</code> means "go find a helper called <code>none</code>", which fails harder than doing nothing.
+</li></ul>
+<p><code>GIT_TERMINAL_PROMPT=0</code> is set on every invocation for the same family of reasons. There is no human at the server. A git that decides to ask a question would hang until its timeout — 30 minutes in the clone's case. Failing immediately is the only useful behaviour.</p>
+<h3 id="22-runisolated-no-ambient-configuration">2.2 <code>runIsolated</code> — no ambient configuration<a class="anchor" href="#22-runisolated-no-ambient-configuration" aria-hidden="true">#</a></h3>
+<p>Used where a server-built candidate repository must not inherit anything from the machine it runs on: <code>IaPublisher</code>, <code>FrdWorkspace</code>'s prepared-commit path, <code>FrdCompletionMergeWorkspace</code>.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Variable</th>
+<th>Value</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr><td>every <code>GIT_*</code> from the parent</td><td><em>removed</em></td><td>The parent process may carry a <code>GIT_DIR</code> or <code>GIT_WORK_TREE</code> that silently retargets the command</td></tr>
+<tr><td><code>GIT_CONFIG_NOSYSTEM</code></td><td><code>1</code></td><td>ignore <code>/etc/gitconfig</code></td></tr>
+<tr><td><code>GIT_CONFIG_GLOBAL</code></td><td><code>/dev/null</code>, or <code>NUL</code> on Windows</td><td>ignore <code>~/.gitconfig</code></td></tr>
+<tr><td><code>GIT_CONFIG_SYSTEM</code></td><td>same</td><td>belt and braces</td></tr>
+<tr><td><code>GIT_OPTIONAL_LOCKS</code></td><td><code>0</code></td><td>a read must not take <code>index.lock</code></td></tr>
+</tbody></table></div>
+<p>Callers that commit through an isolated path also pin the rest by hand: <code>core.hooksPath</code> to an empty directory, <code>core.fsmonitor=false</code>, <code>core.autocrlf=false</code>, <code>commit.gpgsign=false</code>, and an explicit identity.</p>
+<h3 id="23-both-output-streams-are-drained-concurrently">2.3 Both output streams are drained concurrently<a class="anchor" href="#23-both-output-streams-are-drained-concurrently" aria-hidden="true">#</a></h3>
+<p>Each of stdout and stderr gets its own daemon thread (<code>StreamPump</code>) started <strong>before</strong> the wait.</p>
+<p>Reading them one after the other breaks two things at once:</p>
+<ol>
+<li>Reading to EOF blocks until the process ends, so the subsequent <code>waitFor(timeout)</code> always observes an already-finished process — <strong>the timeout stops doing anything at all.</strong> An earlier implementation had exactly this bug.
+</li>
+<li>While stdout is being drained, the stderr pipe fills and both sides wait for each other — a deadlock. <code>git clone</code> writes its progress to stderr, so this is not theoretical.
+</li></ol>
+<p>The threads are daemons so a killed child's pump cannot hold the server open, and <code>text()</code> joins with a 5-second cap rather than waiting forever.</p>
+<h3 id="24-a-timeout-kills-the-whole-process-tree">2.4 A timeout kills the whole process tree<a class="anchor" href="#24-a-timeout-kills-the-whole-process-tree" aria-hidden="true">#</a></h3>
+<p><code>destroyForcibly()</code> on the returned <code>Process</code> kills only the direct child. <code>git clone</code> and <code>git fetch</code> spawn grandchildren — <code>git-remote-https</code>, and on Windows the <code>conhost.exe</code> that wraps a console app. A surviving grandchild keeps file handles open on the working directory, and on Windows an open handle makes deletion <strong>fail</strong>, not merely warn. That is what stopped JUnit <code>@TempDir</code> cleanup from working.</p>
+<p>The order is fixed and matters:</p>
+<ol>
+<li><strong>Collect the descendants first.</strong> <code>Process.descendants()</code> walks the live tree; kill the parent first and the OS reaps the tree before you can enumerate it.
+</li>
+<li>Kill descendants, then the parent.
+</li>
+<li>Wait on <code>onExit()</code> for all of them — capped at 5 seconds, best-effort.
+</li>
+<li><strong>Then sleep a further fixed 50 ms.</strong> Measured repeatedly on 2026-08-15: deleting immediately after <code>onExit()</code> still failed with "in use by another process" roughly half the time. The OS reports the exit before the process releases its directory handles, a gap of tens of milliseconds. The grace is bounded and taken once — it is not a retry loop.
+</li></ol>
+<h2 id="3-a-token-must-never-be-visible">3. A token must never be visible<a class="anchor" href="#3-a-token-must-never-be-visible" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mechanism</th>
+<th>What it does</th>
+</tr></thead><tbody>
+<tr><td><code>authenticatedUrl(repoUrl, token)</code></td><td>builds <code>https://oauth2:&lt;url-encoded token&gt;@host/path</code></td></tr>
+<tr><td><code>GitCommand.mask(text)</code></td><td>rewrites <code>://anything@</code> to <code>://***@</code></td></tr>
+<tr><td><code>GitException(message)</code></td><td><strong>masks in its own constructor</strong> — a caller cannot forget</td></tr>
+<tr><td><code>StreamPump</code> on error</td><td>sets the captured text to <code>&quot;&quot;</code> and logs nothing; credentials can be in it</td></tr>
+<tr><td><code>DevRequestBranchMerger</code> catch-all</td><td>wraps the message in <code>GitCommand.mask(...)</code> before returning it to the screen</td></tr>
+</tbody></table></div>
+<p><code>GitCommandTest</code> pins three of these directly: <em>the token is embedded in the URL</em>, <em>masking hides the token</em>, and <em>the token does not survive into the exception message</em>.</p>
+<h2 id="4-timeouts-actually-in-use">4. Timeouts actually in use<a class="anchor" href="#4-timeouts-actually-in-use" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Operation</th>
+<th>Timeout</th>
+<th>Where it comes from</th>
+</tr></thead><tbody>
+<tr><td><code>git ls-remote</code> reachability probe</td><td>20 s</td><td>hardcoded in <code>RepoProbe</code></td></tr>
+<tr><td>Initial clone</td><td>30 min</td><td><code>CloneWorker.CLONE_TIMEOUT</code></td></tr>
+<tr><td>Nearly everything else</td><td><code>builder.check-timeout</code> — <strong>2 m</strong> by default</td><td><code>BuilderProperties.checkTimeout()</code></td></tr>
+<tr><td>IA publish, ordinary steps</td><td>2 m</td><td><code>IaPublisher.GIT_TIMEOUT</code></td></tr>
+<tr><td>IA publish, <code>push</code> and candidate <code>clone</code></td><td>10 min</td><td><code>IaPublisher.PUSH_TIMEOUT</code></td></tr>
+<tr><td>Dev-result apply, <code>push</code></td><td>10 min</td><td>hardcoded in <code>DevResultApplyWorker</code></td></tr>
+</tbody></table></div>
+<p><code>check-timeout</code> is generous for a git call because it is shared with the planning-repository checker, whose first run includes an <code>npm install</code>. <strong>It deliberately does not inherit the clone's 30 minutes.</strong></p>
+<h2 id="5-what-ends-up-on-disk">5. What ends up on disk<a class="anchor" href="#5-what-ends-up-on-disk" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">&lt;data-root&gt;/
+  probe/                                        RepoProbe&#x27;s working directory
+  projects/&lt;projectId&gt;/
+    clone/                                      the one real repository; every worktree&#x27;s object store
+    worktrees/
+      frd-&lt;frdId&gt;/                              one FRD&#x27;s persistent workspace   (branch frd/&lt;frdId&gt;)
+      srt-&lt;srtId&gt;/                              an SRT&#x27;s workspace               (branch srt/&lt;srtId&gt;)
+      dev-request-merge-&lt;requestId&gt;/            detached; deleted in a finally block
+      check/                                    detached; read-and-discard
+      ia-publish-&lt;sha256&gt;/                      IA publish candidate + commit.txt receipt
+    received/                                   uploaded documents — deliberately OUTSIDE clone/
+    dev-request-attachments/
+    dev-request-packages/&lt;requestId&gt;/DR-###.zip what was actually sent — also outside clone/</code></pre>
+<p>Every one of these paths is computed by <code>ProjectPaths</code>, which re-validates the 7-digit ID format on the way in: a string ID (unlike the old <code>Long</code>) lets <code>..</code> or <code>a/b</code> resolve outside the root.</p>
+<p><strong>Two things are outside <code>clone/</code> on purpose.</strong> Received documents and outgoing packages are not meant to reach the planning repository; anything inside the clone directory is something git can see.</p>
+<p><strong>Worktrees share the clone's object store.</strong> That is why a second workspace does not re-download the repository — measured at 148 MB on the reference engagement.</p>
+<h2 id="6-locking">6. Locking<a class="anchor" href="#6-locking" aria-hidden="true">#</a></h2>
+<p>Builder is a single-server product, so locks are in-process. This is a design decision, not an oversight.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Lock</th>
+<th>Keyed by</th>
+<th>Held by</th>
+</tr></thead><tbody>
+<tr><td><code>ProjectRepositoryLocks</code></td><td><code>projectId</code></td><td>anything that touches the clone or the default branch</td></tr>
+<tr><td><code>FrdWorkspaceLocks</code></td><td>absolute worktree path</td><td>anything that touches one FRD's files</td></tr>
+</tbody></table></div>
+<p>Both are a <code>ConcurrentHashMap</code> of <code>ReentrantLock</code>, and <strong>the map entries are never removed</strong> — a lock with waiters must not be replaced by a fresh one.</p>
+<p><strong>The order is project, then workspace.</strong> <code>FrdWorkspaceLocks.acquire(projectId, workspace, shared)</code> takes the project lock first when <code>shared</code> is true, and throws outright if a caller already holds the workspace lock without the project lock:</p>
+<pre><code class="language-java">if (shared &amp;&amp; lock.isHeldByCurrentThread() &amp;&amp; !projects.isHeldByCurrentThread(projectId))
+    throw new IllegalStateException(&quot;프로젝트 잠금보다 작업 잠금을 먼저 획득할 수 없습니다.&quot;);</code></pre>
+<p><code>shared = false</code> means "this only touches one FRD's files" and skips the project lock — that is what lets one person's FRD work proceed while another's runs.</p>
+<p><strong>Lock timings are logged, but only when they mean something.</strong> The workbench polls <code>hasChanges</code> every 2 seconds and a single <code>git status</code> measured 120–190 ms on 2026-09-13, so hold time alone is noise. Only waits ≥ 100 ms and holds ≥ 1000 ms are logged at INFO.</p>
+<p><code>ProjectRepositoryLocks.tryRun</code> exists for optional pre-warming: work that is worth doing if the repository happens to be free and worth skipping if it is not.</p>
+<p><code>DevResultApplyWorker</code> splits the two deliberately: the AI extraction takes the <strong>FRD</strong> lock, and only the merge that touches the clone takes the <strong>project</strong> lock. Holding the project lock for the several minutes an AI run takes would stall every other FRD in the same Group.</p>
+<h2 id="7-clone-how-a-repository-arrives">7. Clone — how a repository arrives<a class="anchor" href="#7-clone-how-a-repository-arrives" aria-hidden="true">#</a></h2>
+<p>Before anything is stored, <code>RepoProbe</code> runs one command:</p>
+<pre><code class="language-bash">git ls-remote --heads &lt;authenticated-url&gt; &lt;branch&gt;</code></pre>
+<p>It downloads nothing and validates URL, token and branch together. It distinguishes two failures: <em>could not connect</em> (non-zero exit) versus <em>connected but the branch does not exist</em> (empty stdout).</p>
+<p>Then <code>CloneWorker</code> — <code>@Async(&quot;cloneExecutor&quot;)</code>, 30-minute timeout, and emphatically <strong>not</strong> <code>@Transactional</code>:</p>
+<ol>
+<li>Short transaction: read the branch and unseal the token. <strong>The token is unsealed before anything touches the disk</strong> — the reverse order destroys the existing clone and only then discovers the token cannot be read.
+</li>
+<li>Delete leftovers from the previous attempt.
+</li>
+<li><code>git clone --branch &lt;branch&gt; &lt;authenticated-url&gt; &lt;dir&gt;</code>, outside any transaction.
+</li>
+<li>Short transaction: <code>markReady</code> or <code>markFailed</code>.
+</li></ol>
+<p><strong>Leftovers must be deleted first.</strong> A clone killed at the 30-minute mark cannot clean up after itself, and without the delete every later retry fails permanently with <code>destination path already exists and is not an empty directory</code>.</p>
+<p><strong>Deletion uses <code>FileTrees.deleteRecursively</code>, not Spring's <code>FileSystemUtils</code>.</strong> Git marks pack files read-only, and on Windows the Spring helper dies on them with <code>AccessDeniedException</code> — which leaves the blocking directory in place. Unix never showed this, because deleting a file there checks the <em>containing directory's</em> permissions.</p>
+<p><strong>The failure reason always carries the exit code, and keeps the last 2000 characters rather than the first.</strong> An earlier version recorded only <code>stderr</code>, which in a real failure was the single line <code>Cloning into &#x27;…&#x27;</code>. Git prints progress first and the error last. Exit 128 (git's own error) versus 143 (killed from outside) is the distinction that matters.</p>
+<p>Full context: <a href="04-project-setup.html">Project setup</a>.</p>
+<h2 id="8-updating-the-clone">8. Updating the clone<a class="anchor" href="#8-updating-the-clone" aria-hidden="true">#</a></h2>
+<p><code>RepositoryUpdateWorker</code> refreshes in place. Five preconditions, checked in order, each with its own message:</p>
+<ol>
+<li>The Group is <code>READY</code>.
+</li>
+<li>No update is already running — claimed atomically in the database, not in memory.
+</li>
+<li>The clone directory contains <code>.git</code>.
+</li>
+<li><code>git status --porcelain</code> is clean.
+</li>
+<li><code>git symbolic-ref --short HEAD</code> equals the Group's default branch.
+</li></ol>
+<p>Then: record <code>HEAD</code> → <code>git fetch &lt;url&gt; &lt;branch&gt;</code> → <code>git merge --ff-only FETCH_HEAD</code> → record the new <code>HEAD</code> and whether it moved.</p>
+<p><strong>Fast-forward only.</strong> Anything needing a real merge is refused and reported. The clone is a mirror, not a place where work happens.</p>
+<p><code>PlanningRepositoryUpdater</code> wraps the same fast-forward for callers that need "bring the default branch up to date, then do X, all under one lock" — FRD completion being the one that needs it.</p>
+<h2 id="9-the-frd-worktree">9. The FRD worktree<a class="anchor" href="#9-the-frd-worktree" aria-hidden="true">#</a></h2>
+<p><code>FrdWorkspace</code> is the largest git caller in the product: 26 invocations.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th></th>
+<th></th>
+</tr></thead><tbody>
+<tr><td>Branch</td><td><code>frd/&lt;FRD DB id&gt;</code>, e.g. <code>frd/0000025</code> — or <code>srt/&lt;SRT id&gt;</code> for an SRT's internal FRD</td></tr>
+<tr><td>Directory</td><td><code>&lt;worktrees&gt;/frd-&lt;FRD DB id&gt;</code> — or <code>srt-&lt;SRT id&gt;</code></td></tr>
+<tr><td>Branched from</td><td>the clone's <code>HEAD</code> at the moment the button is pressed</td></tr>
+</tbody></table></div>
+<p><strong>The DB id is used, not the display number.</strong> <code>FRD-025</code> is for people; the DB id is the recovery key that recomputes the same branch, directory and URL after a restart. There is no stored path column.</p>
+<p><strong>Path and branch must be decided by the same code.</strong> <code>ArtifactWorktreePaths</code> answers both <code>forFrd(...)</code> and <code>branchFor(...)</code> from one <code>bridgeSrt</code> lookup, because a real failure on 2026-09-03 came from a workspace under <code>srt-</code> whose branch was still <code>frd/</code> — and the mismatch broke receiving.</p>
+<h3 id="ensureprojectid-frdid"><code>ensure(projectId, frdId)</code><a class="anchor" href="#ensureprojectid-frdid" aria-hidden="true">#</a></h3>
+<p>Under the FRD lock:</p>
+<ol>
+<li>Reject a malformed id.
+</li>
+<li>Fail if <code>clone/.git</code> is missing.
+</li>
+<li>If the directory exists → <code>verifyExisting</code> and <strong>reuse it</strong>. No second worktree is created.
+</li>
+<li>Otherwise <code>git show-ref --verify --quiet refs/heads/&lt;branch&gt;</code> decides between <code>worktree add &lt;dir&gt; &lt;branch&gt;</code> (branch exists) and <code>worktree add -b &lt;branch&gt; &lt;dir&gt; HEAD</code>.
+</li>
+<li>Verify the result; <strong>roll back if verification fails</strong>, but only the parts this call created — <code>Prepared</code> carries <code>workspaceCreated</code> and <code>branchCreated</code> separately for exactly that reason.
+</li></ol>
+<p><strong>Git work succeeds, then the database moves.</strong> A git file operation and a DB transaction cannot be one atomic unit, so the order is fixed: worktree confirmed → state becomes <code>DRAFTING</code>. If the state change then fails, only a freshly created empty worktree is cleaned up. <strong>An existing worktree is never deleted automatically</strong> — it may hold someone's work.</p>
+<p><code>reset</code> is the deliberate opposite: <code>verifyExisting</code> first (an unverified directory is never recursively deleted), then <code>worktree remove --force</code>, then <code>branch -D</code>, then <code>ensure</code> again from the clone's current <code>HEAD</code>.</p>
+<h3 id="reading-state">Reading state<a class="anchor" href="#reading-state" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Question</th>
+<th>Command</th>
+</tr></thead><tbody>
+<tr><td>Is there uncommitted work?</td><td><code>status --porcelain --untracked-files=all</code></td></tr>
+<tr><td>What is the base commit?</td><td><code>rev-parse HEAD</code></td></tr>
+<tr><td>Is the worktree behind the clone?</td><td><code>merge-base --is-ancestor &lt;cloneHead&gt; HEAD</code></td></tr>
+</tbody></table></div>
+<p><strong>A missing worktree is not an error.</strong> <code>isBehindClone</code> returns false and <code>syncWithCloneDetails</code> returns <code>NO_WORKTREE</code> — a simple backend-only FRD legitimately has no worktree at all.</p>
+<h3 id="excluding-a-screen">Excluding a screen<a class="anchor" href="#excluding-a-screen" aria-hidden="true">#</a></h3>
+<p><code>discardScreenFiles</code> <strong>restores existing files from <code>HEAD</code> rather than deleting them.</strong> Deleting a file that exists in the operational baseline would be read downstream as "this screen was removed". Only files that were never in <code>HEAD</code> — genuinely new screens — are actually deleted.</p>
+<h2 id="10-commits-builder-makes">10. Commits Builder makes<a class="anchor" href="#10-commits-builder-makes" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Message</th>
+<th>Made by</th>
+<th>Identity</th>
+</tr></thead><tbody>
+<tr><td><code>docs: &lt;FRD label&gt; 작업 완료</code></td><td><code>FrdWorkspace.completionMessage</code></td><td>ambient</td></tr>
+<tr><td><code>docs: &lt;DR label&gt; 기능정의서 확정</code></td><td><code>FrdWorkspace.materializeTobeDocuments</code></td><td>ambient</td></tr>
+<tr><td><code>chore: 기획 저장소 최신 반영</code></td><td><code>FrdWorkspace</code> sync merge</td><td>ambient</td></tr>
+<tr><td><code>docs: &lt;system&gt; IA &lt;n&gt;차 확정</code></td><td><code>IaPublisher</code></td><td><code>Builder &lt;builder@localhost&gt;</code></td></tr>
+<tr><td><code>merge: &lt;DR label&gt; 개발 완료</code></td><td><code>DevRequestBranchMerger</code></td><td><code>빌더 개발완료 &lt;builder@localhost&gt;</code></td></tr>
+<tr><td><code>apply: &lt;DR label&gt; 개발 결과 반영</code></td><td><code>DevResultApplyWorker</code></td><td><code>빌더 개발결과 &lt;builder@localhost&gt;</code></td></tr>
+<tr><td><code>작업 보존 후보</code></td><td><code>FrdCompletionMergeWorkspace</code> (internal preservation)</td><td><code>Builder &lt;builder@localhost&gt;</code></td></tr>
+</tbody></table></div>
+<p><strong>The completion message is produced by one static method</strong>, <code>FrdWorkspace.completionMessage(label)</code>, because "undo completion" identifies Builder's own commit by matching that exact string. Two copies of the format would make the undo silently stop finding it.</p>
+<p><strong>The identity is pinned only on the isolated paths.</strong> <code>FrdWorkspace.commitChanges</code> and the sync merge run through plain <code>git.run</code> and therefore use whatever identity the environment supplies; the four isolated writers pass <code>-c user.name</code> / <code>-c user.email</code> explicitly. Worth knowing before moving a call from one helper to the other.</p>
+<p><code>commitChanges</code> refuses to make an empty commit: after <code>add -A</code> it runs <code>diff --cached --quiet</code> and treats exit <code>0</code> as "there is nothing to complete", exit <code>1</code> as the success path, and anything else as a failure to determine.</p>
+<h2 id="11-bringing-a-worktree-up-to-date">11. Bringing a worktree up to date<a class="anchor" href="#11-bringing-a-worktree-up-to-date" aria-hidden="true">#</a></h2>
+<p><code>syncWithCloneDetails</code> exists because of a measured failure on 2026-08-25: a worktree still carried <code>manifest.json</code> at schema <code>/4</code> while the clone's checker had moved to <code>/5</code>, so the checker stopped at its first gate and pre-send verification permanently reported "could not run the checker".</p>
+<pre><code class="language-text">merge-base --is-ancestor &lt;cloneHead&gt; HEAD ?  ──yes──▶  UP_TO_DATE
+                   │ no
+                   ▼
+   merge-base HEAD &lt;cloneHead&gt;  →  diff --name-only  (what changed)
+                   │
+        merge --no-edit -m &quot;chore: 기획 저장소 최신 반영&quot; &lt;cloneHead&gt;
+                   │
+         ┌─────────┴─────────┐
+      succeeds            fails
+         │                   │
+      MERGED        merge --abort  →  CONFLICT</code></pre>
+<p><strong>It runs even with uncommitted work in the tree.</strong> Git merges around files the merge does not touch. If they do overlap, git refuses, and Builder reads that as <strong>the person's work wins</strong>: abort, report <code>CONFLICT</code>, and leave no half-merged state behind. Calling <code>merge --abort</code> when no merge started is harmless.</p>
+<p><code>MERGED</code> with changed paths that touch a screen sets a <strong>review marker</strong> so the FRD cannot be completed without someone looking. The marker is a file inside the git directory, located via <code>git rev-parse --git-path builder-frd-latest-review</code> — so it travels with the worktree and is never committed. It is cleared only when the confirmed head still equals the current clone head.</p>
+<p><code>Sync</code> has four values: <code>NO_WORKTREE</code>, <code>UP_TO_DATE</code>, <code>MERGED</code>, <code>CONFLICT</code>.</p>
+<h2 id="12-the-completion-merge-workspace">12. The completion merge workspace<a class="anchor" href="#12-the-completion-merge-workspace" aria-hidden="true">#</a></h2>
+<p><code>FrdCompletionMergeWorkspace</code> is the most defensive git code in the repository: it takes a durable, independent copy of a worktree's state before FRD completion rewrites it, so a crash mid-completion can be recovered.</p>
+<p>The pieces worth knowing:</p>
+<ul>
+<li><code>git clone --no-local --no-checkout</code> for the candidate copy, and <code>git init</code> plus a depth-1 <code>fetch</code> for the baseline. <strong>The baseline deliberately keeps one commit with no history</strong> — independent objects, isolated from garbage collection and from later changes to the candidate.
+</li>
+<li>A recorded fingerprint compares the <strong>index file byte for byte</strong>. It does not call <code>git write-tree</code>: that command rewrites the cache-tree into the index file, taking <code>index.lock</code> and changing the very bytes being measured.
+</li>
+<li>Sparse-checkout is detected (<code>config --bool core.sparseCheckout</code>) so that <strong>a path omitted by a partial checkout is never mistaken for a deletion</strong>.
+</li>
+<li>A boot-time <code>ApplicationReadyEvent</code> listener at <code>HIGHEST_PRECEDENCE</code> reclaims copies whose server died after a successful publish but before cleanup.
+</li>
+<li>Disk is budgeted up front (<code>FrdCompletionDiskBudget</code>); if the produced output exceeds the budget it is not applied to the original, and the reservation is returned even when cleanup is refused.
+</li></ul>
+<p>Its test class is the largest in the git area — 25 named guarantees, sampled in §18.</p>
+<h2 id="13-pushes-all-four-of-them">13. Pushes — all four of them<a class="anchor" href="#13-pushes-all-four-of-them" aria-hidden="true">#</a></h2>
+<p><strong>Only four call sites in the entire product push.</strong> If you are adding a fifth, that is a design decision, not a detail.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Where</th>
+<th>What it pushes</th>
+</tr></thead><tbody>
+<tr><td>1</td><td><code>IaPublisher</code></td><td><code>&lt;commit&gt;:&lt;defaultBranch&gt;</code> — a confirmed IA revision</td></tr>
+<tr><td>2</td><td><code>DevRequestBranchMerger</code></td><td><code>HEAD:refs/heads/&lt;defaultBranch&gt;</code> — the dev-completion merge</td></tr>
+<tr><td>3</td><td><code>DevRequestBranchMerger.deleteRemoteFrdBranch</code></td><td><code>:refs/heads/&lt;workBranch&gt;</code> — deletes a merged branch</td></tr>
+<tr><td>4</td><td><code>DevResultApplyWorker</code></td><td><code>HEAD:refs/heads/&lt;frd-or-srt branch&gt;</code> — extracted dev results</td></tr>
+</tbody></table></div>
+<p>All four pass the authenticated URL as an argument and an explicit refspec. None uses a named remote.</p>
+<p><strong>Ordinary FRD work is never pushed.</strong> The FRD worktree commits and stays local until a development request takes it further. Note also that closing a task removes the worktree but <strong>keeps the branch</strong> — the branch is the only record of what changed and why.</p>
+<h2 id="14-ia-publish">14. IA publish<a class="anchor" href="#14-ia-publish" aria-hidden="true">#</a></h2>
+<p><code>IaPublisher.publish</code> is the most cautious of the four, because it writes to the default branch of a repository the planning team owns, and a lost response must not produce a duplicate.</p>
+<p>The scheme is a <strong>receipt plus a reusable candidate directory</strong>:</p>
+<ul>
+<li>The candidate lives at <code>worktrees/ia-publish-&lt;sha256(systemCode + content)&gt;/</code>. Keying on the content means a retry of <em>the same</em> publish finds <em>the same</em> directory.
+</li>
+<li><code>commit.txt</code> holds the commit SHA and the candidate directory name, and is validated on read (40–64 hex characters, <code>candidate-…</code>) rather than trusted.
+</li>
+<li>Before committing, <code>refs/builder/ia-baseline</code> pins what the publish started from.
+</li></ul>
+<p>Guards, in order:</p>
+<ol>
+<li>The clone must be clean and on the default branch.
+</li>
+<li>The candidate is a <code>--no-local --no-checkout</code> clone of the clone, then fetched and <code>checkout --detach FETCH_HEAD</code> — publishing starts from the <strong>remote's</strong> current state.
+</li>
+<li><code>diff --quiet &lt;original&gt; FETCH_HEAD -- core/&lt;system&gt;/ia.md</code> — if the remote's IA changed, abort rather than overwrite.
+</li>
+<li>After the push, verify by fetching again.
+</li>
+<li><strong>A failed push is re-checked, not retried blindly.</strong> If the remote turns out to contain the commit anyway, the response was simply lost and the publish is complete.
+</li>
+<li>Finally the clone catches up with <code>merge --ff-only FETCH_HEAD</code>.
+</li></ol>
+<p><strong>A stale receipt is discarded, not obeyed.</strong> If a later revision changed the remote IA after this receipt was written, keeping it would make the same content impossible to publish ever again — so the receipt is deleted and a fresh publish begins. That case has a test of its own.</p>
+<p>The large candidate copy is only removed by <code>acknowledge(...)</code>, called <strong>after</strong> the database has recorded success. The small receipt survives.</p>
+<h2 id="15-dev-request-delivery-merge">15. Dev-request delivery merge<a class="anchor" href="#15-dev-request-delivery-merge" aria-hidden="true">#</a></h2>
+<p><code>DevRequestBranchMerger</code> brings a finished FRD branch into the planning repository's default branch once development reports completion.</p>
+<pre><code class="language-text">fetch  +refs/heads/&lt;default&gt;    → refs/builder/dev-request/&lt;requestId&gt;
+       +refs/heads/&lt;workBranch&gt; → refs/builder/&lt;workBranch&gt;
+   │
+   ├─ finalHead already an ancestor of remoteHead ──▶ nothing to push; sync clone; done
+   │
+   ├─ worktree add --detach &lt;dir&gt; &lt;remoteHead&gt;
+   ├─ merge --no-ff --no-edit -m &quot;merge: &lt;label&gt; 개발 완료&quot; &lt;finalHead&gt;
+   │      └─ conflict → DevRequestMergeConflictResolver (AI) → still failing → merge --abort
+   ├─ push HEAD:refs/heads/&lt;default&gt;
+   ├─ fetch again and require BOTH finalHead and the DR&#x27;s recorded base commit to be ancestors
+   └─ finally: worktree remove --force · worktree prune --expire now · update-ref -d (both refs)</code></pre>
+<p>Five things here are each a fix for something that happened:</p>
+<ul>
+<li><strong>The generation is checked first.</strong> If the development request has been re-sent since, the stale completion is not merged.
+</li>
+<li><strong>"Already merged" exits before pushing.</strong> Re-pushing the same head turns a previously successful operation into a failure if the remote moved in the meantime.
+</li>
+<li><strong>Verification requires two ancestors, not one.</strong> Both the FRD branch tip <em>and</em> the commit the development request actually delivered must be present — that catches a branch that was rewritten so the delivered commit never made it in.
+</li>
+<li><strong>Both temporary refs are deleted in <code>finally</code>.</strong> Left behind, they accumulate (three were found on 2026-09-11), pin old commits against garbage collection, and make <code>for-each-ref</code> report dead branches as live.
+</li>
+<li><strong>The conflict resolver returns <code>false</code>, never throws.</strong> The caller's <code>merge --abort</code> is what restores the tree; an exception would skip it. An unresolved conflict is correctly a human's job.
+</li></ul>
+<h2 id="16-applying-returned-development-results">16. Applying returned development results<a class="anchor" href="#16-applying-returned-development-results" aria-hidden="true">#</a></h2>
+<p><code>DevResultApplyWorker</code> takes what development sent back and pushes it onto the FRD branch.</p>
+<ul>
+<li><strong>The rules for reading the result are not in Builder.</strong> The working directory is set to the worktree, which contains the extractor, and the prompt is one line: read those rules and follow them. Each engagement's clone supplies different rules.
+</li>
+<li><strong>The ZIP is unpacked outside the worktree.</strong> Unpacking inside would mix implementation source into the commit — this is the actual defence behind "<code>changes/</code> is not a copy target".
+</li>
+<li>Test-result documents are <strong>copied, not generated</strong>. The AI does not write them.
+</li>
+<li>Commit is <code>apply: &lt;label&gt; 개발 결과 반영</code> as <code>빌더 개발결과</code>, skipped entirely when <code>diff --cached --quiet</code> shows nothing staged.
+</li>
+<li>Push is <code>HEAD:refs/heads/&lt;branch&gt;</code> with a 10-minute timeout.
+</li></ul>
+<h2 id="17-read-only-worktrees">17. Read-only worktrees<a class="anchor" href="#17-read-only-worktrees" aria-hidden="true">#</a></h2>
+<p><code>CheckerWorkspace</code> takes a <code>worktree add --detach &lt;worktrees&gt;/check HEAD</code>. <strong>No branch</strong> — it is read and discarded.</p>
+<p><strong>Checks never run in the shared clone.</strong> Every planner in a Group shares that clone; laying a candidate file into it means two people saving at once mix each other's drafts, and the "before" state includes someone else's work, which makes the whole diff judgement false.</p>
+<p>Cleanup needs all three steps, learned on 2026-08-14:</p>
+<pre><code class="language-text">worktree remove --force                        may fail: not a registered worktree
+worktree prune                                 registration left behind after the directory went
+FileSystemUtils.deleteRecursively(workspace)   a bare directory git does not know about</code></pre>
+<p>If the server dies mid-check, a bare unregistered directory is left. Git refuses to <code>remove</code> it ("not a worktree") and refuses to <code>add</code> over it (<code>already exists</code>) — which would permanently break saving for that Group.</p>
+<h2 id="18-code-map">18. Code map<a class="anchor" href="#18-code-map" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>Role</th>
+</tr></thead><tbody>
+<tr><td><code>git/GitCommand.java</code></td><td>The only place a git process starts. Credentials, isolation, pumps, kill-tree</td></tr>
+<tr><td><code>git/GitResult.java</code></td><td><code>(exitCode, stdout, stderr)</code></td></tr>
+<tr><td><code>git/GitException.java</code></td><td>Masks the token in its constructor</td></tr>
+<tr><td><code>git/RepoProbe.java</code></td><td><code>ls-remote</code> reachability check, 20 s</td></tr>
+<tr><td><code>project/ProjectPaths.java</code></td><td>Every path under <code>data-root</code>; re-validates ids</td></tr>
+<tr><td><code>project/ProjectRepositoryLocks.java</code></td><td>Per-Group in-process serialization</td></tr>
+<tr><td><code>project/CloneWorker.java</code></td><td>Async clone, leftover cleanup, failure description</td></tr>
+<tr><td><code>project/RepositoryUpdateWorker.java</code></td><td>Fast-forward update behind five preconditions</td></tr>
+<tr><td><code>project/PlanningRepositoryUpdater.java</code></td><td>"Fast-forward, then do X, under one lock"</td></tr>
+<tr><td><code>project/ArtifactWorktreePaths.java</code></td><td>One decision for both path and branch (FRD vs SRT)</td></tr>
+<tr><td><code>frd/FrdWorkspace.java</code></td><td>FRD worktrees, commits, sync, review marker, undo (26 git calls)</td></tr>
+<tr><td><code>frd/FrdWorkspaceLocks.java</code></td><td>Workspace lock, ordered after the project lock</td></tr>
+<tr><td><code>frd/FrdCompletionMergeWorkspace.java</code></td><td>Isolated preservation and recovery for completion</td></tr>
+<tr><td><code>frd/FrdCompletionConflictResolver.java</code></td><td>Hands conflict material to a tool-less AI</td></tr>
+<tr><td><code>ia/IaPublisher.java</code></td><td>The IA publish: candidate, receipt, push, ff-only catch-up</td></tr>
+<tr><td><code>devrequest/DevRequestBranchMerger.java</code></td><td>Dev-completion merge into the default branch (21 git calls)</td></tr>
+<tr><td><code>devrequest/DevRequestMergeConflictResolver.java</code></td><td>AI conflict resolution; returns false, never throws</td></tr>
+<tr><td><code>devrequest/DevResultApplyWorker.java</code></td><td>Applies returned dev results and pushes the FRD branch</td></tr>
+<tr><td><code>devrequest/DevRequestPackageBuilder.java</code></td><td>Reads as-is material and the originating commit</td></tr>
+<tr><td><code>checker/CheckerWorkspace.java</code></td><td>Detached, branchless, read-and-discard worktree</td></tr>
+</tbody></table></div>
+<h2 id="19-guarantees-covered-by-tests">19. Guarantees covered by tests<a class="anchor" href="#19-guarantees-covered-by-tests" aria-hidden="true">#</a></h2>
+<p>Test method names in this project are Korean sentences stating what is guaranteed, by convention. Translated:</p>
+<p><strong><code>GitCommandTest</code></strong> — the isolated environment strips the parent's git configuration and path overrides · a real isolated git does not read global configuration · git runs and returns a result · a failure yields a non-zero exit code · the token is embedded in the URL · masking hides the token · exceeding the limit kills the process and throws · the token does not survive into the exception message · git is invoked with the credential helper disabled · the disabling value is empty, not a name.</p>
+<p><strong><code>IaPublisherTest</code></strong> — a confirmed snapshot is published to the default branch as one commit · a different file added remotely still publishes and the shared clone catches up · a failed push leaves no commit in the shared clone and the same publish can be retried · a lost response after the remote accepted does not create a duplicate commit · a remotely changed IA is not overwritten · a history that diverged from an existing local-only commit is preserved and the update stops · re-confirming the same content as a previous revision is not bound to the old receipt.</p>
+<p><strong><code>CloneWorkerTest</code></strong> — a successful clone becomes Ready · a failure records the state and the reason · an exit code survives even when git says nothing · a long reason keeps the tail, not the head · retrying returns to Receiving · a rejected numbering submission does not turn an already-successful clone into a failure · each project clones to its own place · a malformed id creates no path · a failure commits even when the token cannot be unsealed · a read-only file does not prevent wiping the clone directory · nothing to delete does nothing.</p>
+<p><strong><code>ArtifactWorktreePathsTest</code></strong> — a plain FRD uses the <code>frd-</code> path and the <code>frd/</code> branch · an SRT's internal FRD uses <code>srt-</code> and <code>srt/</code> · another project's SRT is excluded from the lookup.</p>
+<p><strong><code>DevRequestBranchMergerTest</code></strong> — the FRD's delivered base commit is merged into the default branch, and re-running does not merge twice.</p>
+<p><strong><code>DevRequestMergeConflictResolverTest</code></strong> — when the AI fixes the conflicting files a merge commit is made · leftover conflict markers mean nothing is applied · tool permissions are working-directory relative globs with the isolation fragment first · no account means no attempt.</p>
+<p><strong><code>FrdCompletionMergeWorkspaceTest</code></strong> (25 guarantees) — among them: an external change is not overwritten even when size and mtime match · a copy without a record is preserved by both recovery and cleanup · a sparse-checkout omission is not applied as a deletion · a copy abandoned after a successful publish is cleaned up on restart and its budget returned · an insufficient budget leaves the original and the index untouched · two FRDs completing at once do not mix their preserved content · <code>git status</code> rewriting the index mid-finalization still recovers on restart · a changed index stage blocks restart recovery · the fingerprint compares the index byte for byte.</p>
+<p>Run the git-facing suites:</p>
+<pre><code class="language-bash">./mvnw test -Dtest=&#x27;GitCommandTest,IaPublisherTest,CloneWorkerTest,ArtifactWorktreePathsTest,DevRequestBranchMergerTest,DevRequestMergeConflictResolverTest,FrdCompletionMergeWorkspaceTest&#x27;</code></pre>
+<h2 id="20-traps">20. Traps<a class="anchor" href="#20-traps" aria-hidden="true">#</a></h2>
+<p>Collected from the <code>⛔</code> and <code>⚠</code> markers in the source. Each one is a bug that actually happened.</p>
+<ol>
+<li><strong>Do not remove <code>-c credential.helper=</code>.</strong> A Windows credential helper took down an already-successful clone with exit 128, and leaves the planning token in the machine's credential store.
+</li>
+<li><strong>Do not name a helper to disable one.</strong> <code>credential.helper=none</code> searches for a helper called <code>none</code>. The empty value is the mechanism.
+</li>
+<li><strong>Do not read the two output streams in sequence.</strong> The timeout stops working, and <code>git clone</code> deadlocks on a full stderr pipe.
+</li>
+<li><strong>Do not <code>destroyForcibly()</code> the parent alone.</strong> Grandchildren keep directory handles open, and on Windows an open handle makes deletion fail outright.
+</li>
+<li><strong>Do not collect descendants after killing the parent.</strong> The tree is already reaped.
+</li>
+<li><strong>Do not delete immediately after <code>onExit()</code>.</strong> Take the bounded 50 ms grace.
+</li>
+<li><strong>Do not add <code>@Transactional</code> to <code>CloneWorker.clone</code>.</strong> Failures stop being recorded and a connection is pinned for 30 minutes.
+</li>
+<li><strong>Do not use <code>FileSystemUtils.deleteRecursively</code> on a clone.</strong> Windows read-only pack files. Use <code>FileTrees</code>.
+</li>
+<li><strong>Do not skip deleting leftovers before a clone attempt.</strong> Retry breaks permanently.
+</li>
+<li><strong>Do not let path and branch be decided by different code.</strong> A <code>srt-</code> directory on a <code>frd/</code> branch broke receiving on 2026-09-03.
+</li>
+<li><strong>Do not delete a screen file to exclude it.</strong> Restore it from <code>HEAD</code>; a deletion reads as "removed from the operational system".
+</li>
+<li><strong>Do not change the FRD state before the worktree is confirmed.</strong> And never auto-delete an existing worktree — it may hold someone's work.
+</li>
+<li><strong>Do not take the workspace lock before the project lock.</strong> <code>FrdWorkspaceLocks</code> throws on it.
+</li>
+<li><strong>Do not hold the project lock while an AI run is in flight.</strong> Every other FRD in the Group stalls.
+</li>
+<li><strong>Do not remove entries from the lock maps.</strong> A lock with waiters must not be replaced.
+</li>
+<li><strong>Do not re-push when the merge is already an ancestor.</strong> A previously successful operation turns into a failure if the remote moved.
+</li>
+<li><strong>Do not leave <code>refs/builder/…</code> behind.</strong> They accumulate, pin objects against gc, and make dead branches look alive.
+</li>
+<li><strong>Do not throw from a conflict resolver.</strong> The caller's <code>merge --abort</code> is what cleans up.
+</li>
+<li><strong>Do not unpack a returned ZIP inside the worktree.</strong> Implementation source would land in the commit.
+</li>
+<li><strong>Do not run the checker in the shared clone.</strong> Concurrent saves mix, and the diff judgement becomes false.
+</li>
+<li><strong>Do not rely on <code>worktree remove</code> alone.</strong> Prune, then delete the bare directory by hand.
+</li>
+<li><strong>Do not use <code>git write-tree</code> to fingerprint an index.</strong> It rewrites the bytes you are measuring.
+</li>
+<li><strong>Do not add a fifth push site casually.</strong> There are four, and that is the contract.
+</li></ol>
+    </article>
+    <footer class="doc-footer">
+      <a href="05-claude-cli-runtime.html">← Claude CLI runtime</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/git.md</span>
+      <a href="20-notification.html">Notifications →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

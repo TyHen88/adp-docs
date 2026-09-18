@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADP Builder — Reference Documentation</title>
+<meta name="description" content="A complete reference map of we-adk-builder: what it is, how it is built, and what every feature does. Written for engineers and analysts who need to understand the whole system wit">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">ADP Builder — Reference Documentation</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html" aria-current="page"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Start here</p>
+      <h1>ADP Builder — Reference Documentation</h1>
+      <blockquote><p>A complete reference map of <code>we-adk-builder</code>: what it is, how it is built, and what every feature does. Written for engineers and analysts who need to understand the whole system without reading 714 Java files.</p></blockquote>
+<p><code>we-adk-builder</code> (internally: <strong>ADP Builder</strong>) is a <strong>single-server, browser-accessed web application</strong> that lets a planner (기획자) turn a business requirement into a <strong>development request package</strong> that a development organisation can act on — with Claude Code doing the analysis, screen drafting and document generation along the way.</p>
+<p><strong>One work unit is one FRD.</strong></p>
+<pre><code class="language-text">FRD 1 = one work item = one git worktree = one person</code></pre>
+<hr>
+<h2 id="see-how-the-work-moves">See how the work moves<a class="anchor" href="#see-how-the-work-moves" aria-hidden="true">#</a></h2>
+<div class="cards">
+<a class="card" href="works-process/index.html">
+<span class="card__title">Work processes</span>
+<span class="card__desc">Ten process maps, one action each — from the button a person presses to the last thing written to disk or sent over the network.</span>
+</a>
+</div>
+<h2 id="read-in-this-order">Read in this order<a class="anchor" href="#read-in-this-order" aria-hidden="true">#</a></h2>
+<div class="cards">
+<a class="card" href="00-overview.html">
+<span class="card__num">00</span>
+<span class="card__title">What ADP Builder is</span>
+<span class="card__desc">Product purpose, the three-repository topology, hard boundaries, and the current build stage.</span>
+</a>
+<a class="card" href="01-architecture.html">
+<span class="card__num">01</span>
+<span class="card__title">Architecture</span>
+<span class="card__desc">Stack, package map, request path, the async worker pattern, and the on-disk data-root layout.</span>
+</a>
+<a class="card" href="02-data-model.html">
+<span class="card__num">02</span>
+<span class="card__title">Data model</span>
+<span class="card__desc">PostgreSQL <code>builder</code> schema — 55 tables by group, ID numbering, Flyway rules.</span>
+</a>
+<a class="card" href="04-project-setup.html">
+<span class="card__num">04</span>
+<span class="card__title">Project setup</span>
+<span class="card__desc">Registering a planning repository and cloning it. Nothing downstream exists until a project is ready.</span>
+</a>
+<a class="card" href="05-claude-cli-runtime.html">
+<span class="card__num">05</span>
+<span class="card__title">Claude CLI runtime</span>
+<span class="card__desc">How the server actually runs <code>claude</code>: per-account credentials, isolation flags, streaming, timeouts, cancellation.</span>
+</a>
+<a class="card" href="06-frd-wizard.html">
+<span class="card__num">06</span>
+<span class="card__title">FRD wizard</span>
+<span class="card__desc">Requirement input → AI interview → scope review. The three steps that produce an FRD.</span>
+</a>
+<a class="card" href="10-dev-request.html">
+<span class="card__num">10</span>
+<span class="card__title">Development request</span>
+<span class="card__desc">The DR package, pre-send checks, GitLab delivery, development-status sync.</span>
+</a>
+</div>
+<h2 id="everything-by-area">Everything, by area<a class="anchor" href="#everything-by-area" aria-hidden="true">#</a></h2>
+<h3 id="platform">Platform<a class="anchor" href="#platform" aria-hidden="true">#</a></h3>
+<div class="cards">
+<a class="card" href="03-accounts-security.html">
+<span class="card__num">03</span>
+<span class="card__title">Accounts &amp; security</span>
+<span class="card__desc">Roles, first-login flow, Spring Security config, secret sealing, temporary passwords.</span>
+</a>
+<a class="card" href="04-project-setup.html">
+<span class="card__num">04</span>
+<span class="card__title">Project setup</span>
+<span class="card__desc">Registering a planning repository, cloning, systems, facets, repository refresh.</span>
+</a>
+<a class="card" href="05-claude-cli-runtime.html">
+<span class="card__num">05</span>
+<span class="card__title">Claude CLI runtime</span>
+<span class="card__desc"><code>CliClaudeRunner</code>, <code>ClaudeIsolation</code>, <code>ClaudeCommonRules</code>, AI run lifecycle and concurrency.</span>
+</a>
+<a class="card" href="git.html">
+<span class="card__title">Git layer</span>
+<span class="card__desc">The one runner, the locks, the worktrees, and the only four places allowed to push.</span>
+</a>
+<a class="card" href="20-notification.html">
+<span class="card__num">20</span>
+<span class="card__title">Notifications</span>
+<span class="card__desc">In-app notification publishing, the interceptor, and batch-completion events.</span>
+</a>
+<a class="card" href="25-flow.html">
+<span class="card__num">25</span>
+<span class="card__title">Flow integration</span>
+<span class="card__desc">The system-administration screen, the sealed API key, and how a task number is resolved.</span>
+</a>
+<a class="card" href="26-large-repository.html">
+<span class="card__num">26</span>
+<span class="card__title">Large repos &amp; perf</span>
+<span class="card__desc">What is implemented for big repositories, the real limits — and what is still only proposed.</span>
+</a>
+<a class="card" href="27-concurrent-edit.html">
+<span class="card__num">27</span>
+<span class="card__title">Concurrent editing</span>
+<span class="card__desc">Who is blocked by whom, and why screen-level locking was abandoned.</span>
+</a>
+</div>
+<h3 id="frd-work-the-core-loop">FRD work — the core loop<a class="anchor" href="#frd-work-the-core-loop" aria-hidden="true">#</a></h3>
+<div class="cards">
+<a class="card" href="06-frd-wizard.html">
+<span class="card__num">06</span>
+<span class="card__title">FRD wizard</span>
+<span class="card__desc">Step 1 requirement input, step 2 AI interview, step 3 scope review; the eight FRD states.</span>
+</a>
+<a class="card" href="07-frd-workbench.html">
+<span class="card__num">07</span>
+<span class="card__title">FRD workbench</span>
+<span class="card__desc">Screen-by-screen AI chat, markers, memos, direct edits, history/undo, state cases, the canvas.</span>
+</a>
+<a class="card" href="08-frd-completion.html">
+<span class="card__num">08</span>
+<span class="card__title">FRD completion</span>
+<span class="card__desc">The completion run, write admission locking, merge workspace, and what "done" actually commits.</span>
+</a>
+<a class="card" href="09-srt.html">
+<span class="card__num">09</span>
+<span class="card__title">SRT fast track</span>
+<span class="card__desc">Small, concrete changes that skip the interview and screen work entirely.</span>
+</a>
+</div>
+<h3 id="handing-work-to-development">Handing work to development<a class="anchor" href="#handing-work-to-development" aria-hidden="true">#</a></h3>
+<div class="cards">
+<a class="card" href="10-dev-request.html">
+<span class="card__num">10</span>
+<span class="card__title">Development request</span>
+<span class="card__desc">Package layout, blocking vs. warning pre-checks, ZIP + GitLab issue delivery, retry and withdrawal.</span>
+</a>
+<a class="card" href="11-dev-result.html">
+<span class="card__num">11</span>
+<span class="card__title">Development result</span>
+<span class="card__desc">Receiving the reply, validating the archive, and applying it back to the planning repository.</span>
+</a>
+<a class="card" href="17-tests.html">
+<span class="card__num">17</span>
+<span class="card__title">Unit &amp; integration tests</span>
+<span class="card__desc">The two result documents development returns, and how Builder counts and displays them.</span>
+</a>
+</div>
+<h3 id="reference-material-the-ai-and-the-planner-read">Reference material the AI and the planner read<a class="anchor" href="#reference-material-the-ai-and-the-planner-read" aria-hidden="true">#</a></h3>
+<div class="cards">
+<a class="card" href="12-ia.html">
+<span class="card__num">12</span>
+<span class="card__title">IA (menu tree)</span>
+<span class="card__desc">The information architecture document — Builder's DB is the source of truth, the repo gets a snapshot.</span>
+</a>
+<a class="card" href="13-solution-mockup.html">
+<span class="card__num">13</span>
+<span class="card__title">Solution templates</span>
+<span class="card__desc">Current production screens extracted by the extractor; preview, skins, mismatch flags.</span>
+</a>
+<a class="card" href="14-design-guide.html">
+<span class="card__num">14</span>
+<span class="card__title">Design guide</span>
+<span class="card__desc">The visual rules of the target system, read from extractor-baked derivatives.</span>
+</a>
+<a class="card" href="15-business-language.html">
+<span class="card__num">15</span>
+<span class="card__title">Policy &amp; terms</span>
+<span class="card__desc">Business policy and standard terminology documents, with seeding and revision history.</span>
+</a>
+<a class="card" href="16-green-zone.html">
+<span class="card__num">16</span>
+<span class="card__title">Green-zone artifacts</span>
+<span class="card__desc">Feature specs, screen designs, user manuals — generated by Builder from refreshed screen material.</span>
+</a>
+<a class="card" href="18-screen-id.html">
+<span class="card__num">18</span>
+<span class="card__title">Screen IDs</span>
+<span class="card__desc">Standard screen-ID numbering: one algorithm for both initial and incremental assignment.</span>
+</a>
+<a class="card" href="19-checker.html">
+<span class="card__num">19</span>
+<span class="card__title">Spec checker</span>
+<span class="card__desc">The planning repository's own checker, run before save and before delivery — and how blame is separated.</span>
+</a>
+<a class="card" href="24-document-intake.html">
+<span class="card__num">24</span>
+<span class="card__title">Intake &amp; doc reading</span>
+<span class="card__desc">One retired workflow and one live capability in the same package — plus the second AI provider, Gemini.</span>
+</a>
+</div>
+<h3 id="working-on-the-codebase">Working on the codebase<a class="anchor" href="#working-on-the-codebase" aria-hidden="true">#</a></h3>
+<div class="cards">
+<a class="card" href="21-operations.html">
+<span class="card__num">21</span>
+<span class="card__title">Install &amp; operations</span>
+<span class="card__desc">JDK, PostgreSQL, Chromium, systemd, configuration keys, backup, troubleshooting.</span>
+</a>
+<a class="card" href="22-conventions.html">
+<span class="card__num">22</span>
+<span class="card__title">Conventions</span>
+<span class="card__desc">Naming, test policy, verification tiers, migration and ERD rules, document rules.</span>
+</a>
+<a class="card" href="23-glossary.html">
+<span class="card__num">23</span>
+<span class="card__title">Glossary</span>
+<span class="card__desc">Korean ↔ English for every domain term used in the code and UI.</span>
+</a>
+</div>
+<hr>
+<h2 id="the-20-second-version">The 20-second version<a class="anchor" href="#the-20-second-version" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Question</th>
+<th>Answer</th>
+</tr></thead><tbody>
+<tr><td>What does it do?</td><td>Turns a planner's requirement into a development request package, using Claude Code for analysis and screen drafting.</td></tr>
+<tr><td>Who uses it?</td><td>Planners (기획자), plus a super administrator who registers projects and users.</td></tr>
+<tr><td>Where does the content live?</td><td>A <strong>planning repository</strong> on GitLab, owned by the planning team. Builder keeps a clone and per-FRD worktrees.</td></tr>
+<tr><td>What does Builder never do?</td><td>Read the production source system. Extraction is a separate tool (<code>we-adk-builder-extractor</code>) a human runs.</td></tr>
+<tr><td>How does AI run?</td><td>The server executes the <code>claude</code> CLI as a subprocess, with <strong>the signed-in user's own credentials</strong>, in an isolated config directory.</td></tr>
+<tr><td>What is the deliverable?</td><td>A <strong>development request (DR)</strong> — a package, not a single document — delivered as a ZIP plus a GitLab issue.</td></tr>
+<tr><td>What comes back?</td><td>Updated as-is screen material, unit-test results, and integration-test scenarios — which feed the green-zone artifacts.</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="about-these-documents">About these documents<a class="anchor" href="#about-these-documents" aria-hidden="true">#</a></h2>
+<ul>
+<li><strong>Source of truth is the Markdown.</strong> Every <code>NN-name.html</code> in this folder is generated from <code>NN-name.md</code> by <code>tools/build_html.py</code>. Do not hand-edit the HTML.
+</li>
+<li>Rebuild after editing any Markdown file:
+</li></ul>
+<pre><code class="language-bash">python docs/adp/tools/build_html.py            # rebuild all
+python docs/adp/tools/build_html.py --check    # exit 1 if any HTML is stale</code></pre>
+<ul>
+<li>Adding a page: create <code>NN-name.md</code>, add one line to <code>NAV</code> in <code>tools/build_html.py</code>, add a card here, rebuild.
+</li>
+<li>These pages <strong>describe</strong> the system; they are not the product's decision record. Where a decision is contested, the canonical documents are <code>CLAUDE.md</code>, <code>docs/artifacts.md</code>, <code>docs/data-model.md</code>, and <code>docs/superpowers/specs/*.md</code> — each page links to the relevant one.
+</li>
+<li>Korean is kept for anything that appears in the code, the UI, or the domain (<code>FRD 작업하기</code>, <code>개발요청서</code>, <code>그린존</code>). English explains it. A name that appears on screen is never translated silently — see the <a href="23-glossary.html">glossary</a>.
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/index.md</span>
+      <a href="00-overview.html">What ADP Builder is →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRD completion · Work processes · ADP Builder</title>
+<meta name="description" content="What FRD 작업 완료 does: the connection probe, the write lock, the isolated merge, AI conflict resolution, and what is deliberately left out of the wait.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · FRD completion</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html" aria-current="page"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 5</p>
+      <h1>FRD completion — closing the work</h1>
+      <p class="wp-lede"><b>Completion is not a development quality gate. It is the safe saving and handing over of planning content.</b> Everything below follows from that one sentence — including the things it refuses to block on.</p>
+
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Blocks completion</p>
+          <ul>
+            <li>A save, read or recovery failure</li>
+            <li>An unsafe real file path</li>
+            <li>An unresolved merge conflict</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Does not block completion</p>
+          <ul>
+            <li>Missing screen links or references</li>
+            <li>HTML structure problems</li>
+            <li>Design issues and review counts</li>
+            <li>External quality-check failures</li>
+          </ul>
+        </div>
+      </div>
+      <p>Non-blocking findings are not discarded: they are pinned into the development request's <code>확인 사항</code>. Thresholds are never raised automatically, and tool-operations noise stays in the server log.</p>
+
+      <h2>The run</h2>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Probe the Claude connection first</div><div class="flow__cmd">ClaudeConnectionProbe · cheapest model, lowest effort</div></div>
+          <div class="flow__aside flow__aside--fail">FRD-029 ran completion for four minutes before seven feature definitions failed at once on a dead credential. Long jobs check first.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Take the write lock</div><div class="flow__cmd">FrdWriteAdmission · user writes are refused meanwhile</div></div>
+          <div class="flow__aside">One server, so serialising completion against user writes is enough.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">Check what is still in flight</div><div class="flow__cmd">running AI runs · required screen drafts · unsaved changes</div></div>
+          <div class="flow__aside">A draft that was never made is missing material, not a quality problem.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Fetch the latest planning repo and merge — in an isolated workspace</div><div class="flow__cmd">FrdCompletionMergeWorkspace · 64 MB per file · disk budget reserved on disk</div></div>
+          <div class="flow__aside">Separate from the FRD worktree, so a failed merge never damages the planner's working tree.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">05</div>
+          <div><div class="flow__title">A conflict goes to a tool-less AI, and the result is validated</div><div class="flow__cmd">2 MB input cap · no tools · strict JSON parsing → FrdCompletionMergeValidator</div></div>
+          <div class="flow__aside flow__aside--fail">An empty result, generic prose or comments-only output is rejected as a candidate. Git problems are never handed to the planner.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">06</div>
+          <div><div class="flow__title">Wait-phase checks only, then publish success</div><div class="flow__cmd">path · readability · size · binary contamination · unresolved conflict markers</div></div>
+          <div class="flow__aside flow__aside--ok">The delivery-baseline commit is made here — the commit the development request is later built from.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">07</div>
+          <div><div class="flow__title">Prepare DR material, and review in the background</div><div class="flow__cmd">feature definitions · test scenarios · HTML/JSON quality · external links</div></div>
+          <div class="flow__aside">Both run after success is published, on the existing async worker.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">What the speed pass moved out of the wait — and what that costs</div>
+        <p>Quality analysis and link checking left the waiting path. In exchange, the development request records a <b>“priority check result not yet confirmed”</b> notice; when the result lands, <i>only that notice</i> is replaced — existing confirmation items and test scenarios are preserved. A document already being delivered, or deleted, is not touched. On a restart or a failed check the notice simply stays, and completion is never rolled back. <code>WAIT_TOTAL</code> and <code>BACKGROUND_REVIEW</code> are logged separately so the two times are measured apart.</p>
+      </div>
+
+      <div class="note">
+        <div class="note__t">“The MD exists” and “the MD is ready” are different judgements</div>
+        <p>A document holding only marker descriptions or empty scaffolding is not ready. An existing history's HTML and MD are reused only when they match the merged HTML; otherwise generation is requested again. A human-written ready document is never overwritten, and a generation failure does not cancel completion.</p>
+      </div>
+
+      <h2>What completion does <i>not</i> do</h2>
+      <div class="branch">
+        <div class="branch__t">It does not merge to-be into the default branch</div>
+        <p><code>core/&lt;system&gt;/pages/</code> holds as-is. If completion merged the planner's drawing there, the next FRD would read it as the current state of the system. Fact reaches that folder only through the <a href="04-dev-result.html">development result</a>.</p>
+      </div>
+      <div class="branch">
+        <div class="branch__t">It does not delete the branch</div>
+        <p>The worktree survives <code>REVIEW</code> and is not removed just because the FRD is marked <code>DONE</code> — only after the commit and push succeed, and only with nothing uncommitted. The branch is kept regardless: it is the only evidence of what changed and why. Old phrasing like “closing = push, remove the worktree, release the lock” survives in places; do not add branch deletion to it.</p>
+      </div>
+      <p><b>So <code>FRD 작업 완료</code> closes the work and keeps the branch, and stops there.</b> On failure the work is preserved and the cause reported; the run supports retry and cancel, and a restart-abandoned run is swept up at boot.</p>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdCompletionRunService.java"><span class="pill">FrdCompletionRunService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdCompletionWorker.java"><span class="pill">FrdCompletionWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdCompletionMergeWorkspace.java"><span class="pill">FrdCompletionMergeWorkspace</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdCompletionConflictResolver.java"><span class="pill">FrdCompletionConflictResolver</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdCompletionMergeValidator.java"><span class="pill">FrdCompletionMergeValidator</span></a>
+      </div>
+      <p>Narrative reference: <a href="../08-frd-completion.html">FRD completion</a>. Canonical: <code>docs/superpowers/specs/2026-09-09-frd-completion-progress-design.md</code>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="06-frd-workbench.html">← FRD workbench</a>
+        <a href="08-srt-fast-track.html">SRT fast track →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

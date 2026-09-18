@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>docs/adp — ADP Builder reference documentation</title>
+<meta name="description" content="A feature-by-feature reference for we-adk-builder, describing the system as built. Open index.html to read it.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">docs/adp — ADP Builder reference documentation</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">ADP Builder reference</p>
+      <h1>docs/adp — ADP Builder reference documentation</h1>
+      <blockquote><p>A feature-by-feature reference for <code>we-adk-builder</code>, describing the system <strong>as built</strong>. Open <a href="index.html"><code>index.html</code></a> to read it.</p></blockquote>
+<h2 id="how-this-folder-works">How this folder works<a class="anchor" href="#how-this-folder-works" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">docs/adp/
+├── index.md / index.html      the hub — start here
+├── NN-slug.md                 the source for one area (00–23)
+├── NN-slug.html               generated from the .md of the same name
+├── README.md                  this file
+├── assets/adp.css             stylesheet; tokens mirrored from the product&#x27;s tokens.css
+├── assets/adp.js              theme toggle, mobile nav, sidebar filter
+└── tools/build_html.py        the generator</code></pre>
+<p><strong>The Markdown is the source of truth. The HTML is generated.</strong> Do not hand-edit an <code>.html</code> file here — the next build overwrites it.</p>
+<pre><code class="language-bash">python docs/adp/tools/build_html.py            # rebuild every page
+python docs/adp/tools/build_html.py --check    # exit 1 if any HTML is stale
+python docs/adp/tools/build_html.py --lint     # exit 1 if a baked page is malformed</code></pre>
+<p><code>--lint</code> catches unparsed markdown, rows that did not become a table, broken internal links, unbalanced tags, and any page missing from <code>NAV</code>.</p>
+<blockquote><p>⛔ <strong>Do not grep the generated HTML for <code>**</code> yourself.</strong> Seven pages match and every one is correct — interceptor path globs (<code>/projects/**</code>, <code>/**</code>), a preview path (<code>…/files/**</code>), a masking result (<code>://***@</code>) and a Javadoc opener (<code>/**</code>). "Fixing" them breaks real paths. <code>--lint</code> strips <code>&lt;code&gt;</code> spans before measuring, which is why it reports zero.</p></blockquote>
+<p>The pages are plain files with relative links. Open <code>index.html</code> from disk; no server is needed.</p>
+<h2 id="the-number-is-a-filename-not-a-reading-order">The number is a filename, not a reading order<a class="anchor" href="#the-number-is-a-filename-not-a-reading-order" aria-hidden="true">#</a></h2>
+<p>⛔ <strong>Do not renumber pages to make the sidebar ascend.</strong> The number orders files on disk; <strong>the group in <code>NAV</code> is the reading order.</strong> Later pages were filed into the group they belong to, so numbers jump at group boundaries (<code>27</code> → <code>06</code>, <code>17</code> → <code>12</code>, <code>24</code> → <code>21</code>). Within any one group, and within each section of <code>index.md</code>, they always ascend.</p>
+<p>The sidebar therefore prints <strong>no number</strong> — in a continuous vertical list a number reads as a position, and those jumps looked like a broken sort. Renumbering instead would mean rewriting 100+ cross-page links and breaking any outside reference, to fix an appearance.</p>
+<h2 id="adding-a-page">Adding a page<a class="anchor" href="#adding-a-page" aria-hidden="true">#</a></h2>
+<ol>
+<li>Write <code>NN-slug.md</code>. The first line is <code># Title</code> (the only H1), and the blockquote directly under it becomes the page's meta description.
+</li>
+<li>Add one <code>(&quot;NN-slug&quot;, &quot;Short label&quot;)</code> entry to the right group in <code>NAV</code> in <code>tools/build_html.py</code>. That list is the source of truth for the sidebar and for the previous/next links.
+</li>
+<li>Add a card to the matching section of <code>index.md</code>.
+</li>
+<li>Run the build.
+</li></ol>
+<h2 id="markdown-the-generator-understands">Markdown the generator understands<a class="anchor" href="#markdown-the-generator-understands" aria-hidden="true">#</a></h2>
+<p>Headings, paragraphs, tables, lists (nested by two-space indent, with wrapped continuation lines joined into the same item), fenced code blocks, blockquotes, horizontal rules, bold, italic, inline code and links. The renderer is small and dependency-free, so it knows only what this folder uses — in particular it handles <strong>single</strong> backticks only, so do not write a double-backtick span.</p>
+<p>One extra: a <code> </code>`<code>cards </code> fence renders a card grid, one card per line:</p>
+<pre><code class="language-text">target.html | Card title | One sentence of description</code></pre>
+<p>Link between pages with the <code>.html</code> name, so the links work in both the rendered site and a Markdown viewer that resolves siblings.</p>
+<h2 id="what-these-documents-are-and-are-not">What these documents are and are not<a class="anchor" href="#what-these-documents-are-and-are-not" aria-hidden="true">#</a></h2>
+<p>They <strong>describe</strong> the system. They are not its decision record. Where something is contested, the canonical sources are <code>CLAUDE.md</code>, <code>docs/artifacts.md</code>, <code>docs/data-model.md</code>, <code>docs/coding-conventions.md</code>, <code>docs/mockup-conventions.md</code> and <code>docs/superpowers/specs/*.md</code> — each page names the relevant one.</p>
+<p>Language: English prose, with the Korean names kept wherever they appear in the code, the UI or the domain (<code>FRD 작업하기</code>, <code>개발요청서</code>, <code>그린존</code>). A name that appears on screen is never silently translated; the <a href="23-glossary.html">glossary</a> carries the mapping.</p>
+    </article>
+    <footer class="doc-footer">
+      
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/README.md</span>
+      
+    </footer>
+  </main>
+</div>
+</body>
+</html>

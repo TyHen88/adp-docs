@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design guide · ADP Builder</title>
+<meta name="description" content="The visual rules of the target system, read from the derivatives the extractor bakes. A read-only window whose value is that it never disagrees with the index it came from.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Design guide</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html" aria-current="page"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Reference material</p>
+      <h1>Design guide</h1>
+      <blockquote><p>The visual rules of the target system, read from the derivatives the extractor bakes. A read-only window whose value is that it never disagrees with the index it came from.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.design</code> Screens: <code>artifacts/design-guide.html</code> Routes: <code>/projects/{projectId}/artifacts/design-guide</code> Canonical design: <code>docs/superpowers/specs/2026-09-10-design-guide-specimen-clipping-design.md</code>, <code>docs/serp-design-guide-findings.md</code></p>
+<h2 id="the-one-question-it-answers">The one question it answers<a class="anchor" href="#the-one-question-it-answers" aria-hidden="true">#</a></h2>
+<p><strong>What are the visual rules of this business's source?</strong></p>
+<p>The material is <strong>two derivatives the extractor bakes</strong>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Reader</th>
+<th>Reads</th>
+<th>Gives</th>
+</tr></thead><tbody>
+<tr><td><code>DesignIndexReader</code></td><td><code>design-index.json</code></td><td>Colours, radii, typography, tokens</td></tr>
+<tr><td><code>StyleVocabularyReader</code></td><td><code>core/&lt;system&gt;/styleguide.md</code></td><td>The class vocabulary</td></tr>
+</tbody></table></div>
+<h2 id="two-rules-that-define-this-screen">Two rules that define this screen<a class="anchor" href="#two-rules-that-define-this-screen" aria-hidden="true">#</a></h2>
+<p>⛔ <strong>Do not build an editing path.</strong> These are derivatives: anything a human edits is destroyed at the next re-bake, and in the meantime the planning repository's checker raises <code>DESIGN-1</code> red.</p>
+<p>⛔ <strong>Do not read computed values.</strong> The index does not follow <code>@import</code>, so there is no material from which to reconstruct the cascade winner. What this screen does is <strong>list the declarations as they are</strong> — and then what the screen says and what the index gave never differ by one character.</p>
+<h2 id="the-file-name-is-not-decided-here">The file name is not decided here<a class="anchor" href="#the-file-name-is-not-decided-here" aria-hidden="true">#</a></h2>
+<p>⛔ <code>DesignIndexReader</code> does not name the file. The location's source of truth is <code>manifest.json</code>'s <code>design-index</code> field, read by <code>PlanningManifestReader.designIndexFile</code> — the same discipline that keeps <code>iks</code> and <code>tnj</code> out of Builder's code.</p>
+<p>⚠ <strong>Missing or unreadable gives an empty value, not an exception.</strong> Brand-new repositories and stale ones both exist, and neither may break a screen. The caller renders "not here yet". Same discipline as <code>PlanningManifestReader</code>.</p>
+<h2 id="the-style-vocabulary-is-the-interesting-half">The style vocabulary is the interesting half<a class="anchor" href="#the-style-vocabulary-is-the-interesting-half" aria-hidden="true">#</a></h2>
+<p>⭐ <strong>The material for "the AI must not invent class names when writing a new screen" is <code>styleguide.md</code>, not <code>design-index.json</code>.</strong></p>
+<p>The real <code>webview/styleguide.md</code> is 1,207 lines holding 1,150 classes — including the typo <code>ui-fex-1</code> that shipped in the source. <strong><code>ui-flex-1</code> does not exist in the source</strong>, so writing it "correctly" produces a screen where not one line of style applies.</p>
+<p>⚠ <strong>Checker rule <code>A-5</code> reads the same fence.</strong> A class outside this list turns the planning repository red — so this screen is where that red is seen in advance.</p>
+<p>⛔ <strong>Do not read outside the fence.</strong> Outside it is an explanatory layer written by planners; treating that as the list promotes human prose into vocabulary. <strong>No fence means the empty set</strong>, not "everything".</p>
+<h2 id="curation">Curation<a class="anchor" href="#curation" aria-hidden="true">#</a></h2>
+<p><code>DesignSystemCurationService</code> + <code>adk_builder_design_system_curation</code> store, <strong>per project</strong>, the meaning Builder has confirmed — without overwriting the extraction candidates.</p>
+<p>Categories are a closed set: <code>button</code>, <code>text-field</code>, <code>textarea</code>, <code>select</code>, <code>checkbox</code>, <code>radio</code>, <code>switch</code>, <code>tabs</code>, <code>pagination</code>, <code>status</code>, <code>modal</code>, <code>table</code>, <code>upload</code>, <code>etc</code>. Component IDs must match <code>[A-Za-z0-9][A-Za-z0-9._-]{0,79}</code>.</p>
+<p>Route: <code>POST …/design-guide/curation/{systemId}/components/{componentId}</code>.</p>
+<h2 id="serving-the-specimens">Serving the specimens<a class="anchor" href="#serving-the-specimens" aria-hidden="true">#</a></h2>
+<ul>
+<li><code>DesignGuideArtifactController</code> serves the extracted artifact files. Its URL pattern is one of the few <strong><code>permitAll</code></strong> paths, and is framed — see <a href="03-accounts-security.html">Accounts &amp; security</a>.
+</li>
+<li><code>DesignFrameController</code> provides the same-origin frame the specimens render in.
+</li>
+<li><code>ShellFragmentReader</code> reads the shell fragment so a specimen can be clipped in context rather than shown bare.
+</li>
+<li><code>DesignGuideArtifactAccess</code> and <code>DesignGuideCatalogReader</code> handle access checks and the catalogue.
+</li></ul>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="13-solution-mockup.html">Solution templates</a> — the screens these rules describe
+</li>
+<li><a href="19-checker.html">Spec checker</a> — <code>DESIGN-1</code> and <code>A-5</code>
+</li>
+<li><a href="07-frd-workbench.html">FRD workbench</a> — where the design rules are applied on every edit
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="13-solution-mockup.html">← Solution templates</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/14-design-guide.md</span>
+      <a href="15-business-language.html">Policy &amp; terms →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

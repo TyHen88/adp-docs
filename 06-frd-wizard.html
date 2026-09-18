@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRD wizard · ADP Builder</title>
+<meta name="description" content="The three steps that turn a typed requirement into a confirmed development scope: direct input, AI interview, scope review. This is where an FRD is born and where the worktree is c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">FRD wizard</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html" aria-current="page"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">FRD work</p>
+      <h1>FRD wizard</h1>
+      <blockquote><p>The three steps that turn a typed requirement into a confirmed development scope: direct input, AI interview, scope review. This is where an FRD is born and where the worktree is created.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.frd</code> — <code>FrdWizardController</code>, <code>FrdInterviewService</code>, <code>ScreenPickService</code> / <code>ScreenPickWorker</code>, <code>FrdRunSpace</code> Screens: <code>templates/artifacts/frd-wizard.html</code>, routes under <code>/projects/{projectId}/artifacts/frds</code> Canonical design: <code>docs/frd-requirement-interview-design.md</code>, <code>docs/superpowers/specs/2026-08-18-frd-fast-track-design.md</code></p>
+<h2 id="the-unit-of-work">The unit of work<a class="anchor" href="#the-unit-of-work" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">FRD 1 = one work item = one git worktree = one person</code></pre>
+<p>An FRD is <strong>independent</strong>. It does <strong>not</strong> hold a foreign key to any upstream artifact — it copies the input text into its own <code>source_text</code>.</p>
+<p><code>Frd.SourceKind</code> has four values, and <strong>two of them are live</strong>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Value</th>
+<th>Status</th>
+</tr></thead><tbody>
+<tr><td><code>PASTED</code></td><td>An FRD a planner created through the wizard — the normal case</td></tr>
+<tr><td><code>SRT</code></td><td>A <strong>bridge FRD</strong>, created automatically so an SRT can travel on the FRD machinery. It never appears in the UI and is born at <code>SCOPE_REVIEW</code>. See <a href="09-srt.html">SRT fast track</a></td></tr>
+<tr><td><code>REQUIREMENT</code>, <code>BRD</code></td><td>Read only, for old data from the retired chain</td></tr>
+</tbody></table></div>
+<p>⚠ <strong>Not every row in <code>adk_builder_frd</code> is FRD work a planner did.</strong> A query that counts FRDs without filtering <code>source_kind</code> also counts every SRT's hidden bridge.</p>
+<p>⭐ Why a copy rather than an FK: the upstream chain (received document → REQ → RD → BRD) was retired, so there may be nothing to point at. An FRD created by pasting text has no upstream row at all.</p>
+<h2 id="the-three-steps-are-inside-one-wizard">The three steps are inside one wizard<a class="anchor" href="#the-three-steps-are-inside-one-wizard" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">FRD 작업하기 ─┬ step 1  요구사항 직접 입력   (enter the requirement directly)
+              ├ step 2  AI 인터뷰            (AI interview)
+              └ step 3  개발 범위 확인        (confirm the development scope)</code></pre>
+<p>⛔ <strong>Do not draw these as siblings of the workbench and the DR.</strong> They are the inside of the wizard. The canonical definition is <code>FrdWizardController</code> plus the three progress markers in <code>frd-wizard.html</code>. The reason the left menu does not list them is that they live inside the wizard, not that they were removed.</p>
+<h2 id="states">States<a class="anchor" href="#states" aria-hidden="true">#</a></h2>
+<p><code>Frd.State</code> — eight values:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>State</th>
+<th>Screen label</th>
+<th>What Builder is doing</th>
+<th>What the user does</th>
+</tr></thead><tbody>
+<tr><td><code>ANALYZING</code></td><td>요구사항 분석 중</td><td>Investigating the requirement and the planning repository; preparing the next question or the result</td><td>Wait. Closing the browser does not stop it</td></tr>
+<tr><td><code>WAITING_ANSWER</code></td><td>답변 필요</td><td>The AI run has ended; the question and the transcript so far are saved</td><td>Answer, or finish the analysis with what is there</td></tr>
+<tr><td><code>ANALYSIS_FAILED</code></td><td>분석 오류</td><td>The failure reason is recorded and auto-progress has stopped</td><td>Read the message and press <code>다시 분석하기</code>. If it repeats, check the Claude connection and the server log</td></tr>
+<tr><td><code>PICKED</code></td><td>분석 결과 확인</td><td>Showing the interview result, the target screens, the out-of-screen scope and completion criteria</td><td>Confirm, or <code>다시 인터뷰하기</code> to fill gaps</td></tr>
+<tr><td><code>SCOPE_REVIEW</code></td><td>개발 범위 확인</td><td>Showing the confirmed analysis as the work scope. <strong>No worktree yet</strong></td><td><code>FRD 작업하기</code>, or <code>개발요청서 바로 만들기</code> for qualifying backend-only work</td></tr>
+<tr><td><code>DRAFTING</code></td><td>수정 중</td><td>Editing screens and documents in the FRD's own worktree, saving history</td><td>Review the result, finish the edits, request completion</td></tr>
+<tr><td><code>REVIEW</code></td><td>—</td><td>Completion is running / prepared</td><td>—</td></tr>
+<tr><td><code>DONE</code></td><td>완료</td><td>The DR content is fixed and the FRD opens read-only</td><td>Review the development request</td></tr>
+</tbody></table></div>
+<h2 id="step-1-enter-the-requirement-directly">Step 1 — enter the requirement directly<a class="anchor" href="#step-1-enter-the-requirement-directly" aria-hidden="true">#</a></h2>
+<p>The user writes, in business language, what should be built or changed, and selects what it applies to (the facet axis, if the project has one).</p>
+<p><strong>Selecting a screen is optional.</strong> Backend, permission, batch and policy work with no screen at all starts the same way and runs in the same FRD and worktree.</p>
+<p>A good input names the actor, the purpose, the starting condition and the expected outcome:</p>
+<pre><code class="language-text">경비 담당자가 법인카드 사용 내역을 확인할 때 미제출 영수증만 모아 보고,
+선택한 직원에게 제출 요청을 보낼 수 있어야 한다.</code></pre>
+<h2 id="step-2-the-ai-interview">Step 2 — the AI interview<a class="anchor" href="#step-2-the-ai-interview" aria-hidden="true">#</a></h2>
+<p>This is <strong>not</strong> one-shot analysis producing screen candidates. It is an interview: the AI investigates the evidence, asks <strong>one question at a time</strong> about judgements it cannot ground, and only then fixes a result.</p>
+<pre><code class="language-text">requirement entered
+  → AI investigates
+  → is there a judgement that needs an answer?
+      ├─ yes: one question → user answers → AI keeps investigating
+      └─ no : write up the analysis result
+  → the user checks the front/back scope and the screens
+  → confirm the analysis</code></pre>
+<p>The AI asks when it lacks the evidence to be confident about:</p>
+<ul>
+<li>whether this changes an existing screen or adds a new one
+</li>
+<li>whether the screen change needs API, batch, permission or data changes with it
+</li>
+<li>whether this is operating an existing feature or new development
+</li>
+<li>which of several systems the scope reaches
+</li>
+<li>conditions that affect the completion criteria — errors, permissions, retention periods
+</li></ul>
+<p>Default maximum <strong>five</strong> questions, one at a time. The user can end the interview at any point with <code>현재 내용으로 범위 정리</code>.</p>
+<h3 id="why-turn-based-execution-not-a-long-lived-process">Why turn-based execution, not a long-lived process<a class="anchor" href="#why-turn-based-execution-not-a-long-lived-process" aria-hidden="true">#</a></h3>
+<p>The first implementation chose <strong>one Claude run per turn</strong> rather than a bidirectional process held open:</p>
+<ol>
+<li>The AI investigates the requirement and the planning repository.
+</li>
+<li>If it needs an answer, it returns <strong>one question as structured JSON</strong> instead of a final result, and the run ends.
+</li>
+<li>The server saves the question and the investigation summary, and moves the FRD to <code>WAITING_ANSWER</code>.
+</li>
+<li>The user answers; the answer is saved and the next run starts.
+</li>
+<li>The next run receives the original requirement plus every question and answer so far.
+</li>
+<li>When there are no questions left, the analysis result is saved and the FRD moves to <code>PICKED</code>.
+</li></ol>
+<p>This survives a closed browser and a server restart. <strong>While waiting for a human, no Claude process, no credential file and no account lock is held.</strong></p>
+<blockquote><p>⚠ <strong>Revised 2026-08-19.</strong> Measurement showed 220 of 350 seconds per run were exploration, and every one-line answer paid that 220 seconds again. Successful runs now remember their session and continue with <code>--resume</code> (<code>FrdRunSpace</code>). Continuation runs send only a short instruction and do <strong>not</strong> reload the policy/terminology blocks or the codebase MCP. Sessions from runs the reader rejected are not remembered (2026-09-10). The canonical description is the comment in <code>ScreenPickWorker</code>.</p></blockquote>
+<h3 id="screen-picking">Screen picking<a class="anchor" href="#screen-picking" aria-hidden="true">#</a></h3>
+<p><code>ScreenPickWorker</code> reads the requirement and picks <strong>the screens in this business that must change</strong>.</p>
+<ul>
+<li>★ It is a <strong>separate bean</strong> from <code>ScreenPickService</code>. ⛔ Putting it inside the service would make the call self-invoking, skip the Spring proxy, and stop <code>@Async</code> from firing at all.
+</li>
+<li>It is <strong>read-only</strong>: <code>claude</code> takes the cloned planning repository as its working directory and reads the index and screen documents without modifying them.
+</li>
+<li>⛔ <strong>Pasted source text is never inlined into the instruction</strong> (2026-08-18 review). <code>source_text</code> has no length limit, so "it is short enough to fit" was unfounded: inlining can exceed the Windows argv limit (~32 KB), and imperative sentences inside the pasted text get a place to be read as instructions. The text is written to a run-only file and the instruction carries only its path.
+</li>
+<li><code>ScreenPickService</code> is <strong>the DB half</strong>. ⛔ No process-spawning code goes in it.
+</li></ul>
+<p>Prompt fragments live under <code>src/main/resources/claude/prompts/screen-pick/</code>, with <code>mode-grep/</code> and <code>mode-mcp/</code> variants depending on whether <code>codebase-memory-mcp</code> is configured.</p>
+<h3 id="what-the-interview-records">What the interview records<a class="anchor" href="#what-the-interview-records" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Table</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr><td><code>adk_builder_frd_interview_message</code></td><td>The ordered conversation — AI questions and analysis summaries, user answers</td></tr>
+<tr><td><code>adk_builder_frd_screen</code></td><td>Screens to change — existing and new together</td></tr>
+<tr><td><code>adk_builder_frd_backend_change</code></td><td>Per API / data / permission / batch / notification: needs change, or confirmed no change</td></tr>
+<tr><td><code>adk_builder_frd_analysis_note</code></td><td>Completion criteria and items needing confirmation</td></tr>
+</tbody></table></div>
+<p><code>FrdInterviewService</code> saves questions, answers and the final result <strong>as one state transition</strong>. <code>FrdInterviewRecovery</code> repairs runs that died mid-flight.</p>
+<h2 id="step-3-confirm-the-development-scope">Step 3 — confirm the development scope<a class="anchor" href="#step-3-confirm-the-development-scope" aria-hidden="true">#</a></h2>
+<p><code>SCOPE_REVIEW</code> shows the confirmed analysis as the work scope: which screens change, what is implemented outside a screen, the completion criteria, and what is excluded. If something is missing or a screen is wrong, the user goes back and fills the gap.</p>
+<p><strong>No worktree exists yet.</strong> <code>다시 인터뷰하기</code> re-scopes without creating one.</p>
+<p>Two exits:</p>
+<h3 id="frd-작업하기-the-normal-path"><code>FRD 작업하기</code> — the normal path<a class="anchor" href="#frd-작업하기-the-normal-path" aria-hidden="true">#</a></h3>
+<p>Pressing it is the <strong>first write</strong>, so this is where the worktree is created.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Rule</th>
+</tr></thead><tbody>
+<tr><td>Branch</td><td><code>frd/{FRD DB id}</code> — e.g. <code>frd/0000025</code></td></tr>
+<tr><td>Folder</td><td><code>{worktreeRoot(projectId)}/frd-{FRD DB id}</code></td></tr>
+<tr><td>Cut from</td><td>The project clone's <code>HEAD</code> at the moment the button is pressed</td></tr>
+<tr><td>Owner</td><td>The FRD's <code>owner_account_id</code></td></tr>
+</tbody></table></div>
+<p>The <strong>DB id</strong>, not the display number <code>FRD-025</code>, is used — the display number is for humans; the DB id is the recovery key that recomputes the URL, the branch and the folder to the same values.</p>
+<p>Creation contract:</p>
+<ol>
+<li>Verify the FRD is in <code>SCOPE_REVIEW</code>.
+</li>
+<li>Verify the clone and the default branch are healthy.
+</li>
+<li>Handle only one creation request per FRD at a time.
+</li>
+<li>Create the branch and worktree if they do not exist.
+</li>
+<li><strong>Reuse</strong> them if the same pair already exists.
+</li>
+<li>Only after the worktree is confirmed, move the FRD to <code>DRAFTING</code>.
+</li>
+<li>On failure, leave the FRD in <code>SCOPE_REVIEW</code> and tell the user why and what to retry.
+</li></ol>
+<p>⭐ Git file operations and a DB state change cannot be one transaction, hence the order <strong>worktree first, state second</strong>. If the state change fails after a <em>new</em> worktree was created, only that empty worktree is cleaned up. An existing worktree is never auto-deleted — it may contain the user's work.</p>
+<p>Reopening a <code>DRAFTING</code> FRD reuses the same worktree; the branch and folder are recomputed from the DB id after any restart. If the branch exists without a worktree, the worktree is re-attached. If the folder is not registered with git or points at a different branch, Builder <strong>reports that recovery is needed</strong> rather than overwriting or deleting.</p>
+<h3 id="개발요청서-바로-만들기-backend-only-fast-track"><code>개발요청서 바로 만들기</code> — backend-only fast track<a class="anchor" href="#개발요청서-바로-만들기-backend-only-fast-track" aria-hidden="true">#</a></h3>
+<p>Shown <strong>only</strong> when no screen is selected and there are no open questions. It skips the workbench and the screen worktree, but the entered requirement and the AI's analysis evidence still go into the development request.</p>
+<blockquote><p><strong>Revised 2026-09-02.</strong> Fast track (<code>FAST_TRACK</code>) is now <strong>backend-only changes, and nothing else</strong>. The old "simple change to one existing screen" fast track was replaced by the <strong>SRT</strong> menu outside the FRD flow — see <a href="09-srt.html">SRT fast track</a>.</p></blockquote>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="07-frd-workbench.html">FRD workbench</a> — what <code>DRAFTING</code> actually looks like
+</li>
+<li><a href="08-frd-completion.html">FRD completion</a> — what <code>FRD 작업 완료</code> does
+</li>
+<li><a href="05-claude-cli-runtime.html">Claude CLI runtime</a> — how each interview turn is executed
+</li>
+<li><a href="13-solution-mockup.html">Solution templates</a> — the screens the interview picks from
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="27-concurrent-edit.html">← Concurrent editing</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/06-frd-wizard.md</span>
+      <a href="07-frd-workbench.html">FRD workbench →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The data root on disk · Work processes · ADP Builder</title>
+<meta name="description" content="Every folder under builder.data-root: which class creates it, what nests inside it, why it is kept or deleted, and which ones you may remove safely.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · The data root</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html" aria-current="page"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Underneath</p>
+      <h1>The data root on disk</h1>
+      <p class="wp-lede">Everything the server writes outside the database lives under one configured path, <code>builder.data-root</code>. There are only two kinds of folder down there: <b>one that holds work you cannot lose</b>, and <b>scratch space for <code>claude</code> child processes</b> that is created on demand and deleted in a <code>finally</code>. Knowing which is which is most of what you need.</p>
+
+      <div class="note">
+        <div class="note__t">An empty scratch folder is the normal state</div>
+        <p>Nine of the ten top-level folders exist only because a run needed them once. Finding them empty means nothing is running right now — not that something is missing.</p>
+      </div>
+
+      <h2>The whole thing at a glance</h2>
+      <div class="tree">&lt;data-root&gt;/
+├─ <b>projects/</b>                       <i>durable — clones, worktrees, packages</i>
+├─ claude/                          <i>common-rules.md, re-unpacked from the jar every boot</i>
+├─ frd-runs/                        <i>one folder per FRD — kept between interview turns</i>
+├─ frd-chat-sessions/               <i>one folder per screen — kept so --resume works</i>
+├─ frd-completion-runs/             <i>kept until a completion closes</i>
+├─ frd-chat-runs/                   <i>one folder per chat request — deleted after</i>
+├─ frd-tobe-doc-runs/               <i>one per to-be document run — deleted after</i>
+├─ dev-request-test-scenario-runs/  <i>one per scenario run — deleted after</i>
+├─ claude-connection-probes/        <i>one per credential check — deleted after</i>
+└─ probe/                           <i>a working directory for git ls-remote; never written to</i></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Folder</th><th>Lifetime</th><th>Created by</th></tr></thead>
+          <tbody>
+            <tr><td><code>projects/</code></td><td><b>Durable</b> — never auto-deleted</td><td><code>ProjectPaths</code></td></tr>
+            <tr><td><code>claude/</code></td><td>Rewritten at every boot</td><td><code>ClaudeCommonRules</code></td></tr>
+            <tr><td><code>frd-runs/</code></td><td>Per FRD; wiped when the FRD finishes or resets</td><td><code>FrdRunSpace</code> (via <code>ScreenPickWorker</code>)</td></tr>
+            <tr><td><code>frd-chat-sessions/</code></td><td>Per screen; kept across requests</td><td><code>FrdScreenChatWorker</code></td></tr>
+            <tr><td><code>frd-completion-runs/</code></td><td>Per completion run; cleaned when it closes</td><td><code>FrdCompletionMergeWorkspace</code></td></tr>
+            <tr><td><code>frd-chat-runs/</code></td><td>Per request; deleted in a <code>finally</code></td><td><code>FrdScreenChatWorker</code></td></tr>
+            <tr><td><code>frd-tobe-doc-runs/</code></td><td>Per run; deleted</td><td><code>ScreenTobeDocumentWorker</code></td></tr>
+            <tr><td><code>dev-request-test-scenario-runs/</code></td><td>Per run; deleted</td><td><code>DevRequestTestScenarioWorker</code></td></tr>
+            <tr><td><code>claude-connection-probes/</code></td><td>Per probe; deleted</td><td><code>ClaudeConnectionProbe</code></td></tr>
+            <tr><td><code>probe/</code></td><td>Permanent and permanently empty</td><td><code>RepoProbe</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>projects/ — the one you must not delete</h2>
+      <div class="tree">projects/&lt;projectId&gt;/
+├─ <b>clone/</b>                          <i>the server clone — nobody works in here</i>
+├─ <b>worktrees/</b>
+│  ├─ frd-&lt;frdId&gt;/                   <i>one FRD, one branch, one person</i>
+│  ├─ srt-&lt;srtId&gt;/                   <i>an SRT's workspace</i>
+│  └─ dev-request-merge-&lt;id&gt;/        <i>cut for a merge, then removed</i>
+├─ <b>dev-request-packages/</b>
+│  ├─ &lt;requestId&gt;-&lt;attemptId&gt;/       <i>one delivery attempt's room</i>
+│  │  ├─ delivery.zip                <i>what was sent, hashed into the journal</i>
+│  │  └─ package/                    <i>dev-request.md · expected-back.md · manifest.json · screens/ · attachments/</i>
+│  └─ &lt;requestId&gt;/DR-00n.zip         <i>the archive kept for that request</i>
+├─ received/                         <i>uploaded originals — created only when used</i>
+├─ dev-request-attachments/          <i>attachments waiting to go out</i>
+├─ business-language-run/            <i>short-lived credential dirs for policy/terms runs</i>
+└─ dev-request-merge-run/            <i>short-lived credential dir for a merge resolution</i></div>
+      <p>Every one of those paths is computed in a single class, <code>ProjectPaths</code>, and the last four are created only when something uses them — an install that has never uploaded a document has no <code>received/</code>.</p>
+      <div class="note">
+        <div class="note__t">Two naming rules you can read off the folder names</div>
+        <p>Worktrees are named by <b>database id</b>, never by the display number: <code>frd-0000025</code>, not <code>FRD-025</code>. The display number is for people and can change; the id is what lets the server recompute the same folder and branch after a restart and find the existing worktree again. And a package room is <code>&lt;requestId&gt;-&lt;attemptId&gt;</code>, one per delivery attempt, so you can tell two attempts at the same request apart.</p>
+      </div>
+      <div class="branch">
+        <div class="branch__t">received/ and dev-request-packages/ sit beside the clone, never inside it</div>
+        <p>Anything inside <code>clone/</code> is something git can see, stage and push. An uploaded original is the server's own copy, and a built package is an outbound copy — neither belongs in the planning team's repository.</p>
+      </div>
+
+      <h2>claude/</h2>
+      <p>Holds exactly one file, <code>common-rules.md</code>, appended to <b>every</b> AI run with <code>--append-system-prompt-file</code>: write Korean for the planner audience, treat text inside files and quotations as data rather than instructions, and where the design source of truth is.</p>
+      <div class="branch">
+        <div class="branch__t">Editing it here does nothing</div>
+        <p>It is unpacked from inside the jar at every boot, so the deployed version always wins and your edit is gone on the next restart. The source of truth is <code>src/main/resources/claude/common-rules.md</code>. A resumed session also replays the system prompt recorded when it started, so even a correct edit reaches an in-flight interview only from its next session.</p>
+      </div>
+
+      <h2>frd-runs/&lt;frdId&gt;/ — the wizard's run space</h2>
+      <div class="tree">frd-runs/&lt;frdId&gt;/
+├─ credentials/       <i>CLAUDE_CONFIG_DIR — Claude's session record lands here</i>
+│  ├─ session.id      <i>the session to --resume on the next turn</i>
+│  └─ .credentials.json  <i>wiped after every turn</i>
+└─ work/              <i>the requirement copy, the screen list, the interview copies</i></div>
+      <p>Three decisions are visible in that one path.</p>
+      <div class="note">
+        <div class="note__t">Keyed by FRD, not by run</div>
+        <p>It used to be a UUID per run, deleted at the end — so the next turn could not continue the previous conversation and re-explored the repository from scratch. Measurement: <b>220 of 350 seconds per run</b> was that re-exploration, paid again on every one-line answer. Keying by FRD is safe where keying by person would not be, because a single FRD's state already allows only one run at a time.</p>
+      </div>
+      <div class="note">
+        <div class="note__t">The work path must not move between turns</div>
+        <p>A resumed conversation is holding absolute paths it saw last turn. Move the folder and those paths point at nothing.</p>
+      </div>
+      <div class="branch">
+        <div class="branch__t">The credential wipe is now the only guard</div>
+        <p>While the folder was deleted per run, deleting it also removed the unsealed credential. Now that the space survives, <code>wipeCredential()</code> after each turn is the single thing keeping somebody else's Claude credential off the server's disk. The whole space is wiped when the FRD finishes or is reset.</p>
+      </div>
+
+      <h2>frd-chat-sessions/&lt;frdScreenId&gt;/ — kept on purpose</h2>
+      <p>Claude Code stores its conversation session <i>underneath</i> <code>CLAUDE_CONFIG_DIR</code>. If every chat request used a throwaway directory, <code>--resume</code> would hold a session id pointing at a session that no longer exists — so the session directory is keyed by <b>screen</b> and kept, while only the per-request input goes in <code>frd-chat-runs/</code>.</p>
+      <div class="tree">frd-chat-sessions/&lt;frdScreenId&gt;/
+└─ credentials/    <i>CLAUDE_CONFIG_DIR for this screen · Claude's own session files beneath it</i>
+                   <i>the policy and standard-terminology copies also live here</i></div>
+      <div class="branch">
+        <div class="branch__t">Why the policy files are here and not in the run folder</div>
+        <p>They were written into the per-request folder once. The request ended, the folder was deleted, and the next resumed turn poked the path it remembered — “Path does not exist”. Anything a resumed session can reference has to outlive the request.</p>
+      </div>
+
+      <h2>frd-chat-runs/&lt;messageId&gt;-&lt;uuid&gt;/</h2>
+      <p>One screen-chat request's scratch, deleted when the request ends. What appears under <code>input/</code> depends on what was asked:</p>
+      <div class="tree">frd-chat-runs/&lt;messageId&gt;-&lt;uuid&gt;/input/
+├─ conversation.md            <i>a resumed turn carries ONLY this turn — the rest is in the session</i>
+├─ screen-review-mcp.json     <i>the local “look at only this screen” tool config</i>
+├─ selected-region.json       <i>the region the planner picked in the preview</i>
+├─ reference-image.&lt;ext&gt;      <i>an image attached to the message</i>
+├─ new-screen.html            <i>a draft when the request creates a screen</i>
+└─ design rules · gap context <i>written per request for the menu items that need them</i></div>
+
+      <h2>frd-completion-runs/ — the busiest structure here</h2>
+      <div class="tree">frd-completion-runs/
+├─ budget.lock                <i>the disk-budget lock</i>
+└─ &lt;runUuid&gt;/
+   ├─ journal.json            <i>the durable record: what was preserved, how far finalisation got</i>
+   ├─ contents/               <i>preserved originals, addressed by sha256</i>
+   ├─ disk-reservation        <i>this run's reserved space</i>
+   └─ attempt-&lt;n&gt;/            <i>one merge attempt</i>
+      ├─ candidate/           <i>the merged tree being verified</i>
+      ├─ baseline/            <i>what it is compared against</i>
+      └─ verify/node_modules  <i>the checker's dependencies, copied rather than reinstalled</i></div>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Why the reservation is a file</p>
+          <p>A budget held only in memory is lost on restart, and waiting runs would then compute the wrong free space. Writing it down means the budget survives a restart; rejections log the numbers and the configuration key while the screen shows only a per-code message.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Why <code>contents/</code> is content-addressed</p>
+          <p>Originals are preserved so a failed merge can be rolled back, and addressing them by hash lets a second completion reuse what did not change. Measurement is honest about the limit: reuse between runs is bounded, and a re-completion still rewrites most of it.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Why the merge is a separate tree</p>
+          <p><code>candidate/</code> and <code>baseline/</code> are not the planner's worktree. A merge that fails or is abandoned must never leave the working tree they are editing in a damaged state.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">journal.json has a format version</p>
+          <p>Because recovery reads it after a crash. Format 3 records the index as the hash of <code>git ls-files --stage</code> rather than the index file's bytes — see the trap below.</p>
+        </div>
+      </div>
+      <div class="branch">
+        <div class="branch__t">The incident this folder remembers</div>
+        <p>Recovery used to compare the <b>bytes</b> of the git index file against the recorded hash. But <code>git status</code> — including the workbench's own two-second polling — rewrites the index's stat cache, so the content was identical while the bytes differed. One FRD was left stuck: recovery refused, and “retry completion” hit the same check forever. The fix compares the index <i>tree</i> instead, and the stuck run's <code>journal.json</code> had to be migrated by hand before it could be closed.</p>
+      </div>
+
+      <h2>The three that are gone before you look</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">frd-tobe-doc-runs/&lt;frdScreenId&gt;-&lt;uuid&gt;/</p>
+          <p>Writes the to-be feature definition (<code>&lt;screenId&gt;.md</code>) before a development request goes out — the file that would otherwise leave a blank column in the contract. Inside: <code>input/as-is.md</code> and the rest of the material, plus <code>credentials/</code>.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">dev-request-test-scenario-runs/&lt;requestId&gt;-&lt;uuid&gt;/</p>
+          <p>The run that writes integration-test scenarios for a request after completion. Inside: <code>input/dev-request.md</code> and <code>credentials/</code>.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">claude-connection-probes/&lt;uuid&gt;/</p>
+          <p>One “is this credential still alive?” check, asked before a long job so a four-minute completion does not die at the end on a dead token. Inside: <code>credentials/</code> and <code>work/</code>. Never called from screen polling — polling reads a cached verdict, because spawning a process every few seconds is load, not verification.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Why the material is always a file</p>
+          <p>All three write their input to disk and pass only the path. Pasted text has no length limit, so inlining it can exceed the Windows argv limit — and an imperative sentence inside somebody's pasted text should never land where it could be read as an instruction.</p>
+        </div>
+      </div>
+      <div class="branch">
+        <div class="branch__t">A deleted folder cannot hold its own failure reason</div>
+        <p>Each of these is removed in a <code>finally</code>, which is exactly why a failed run's diagnosis is written <b>outside</b> it. Before that existed, a failure left only a code like <code>AI_FAILED</code> — indistinguishable between a timeout, a missing credential and an over-long request — and one FRD died four identical deaths. Bodies are always masked on the way out, because responses can carry tokens and diagnostics live a long time.</p>
+      </div>
+
+      <h2>probe/</h2>
+      <p>A working directory for <code>git ls-remote</code>, used when a project registration or a replaced token is verified. <b>Nothing is ever written into it</b> — <code>ls-remote</code> downloads no files; a git process simply needs somewhere to run. Permanently empty is correct.</p>
+
+      <h2>Two more that can appear at the top level</h2>
+      <p><code>runs/&lt;runId&gt;/credentials</code> (an AI run's credential directory) and <code>doc-runs/&lt;runId&gt;</code> (document processing). They are absent on an install that has not used them.</p>
+      <div class="branch">
+        <div class="branch__t">They are separate trees for one specific reason</div>
+        <p>Both sequences are seven digits, so <code>ai_run</code>'s <code>0000001</code> and document processing's <code>0000001</code> would land on the same <code>runs/0000001</code> — and the first run to finish would delete the credential the other was still using. Same numbers, different trees. The same rule explains why a credential directory is per <b>run</b> rather than per person: one person can have two jobs running, and a per-person directory makes the first <code>finally</code> destroy the second job's credential.</p>
+      </div>
+
+      <h2>Cleaning up</h2>
+      <div class="note">
+        <div class="note__t">With the server stopped</div>
+        <p>Everything except <code>projects/</code> and <code>claude/</code> can be deleted safely: you lose in-flight runs and resumable chat sessions, and nothing else. <code>claude/</code> comes back by itself on the next boot. <b><code>projects/</code> is real data</b> — clones, and worktrees holding planner work that has not been pushed anywhere. Inside <code>projects/</code>, the one thing that does grow without limit is <code>dev-request-packages/</code>: one room per activated delivery attempt, and nothing trims them — each holds a <code>delivery.zip</code> the journal has hashed, so deleting one throws away the evidence of what was sent. A stale <code>frd-completion-runs/&lt;runUuid&gt;/</code> is the one to look at twice: if a completion was interrupted, that folder is the recovery material.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/project/ProjectPaths.java"><span class="pill">ProjectPaths</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/config/BuilderProperties.java"><span class="pill">BuilderProperties</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/ai/ClaudeCommonRules.java"><span class="pill">ClaudeCommonRules</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/ai/ClaudeConnectionProbe.java"><span class="pill">ClaudeConnectionProbe</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdRunSpace.java"><span class="pill">FrdRunSpace</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdScreenChatWorker.java"><span class="pill">FrdScreenChatWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdCompletionMergeWorkspace.java"><span class="pill">FrdCompletionMergeWorkspace</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/git/RepoProbe.java"><span class="pill">RepoProbe</span></a>
+      </div>
+      <p>Related maps: <a href="02-git-worktree.html">Git &amp; worktrees</a> for what lives inside a worktree, <a href="09-ai-run.html">AI runs</a> for what a credential directory is for, <a href="07-frd-completion.html">FRD completion</a> for the run that fills <code>frd-completion-runs/</code>. Operations: <a href="../21-operations.html">Install &amp; operations</a>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="10-green-zone.html">← Generated artifacts</a>
+        <a href="11-frd-test-samples.html">FRD test samples →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

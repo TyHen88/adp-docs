@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Large repositories &amp; performance · ADP Builder</title>
+<meta name="description" content="What Builder does to stay safe and fast on a big planning repository, which limits actually exist in the code today, and — kept strictly separate — which improvements are still onl">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Large repositories &amp; performance</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html" aria-current="page"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Platform</p>
+      <h1>Large repositories &amp; performance</h1>
+      <blockquote><p>What Builder does to stay safe and fast on a big planning repository, which limits actually exist in the code today, and — kept strictly separate — which improvements are still only proposed.</p></blockquote>
+<p>Canonical design: <code>docs/superpowers/specs/2026-09-12-large-repository-workspace-overview.md</code> (plus its verification, the screen-identifier review, the SERP performance reviews, and the delivery recheck — six documents in all)</p>
+<blockquote><p>⚠ <strong>Read the split in this page before quoting any number from it.</strong> The design document is a <strong>staged proposal</strong>, not a description of a finished system: <em>"이번 문서 변경은 수정 계획 수립이며, 운영 적용은 단계별 검증 결과를 확인한 뒤 진행한다."</em> Sections 1–3 below are measured from the code as it is. Section 4 is what has <strong>not</strong> been done.</p></blockquote>
+<h2 id="the-problem">The problem<a class="anchor" href="#the-problem" aria-hidden="true">#</a></h2>
+<p>Several planners work independently on one large planning repository. Each FRD needs an isolated workspace, every completion needs a durable snapshot it can recover from, and none of that may cost so much memory, disk or waiting time that the product becomes unusable.</p>
+<p>⛔ <strong>The scope is the planning repository the extractor produced.</strong> Builder is not being extended to read or extract the whole SERP production source. That boundary is restated in the design because performance pressure is exactly the argument someone would use to cross it.</p>
+<p>⚠ <strong>The real size and bottlenecks of the SERP planning repository have not been measured.</strong> Every number below is a limit in the code, not an observation of production.</p>
+<h2 id="1-what-the-code-does-today">1. What the code does today<a class="anchor" href="#1-what-the-code-does-today" aria-hidden="true">#</a></h2>
+<h3 id="git-level-economy">Git-level economy<a class="anchor" href="#git-level-economy" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mechanism</th>
+<th>Where</th>
+<th>Effect</th>
+</tr></thead><tbody>
+<tr><td><code>fetch --no-tags</code></td><td><code>FrdCompletionMergeWorkspace:160</code></td><td>Skips tag refs when pulling the latest into the merge candidate</td></tr>
+<tr><td><code>fetch --depth=1 --no-tags</code></td><td><code>FrdCompletionMergeWorkspace:517</code></td><td>The final-file copy takes one commit deep, not the history</td></tr>
+<tr><td>Worktrees share objects with the clone</td><td><code>FrdWorkspace</code>, <code>CheckerWorkspace</code></td><td>A new FRD workspace does not re-download the repository — the 148 MB is fetched once</td></tr>
+<tr><td><code>--detach</code> for check workspaces</td><td><code>CheckerWorkspace</code></td><td>Read-and-discard copies create no branch</td></tr>
+<tr><td>Sparse-checkout <strong>detection</strong></td><td><code>FrdCompletionMergeWorkspace:358</code></td><td>Reads <code>core.sparseCheckout</code> so that <strong>a path omitted by a partial checkout is never mistaken for a deletion</strong></td></tr>
+</tbody></table></div>
+<p>⭐ That last one is the subtle one. Snapshot logic compares "what is on disk" against "what git tracks". Under a sparse checkout those legitimately differ, and without the check Builder would record absent-but-tracked files as deletions and carry that into a merge.</p>
+<h3 id="size-limits-that-really-exist">Size limits that really exist<a class="anchor" href="#size-limits-that-really-exist" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Limit</th>
+<th>Value</th>
+<th>Where</th>
+</tr></thead><tbody>
+<tr><td>Per file in a merge workspace</td><td><strong>64 MiB</strong></td><td><code>FrdCompletionMergeWorkspace.MAX_FILE_BYTES</code></td></tr>
+<tr><td>Conflict material handed to the AI</td><td><strong>2 MiB</strong></td><td><code>FrdCompletionConflictResolver.MAX_BYTES</code></td></tr>
+<tr><td>Per completion run</td><td><strong>8 GiB</strong></td><td><code>builder.completion.max-run-bytes</code></td></tr>
+<tr><td>Across all completion runs</td><td><strong>32 GiB</strong></td><td><code>builder.completion.max-total-bytes</code></td></tr>
+<tr><td>Refuse below free disk</td><td><strong>1 GiB</strong></td><td><code>builder.completion.min-free-bytes</code></td></tr>
+<tr><td>Concurrent completions / queue</td><td><strong>2 / 20</strong></td><td><code>builder.completion.concurrency</code>, <code>queue-capacity</code></td></tr>
+<tr><td>Delivery archive</td><td><strong>512 MB</strong></td><td><code>builder.delivery.max-archive-bytes</code></td></tr>
+<tr><td>Development result archive</td><td>2,000 entries · 10 MB per file · 100 MB total</td><td><code>DevResultArchiveValidator</code></td></tr>
+</tbody></table></div>
+<p>⭐ <strong>The conflict limit and the file-preservation limit are deliberately separate numbers.</strong> How much text an AI can usefully be given and how much data can be safely preserved are different questions; merging them would let one constraint silently set the other.</p>
+<h3 id="budget-that-survives-a-restart">Budget that survives a restart<a class="anchor" href="#budget-that-survives-a-restart" aria-hidden="true">#</a></h3>
+<p><code>FrdCompletionDiskBudget</code> writes each run's reservation <strong>to disk</strong>, so after a server restart the budget for waiting runs is recomputed rather than lost. Rejections log the numbers and the configuration key name while the screen shows only a per-code message — the operator gets the detail, the planner gets a sentence.</p>
+<h3 id="journal-and-content-are-stored-apart">Journal and content are stored apart<a class="anchor" href="#journal-and-content-are-stored-apart" aria-hidden="true">#</a></h3>
+<p><code>FrdCompletionJournalStore</code> + <code>FrdCompletionFileStore</code> split the completion journal from the file bytes it refers to. Legacy records that inlined bodies are split on read, leaving the original JSON untouched. This is stage 1 of the design's plan, and it is <strong>done</strong>.</p>
+<h3 id="work-that-moved-out-of-the-users-wait">Work that moved out of the user's wait<a class="anchor" href="#work-that-moved-out-of-the-users-wait" aria-hidden="true">#</a></h3>
+<p><a href="08-frd-completion.html">FRD completion</a> publishes success after only the cheap checks — path, readability, size, binary contamination, unresolved conflict markers. HTML/JSON quality analysis and external link checking run afterwards on a background worker. <code>WAIT_TOTAL</code> and <code>BACKGROUND_REVIEW</code> are logged separately so the two can be told apart.</p>
+<h2 id="2-contracts-that-performance-work-may-not-break">2. Contracts that performance work may not break<a class="anchor" href="#2-contracts-that-performance-work-may-not-break" aria-hidden="true">#</a></h2>
+<p>The design pins these down precisely because they are what an optimisation would be tempted to trade away:</p>
+<ul>
+<li><code>FRD 1개 = 작업 1개 = 워크트리 1개 = 한 사람</code>
+</li>
+<li>Move to <code>DRAFTING</code> <strong>only after</strong> the workspace is confirmed
+</li>
+<li>⛔ Never automatically shrink, regenerate or delete a worktree someone is working in
+</li>
+<li>FRD completion, development-request delivery, and applying a development result are <strong>three different jobs</strong>
+</li>
+<li>Completion alone never overwrites the default branch's current production screens
+</li>
+<li>Exact file contents, additions/deletions/renames, staging state and permissions are all preserved
+</li>
+<li>⛔ If recovery finds another user's change, <strong>do not overwrite</strong> — keep the recovery material and the lock
+</li>
+<li>⛔ <strong>Never shorten the wait by skipping safety checks, recovery records or remote confirmation, and never show success early</strong>
+</li></ul>
+<h2 id="3-measured-costs">3. Measured costs<a class="anchor" href="#3-measured-costs" aria-hidden="true">#</a></h2>
+<p>⚠ These are single-method measurements on small synthetic data, <strong>not</strong> FRD completion times and <strong>not</strong> a predicted saving.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Spot</th>
+<th>Measured</th>
+<th>Note</th>
+</tr></thead><tbody>
+<tr><td><code>replace</code> rewriting files</td><td>200 temp files × 4 KiB, <strong>one</strong> changed → all 200 rewritten, 575 ms</td><td>The basis for "skip writes when content and permissions are identical"</td></tr>
+<tr><td>Full planning-repo checker run</td><td>~0.95 s over 263 screens</td><td>Which is why <a href="19-checker.html">the checker</a> can afford to run twice and diff</td></tr>
+<tr><td>An FRD interview turn</td><td>220 s of 350 s was exploration</td><td>Which is why resumed sessions use <code>--resume</code> — see <a href="06-frd-wizard.html">FRD wizard</a></td></tr>
+</tbody></table></div>
+<p>⛔ <strong>The "30 seconds to apply" figure in older code comments is a past observation and must not be quoted as a current measurement.</strong></p>
+<h2 id="4-proposed-and-not-implemented">4. Proposed and <strong>not</strong> implemented<a class="anchor" href="#4-proposed-and-not-implemented" aria-hidden="true">#</a></h2>
+<p>⚠ <strong>Nothing in this section is built.</strong> It is recorded so that nobody re-derives it, and so nobody cites it as behaviour.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Stage</th>
+<th>Proposal</th>
+<th>Status</th>
+</tr></thead><tbody>
+<tr><td>P0</td><td>Instrument the real user wait — receipt → execution start → success recorded → screen updated, with queue time included</td><td><strong>Not done.</strong> <code>WAIT_TOTAL</code> still starts when the worker begins, so <strong>queue time is invisible</strong></td></tr>
+<tr><td>P1</td><td>Skip rewriting files whose content and permissions are unchanged</td><td>Not done</td></tr>
+<tr><td>Stage 1</td><td>Separate stored content from the journal</td><td><strong>Done</strong> — see §1</td></tr>
+<tr><td>Stage 2</td><td>Reduce the number of full clones and checkouts in merge preparation</td><td>Not done</td></tr>
+<tr><td>—</td><td>Separate executors so completion, document AI and post-completion quality checks stop competing for one <code>aiExecutor</code></td><td>Not done; measure queue vs execution time first</td></tr>
+</tbody></table></div>
+<p>⭐ <strong>The stated order is instrument → optimise, not the reverse.</strong> The design refuses to fund an optimisation before the cost it removes has been measured — and notes plainly that the server logs it examined <strong>contained no per-stage sample of a user completion</strong>.</p>
+<h2 id="5-where-the-pressure-actually-shows">5. Where the pressure actually shows<a class="anchor" href="#5-where-the-pressure-actually-shows" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Symptom</th>
+<th>Look at</th>
+</tr></thead><tbody>
+<tr><td>Completion is slow</td><td>Queue time is not instrumented (§4 P0). <code>builder.completion.concurrency</code> is 2</td></tr>
+<tr><td>Completion refused on size</td><td>The budget in §1, and <code>FrdCompletionDiskBudget</code>'s log line for the real numbers</td></tr>
+<tr><td>Conflict resolution refused</td><td>2 MiB conflict material cap</td></tr>
+<tr><td>Delivery refused</td><td>512 MB archive cap, 256 MB free-disk floor</td></tr>
+<tr><td>Everything AI is slow for everyone</td><td><code>aiExecutor</code> is shared — 8 threads, per-account 3. See <a href="05-claude-cli-runtime.html">Claude CLI runtime</a></td></tr>
+</tbody></table></div>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="08-frd-completion.html">FRD completion</a> — the merge workspace and what moved out of the wait
+</li>
+<li><a href="git.html">Git layer</a> — fetch, locks, worktrees
+</li>
+<li><a href="21-operations.html">Install &amp; operations</a> — every limit as a configuration key
+</li>
+<li><a href="27-concurrent-edit.html">Concurrent editing</a> — who blocks whom when several people work at once
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="25-flow.html">← Flow integration</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/26-large-repository.md</span>
+      <a href="27-concurrent-edit.html">Concurrent editing →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

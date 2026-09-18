@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install &amp; operations · ADP Builder</title>
+<meta name="description" content="Prerequisites, configuration keys, the systemd unit, what to back up, and the symptom-to-cause table. The canonical install guide is the repository README.md; this page is the oper">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Install &amp; operations</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html" aria-current="page"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Working on it</p>
+      <h1>Install &amp; operations</h1>
+      <blockquote><p>Prerequisites, configuration keys, the systemd unit, what to back up, and the symptom-to-cause table. The canonical install guide is the repository <code>README.md</code>; this page is the operator's reference layer over it.</p></blockquote>
+<h2 id="prerequisites">Prerequisites<a class="anchor" href="#prerequisites" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Requirement</th>
+<th>Used for</th>
+</tr></thead><tbody>
+<tr><td>OS</td><td>Linux server recommended</td><td>The systemd service is written for it</td></tr>
+<tr><td>Java</td><td><strong>JDK 17</strong></td><td>Running and building Builder</td></tr>
+<tr><td>PostgreSQL</td><td>A reachable server</td><td>Builder state and artifact revisions</td></tr>
+<tr><td>Git</td><td>Runnable as the service account</td><td>Cloning, worktrees, commit and push</td></tr>
+<tr><td><strong>Claude Code CLI</strong></td><td>Runnable as the service account</td><td>The interview and all AI work</td></tr>
+<tr><td><code>codebase-memory-mcp</code></td><td>The executable named in the requirement-analysis settings</td><td>Exploring the planning repository's code structure</td></tr>
+<tr><td>Chromium</td><td><strong>Full Chromium</strong>, installed by Playwright</td><td>Screen-design and user-manual revisions</td></tr>
+</tbody></table></div>
+<p>Also needed: the PostgreSQL connection details, a GitLab token that can read and write the planning repository, the GitLab target for development requests, a Flow personal API key (if Flow import is used), and the initial super-administrator ID and temporary password.</p>
+<p>Firewall and proxy must allow the Builder address, GitLab, Claude authentication, and any external APIs in use.</p>
+<h2 id="database">Database<a class="anchor" href="#database" aria-hidden="true">#</a></h2>
+<p>Builder uses the <strong><code>builder</code> schema</strong>. It does not use <code>public</code> in the same database — that belongs to the neighbouring <code>we-adk-admin</code>.</p>
+<pre><code class="language-sql">CREATE DATABASE we_adk;
+CREATE USER we_adk_builder WITH PASSWORD &#x27;a-long-production-password&#x27;;
+GRANT CONNECT ON DATABASE we_adk TO we_adk_builder;</code></pre>
+<p>Create only the database; Flyway creates and migrates the <code>builder</code> schema at startup. The application account must be able to create that schema and manage objects inside it.</p>
+<h2 id="build-and-install">Build and install<a class="anchor" href="#build-and-install" aria-hidden="true">#</a></h2>
+<pre><code class="language-bash">git clone &lt;builder-repo-url&gt; /opt/we-adk-builder-src
+cd /opt/we-adk-builder-src
+./mvnw clean package</code></pre>
+<p>Deploy <strong>only the JAR</strong>. Never copy a development machine's working folder or <code>application-local.yml</code> to a production server.</p>
+<pre><code class="language-bash">sudo install -d -m 750 -o we-adk-builder -g we-adk-builder \
+  /opt/we-adk-builder /etc/we-adk-builder /var/lib/we-adk-builder
+sudo install -m 640 -o we-adk-builder -g we-adk-builder \
+  target/builder-*.jar /opt/we-adk-builder/builder.jar</code></pre>
+<h3 id="chromium">Chromium<a class="anchor" href="#chromium" aria-hidden="true">#</a></h3>
+<p>Run once on any server that will generate screen-design or user-manual revisions:</p>
+<pre><code class="language-bash">./mvnw exec:java -Dexec.mainClass=com.microsoft.playwright.CLI \
+  -Dexec.args=&quot;install --with-deps chromium&quot;</code></pre>
+<p>⛔ <strong>Do not use <code>--only-shell</code>.</strong> Builder's screen capture needs the full Chromium. Without it everything else works and existing revisions stay readable.</p>
+<h2 id="configuration">Configuration<a class="anchor" href="#configuration" aria-hidden="true">#</a></h2>
+<p><code>/etc/we-adk-builder/application-prod.yml</code>, readable only by the service account (<code>chmod 600</code>).</p>
+<pre><code class="language-yaml">builder:
+  claude-command: ${BUILDER_CLAUDE_COMMAND:/opt/claude/bin/claude}
+  super-account-login-id: admin
+  super-account-password: temporary-password-for-first-login
+  secret-key-base64: &lt;openssl rand -base64 32&gt;
+  data-root: /var/lib/we-adk-builder
+  ai-run-timeout: 10m
+  requirement-analysis:
+    codebase-memory-enabled: true
+    codebase-memory-command: /opt/codebase-memory/bin/codebase-memory-mcp
+
+spring:
+  datasource:
+    url: jdbc:postgresql://&lt;db-host&gt;:5432/we_adk
+    username: we_adk_builder
+    password: &lt;db-password&gt;</code></pre>
+<p>⛔ <strong>Do not move <code>spring.flyway.schemas</code> / <code>default-schema</code> into the production file.</strong> They are in the base <code>application.yml</code> so that production and the zonky tests run on the same schema — moving them makes tests green while production differs. <code>default-schema</code> is also read by <code>IdSequence</code> for the sequence name; moved, numbering looks at <code>public</code> and dies with "no such relation".</p>
+<p>⛔ <strong>The Flow API key does not go in the file.</strong> A super administrator registers it in <code>관리 → 시스템 관리</code> and it is sealed into <code>builder.adk_builder_flow_api_key</code>.</p>
+<h3 id="key-settings">Key settings<a class="anchor" href="#key-settings" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Key</th>
+<th>Default</th>
+<th>Notes</th>
+</tr></thead><tbody>
+<tr><td><code>builder.secret-key-base64</code></td><td>—</td><td><strong>Exactly 32 bytes</strong>, validated at boot. Changing it makes existing sealed values unreadable</td></tr>
+<tr><td><code>builder.ai-run-timeout</code></td><td><code>10m</code></td><td>Per Claude run</td></tr>
+<tr><td><code>builder.ai-concurrency</code></td><td><code>8</code></td><td>⛔ Not 1 — a run is one per <em>work</em>, not one per server</td></tr>
+<tr><td><code>builder.ai-queue-capacity</code></td><td><code>50</code></td><td></td></tr>
+<tr><td><code>builder.ai-account-concurrency</code></td><td><code>3</code></td><td>Concurrent <code>claude</code> per account. Set to 1 if OAuth-refresh races appear</td></tr>
+<tr><td><code>builder.check-timeout</code></td><td>—</td><td>One checker run; a full check measured ~0.95 s on 263 screens</td></tr>
+<tr><td><code>builder.requirement-analysis.model</code></td><td><code>opus</code></td><td>⭐ Aliases only — a dated model ID goes stale. ⚠ Unset means the account's default model, which <strong>differs per plan and therefore per person</strong></td></tr>
+<tr><td><code>builder.requirement-analysis.effort</code> / <code>resume-effort</code></td><td><code>medium</code></td><td>Reasoning effort for the first turn and resumed turns. 2026-08-22…08-26 ran <code>opus</code> + <code>high</code> and one answer turn took 57–438 s; most of that was thinking tokens, so effort dropped to <code>medium</code> while the model stayed <code>opus</code></td></tr>
+<tr><td><code>builder.requirement-analysis.allowed-tools</code></td><td><code>Read,Glob,Grep</code></td><td>⛔ <strong>Never add a write tool</strong> — requirement analysis must only read the planning repository. Empty means the flag is omitted entirely and only the instruction's prohibition remains</td></tr>
+<tr><td><code>builder.requirement-analysis.codebase-memory-enabled</code></td><td><code>true</code></td><td>Set false on servers without <code>codebase-memory-mcp</code>; the Read/Grep path is used instead</td></tr>
+<tr><td><code>builder.document-understanding.model</code></td><td><code>gemini-3.6-flash</code></td><td>The <strong>second AI provider</strong> — transcribes uploaded files the server cannot read. ⚠ <strong>If an attachment fails with only <code>내용 분석 오류</code>, suspect this first.</strong> ⛔ Model names expire and <strong>the newest is the wrong choice</strong>: measured 2026-08-16, the just-released 3.7-flash returned 503 twice on the same document while 3.6-flash returned 200 twice. This layer only transcribes, so it needs the least congested model, not the cleverest. The provider's deprecation page is the source of truth</td></tr>
+<tr><td><code>builder.document-understanding.max-inline-bytes</code></td><td>15 MB</td><td>Base64 inflates the payload by 4/3, so a larger value would exceed the provider limit</td></tr>
+<tr><td><code>builder.document-understanding</code> retries</td><td>3 attempts, 3s → 6s</td><td>⛔ Do not raise — <strong>each attempt re-uploads the whole file</strong></td></tr>
+<tr><td><code>builder.completion.max-run-bytes</code></td><td>8 GiB</td><td>Per completion run</td></tr>
+<tr><td><code>builder.completion.max-total-bytes</code></td><td>32 GiB</td><td>Across completion runs</td></tr>
+<tr><td><code>builder.completion.min-free-bytes</code></td><td>1 GiB</td><td>Refuse below this</td></tr>
+<tr><td><code>builder.completion.concurrency</code> / <code>queue-capacity</code></td><td>2 / 20</td><td></td></tr>
+<tr><td><code>builder.delivery.queue-capacity</code></td><td>20</td><td>Delivery is serial (1 thread) by design</td></tr>
+<tr><td><code>builder.delivery.max-archive-bytes</code></td><td>512 MB</td><td></td></tr>
+<tr><td><code>builder.delivery.minimum-free-disk-bytes</code></td><td>256 MB</td><td></td></tr>
+<tr><td><code>builder.dev-request-status.fixed-delay-ms</code></td><td>60000</td><td>GitLab label polling</td></tr>
+<tr><td><code>builder.flow.timeout</code></td><td><code>20s</code></td><td></td></tr>
+<tr><td><code>builder.ia-cache.maximum</code> / <code>maximum-weight</code> / <code>idle</code></td><td>32 / 100000 / PT10M</td><td></td></tr>
+<tr><td><code>builder.ui.theme</code></td><td><code>deep-ink</code></td><td>Builder's own theme — unrelated to target-system institution skins</td></tr>
+</tbody></table></div>
+<h2 id="systemd">systemd<a class="anchor" href="#systemd" aria-hidden="true">#</a></h2>
+<pre><code class="language-ini">[Unit]
+Description=we-adk-builder
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=we-adk-builder
+Group=we-adk-builder
+WorkingDirectory=/opt/we-adk-builder
+Environment=&quot;BUILDER_CLAUDE_COMMAND=/opt/claude/bin/claude&quot;
+Environment=&quot;DISABLE_AUTOUPDATER=1&quot;
+ExecStart=/usr/bin/java -jar /opt/we-adk-builder/builder.jar --spring.profiles.active=prod --spring.config.additional-location=file:/etc/we-adk-builder/
+KillMode=control-group
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+<p>⚠ <strong>systemd does not inherit a login shell's <code>PATH</code>.</strong> That is why <code>BUILDER_CLAUDE_COMMAND</code> must be an absolute path. The same applies to <code>codebase-memory-command</code>.</p>
+<p>Default port is <code>8080</code>. In production, put it behind internal DNS and an HTTPS reverse proxy.</p>
+<h2 id="verifying-the-install">Verifying the install<a class="anchor" href="#verifying-the-install" aria-hidden="true">#</a></h2>
+<ol>
+<li>The login screen opens.
+</li>
+<li>The configured super-administrator ID and temporary password work.
+</li>
+<li>The first login redirects to the password screen.
+</li>
+<li>The Claude connect screen opens, or <code>나중에 연결</code> can be chosen.
+</li>
+<li>Flyway history and Builder tables exist in the <code>builder</code> schema.
+</li></ol>
+<p>If the server will not start: <code>journalctl -u we-adk-builder</code> first error → <code>java -version</code> is 17 → the service account can write <code>/var/lib/we-adk-builder</code> → DB address, account, firewall, schema-creation permission → <code>BUILDER_CLAUDE_COMMAND</code> and <code>codebase-memory-command</code> are absolute paths runnable <strong>as the service account</strong>.</p>
+<h2 id="routine-checks-and-backup">Routine checks and backup<a class="anchor" href="#routine-checks-and-backup" aria-hidden="true">#</a></h2>
+<ul>
+<li>Builder and PostgreSQL are up
+</li>
+<li>Free disk and permissions on <code>/var/lib/we-adk-builder</code>
+</li>
+<li>GitLab and Claude authentication paths reachable
+</li>
+<li>Project clone and development-request delivery failures
+</li>
+<li>Repeated errors in the service log
+</li></ul>
+<p><strong>Back up the PostgreSQL <code>builder</code> schema and the whole of <code>builder.data-root</code> together.</strong> Restoring one without the other leaves the DB state and the on-disk clone/worktree state disagreeing. Keep the production configuration and the secret key <strong>separate</strong> from ordinary artifact backups, with restricted access.</p>
+<p>Updating: deploy the new JAR, restart, and confirm Flyway application and startup in the log.</p>
+<pre><code class="language-bash">sudo systemctl restart we-adk-builder
+journalctl -u we-adk-builder -n 200 --no-pager</code></pre>
+<h2 id="common-problems">Common problems<a class="anchor" href="#common-problems" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Symptom</th>
+<th>Check</th>
+<th>Action</th>
+</tr></thead><tbody>
+<tr><td>Cannot log in</td><td>ID, temporary password, account status</td><td>Ask a super administrator to reissue</td></tr>
+<tr><td>Bounced back to the password screen</td><td>Whether the first password change completed</td><td>Set a new password meeting the rules</td></tr>
+<tr><td>The AI interview never starts</td><td>Claude connection, CLI path, outbound auth</td><td>Reconnect the account; ask an administrator to check the service log</td></tr>
+<tr><td>No projects visible</td><td>The project's <code>준비됨</code> state</td><td>A super administrator resolves the clone error and retries</td></tr>
+<tr><td>Repository clone failed</td><td>URL, token permissions, default branch, network</td><td>Correct the registration and retry from project detail</td></tr>
+<tr><td>Screen capture or document generation failed</td><td>Whether full Chromium is installed</td><td>Re-run the Playwright install <strong>without</strong> <code>--only-shell</code></td></tr>
+<tr><td>Cannot import a Flow post</td><td>Flow API key registration and validity</td><td>A super administrator registers a new key</td></tr>
+<tr><td>An attachment fails with only <code>내용 분석 오류</code></td><td>The document-understanding model name and API key</td><td>The model has almost certainly been deprecated, or the provider is returning 503. Check the provider's deprecation page and override <code>builder.document-understanding.model</code> — see <a href="24-document-intake.html">intake &amp; doc reading</a></td></tr>
+<tr><td>Development request send failed</td><td>GitLab target and token, network, issue-creation permission</td><td>Fix the project settings and resend</td></tr>
+<tr><td>Server will not start</td><td>DB connection, config file syntax, directory permissions</td><td>Start at the first error in <code>journalctl</code></td></tr>
+<tr><td><code>Migration checksum mismatch</code></td><td>An applied migration file was edited</td><td>Restore the file; add a <strong>new</strong> migration instead — see <a href="02-data-model.html">Data model</a></td></tr>
+<tr><td><code>Found more than one migration with version N</code></td><td>A duplicate migration number, often from an untracked file</td><td><code>ls</code> the migration folder; move <strong>your own</strong> file</td></tr>
+</tbody></table></div>
+<p>⛔ <strong>Never include passwords, API keys, GitLab tokens or Claude credentials in a problem report.</strong> Send the time, the project name, the FRD number and the on-screen error text.</p>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="03-accounts-security.html">Accounts &amp; security</a> — the secret key and the two login gates
+</li>
+<li><a href="04-project-setup.html">Project setup</a> — registration and clone failures
+</li>
+<li><a href="05-claude-cli-runtime.html">Claude CLI runtime</a> — what <code>claude-command</code> and the isolation flags do
+</li>
+<li><a href="02-data-model.html">Data model</a> — migration rules
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="24-document-intake.html">← Intake &amp; doc reading</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/21-operations.md</span>
+      <a href="22-conventions.html">Conventions →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

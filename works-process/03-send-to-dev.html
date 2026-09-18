@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sending to development · Work processes · ADP Builder</title>
+<meta name="description" content="Pressing 개발요청 전송: the two-layer precheck, the package layout, the ZIP, the eleven multipart fields, and how an HTTP answer becomes a delivery state.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · Sending to dev</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html" aria-current="page"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 8</p>
+      <h1>Sending to development</h1>
+      <p class="wp-lede">The package this process bakes is the contract with the development team. That is the standard it is held to: not whether it looks tidy, but whether a missing field leaves something to argue about later.</p>
+
+      <h2>The pipeline</h2>
+      <p>The button posts to <code>/projects/{projectId}/artifacts/dev-requests/{requestId}/send</code> with the planner's note, the requested completion and deployment dates, and an optional attachment. The request returns immediately; everything below runs on the delivery executor.</p>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Claim the attempt</div><div class="flow__cmd">PREPARING · delivery key DRK-0000007 · attachment stored and hashed</div></div>
+          <div class="flow__aside">An attempt already active for this request is reused, so a double click does not send twice. The stored attachment is re-hashed; a mismatch stops the send.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Precheck — the only place the spec checker runs</div><div class="flow__cmd">DevRequestPrecheck.checkForDelivery(view)</div></div>
+          <div class="flow__aside flow__aside--fail">One blocking item and the send stops, naming the first one.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">PACKING — bake the package</div><div class="flow__cmd">DB snapshot + clone (as-is, assets) + git (the commit it started from)</div></div>
+          <div class="flow__aside">Materials come from three places; the FRD worktree must still exist.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">ZIP, then record the fingerprint</div><div class="flow__cmd">delivery.zip · sha256 · entry list</div></div>
+          <div class="flow__aside">The entry list and hash are what answer “what exactly did we send?” later.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">05</div>
+          <div><div class="flow__title">POST to DEVELOPER, then read the answer carefully</div><div class="flow__cmd">POST {base}/intake · multipart/form-data · no auth header</div></div>
+          <div class="flow__aside flow__aside--ok">201 new, 200 the same active request already exists — both echo the delivery key.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">The precheck has two layers, and collapsing them breaks it either way</div>
+        <p><b>Blocking</b> stops the send; <b>warning</b> lets it through. If everything blocks, a borderline request can never ship. If everything warns, material the developers cannot use goes out inside the contract. The builder does not write its own validator either — the checker shipped inside the planning repo makes the spec judgement, and this class only translates its findings. It runs on send only: running it on every page view made the same screen look different each time the cache expired.</p>
+      </div>
+
+      <h2>What lands in their hands</h2>
+      <div class="tree">DR-003/
+├─ dev-request.md          <i>the request itself</i>
+├─ expected-back.md        <i>what must come back, and in what shape</i>
+├─ manifest.json           <i>every file, with size and sha256</i>
+├─ attachments/            <i>whatever the planner attached</i>
+└─ screens/&lt;system&gt;/
+   ├─ <b>assets/</b>               <i>css · js · images, copied whole</i>
+   └─ &lt;screenId&gt;/
+      ├─ as-is.html  to-be.html
+      ├─ as-is.md    to-be.md
+      └─ changes.md        <i>why, and what to watch out for</i></div>
+
+      <h3>Where each file comes from, and when</h3>
+      <p>Nothing in that tree exists until the send is pressed — the package is assembled at <b>PACKING</b>. But the material in it was made at three earlier moments, and two of the files are not “made” at all.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>File</th><th>Produced when</th><th>Read from at packing time</th></tr></thead>
+          <tbody>
+            <tr><td><code>to-be.html</code></td><td>Throughout <code>DRAFTING</code> — every draft, chat edit, direct edit and history restore</td><td>The FRD worktree at the delivery-baseline commit</td></tr>
+            <tr><td><code>to-be.md</code></td><td>Just before sending; generated if it is not ready</td><td>The FRD worktree — <b>a failure here blocks the send</b></td></tr>
+            <tr><td><code>as-is.html</code> · <code>as-is.md</code></td><td>Never produced — it is what was already there</td><td><code>git show &lt;workspaceBaseSha&gt;:&lt;path&gt;</code>, the work-start commit, <b>not the current filesystem</b></td></tr>
+            <tr><td><code>changes.md</code></td><td>At packing</td><td>The screen's change list, its markers and its state cases</td></tr>
+            <tr><td><code>assets/</code></td><td>At packing</td><td><code>core/&lt;system&gt;/assets</code> in the clone, copied whole</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="branch">
+        <div class="branch__t">The baseline is verified before a single file is written</div>
+        <p>The worktree's <code>HEAD</code> must equal the head sha recorded on the request, and <code>git status --porcelain</code> must be empty. Otherwise the package would quietly fold a later edit into a contract that claims a fixed baseline. Pulling as-is from the base commit rather than from disk is the same rule seen from the other end: as-is must be the state <i>before</i> this FRD touched anything, however many times the file has changed since.</p>
+      </div>
+      <p>Three cases give you less than the full tree. A <b>backend-only FRD or an SRT</b> has no <code>screens/</code> folder at all. A <b>new screen</b> has no <code>as-is.*</code> — there is nothing at the base commit to show — and its internal <code>tmp-…</code> id is rewritten to the delivery screen id in the copies. A <b>state screen</b> gets no folder of its own: it rides in the parent's folder as <code>to-be-C01.html</code>, with the parent's <code>changes.md</code> table pointing at it, because its as-is and its to-be.md are the parent's text.</p>
+
+      <div class="note">
+        <div class="note__t">One room per attempt — which is why that folder fills up</div>
+        <p>A delivery does not overwrite the package: it bakes into <code>dev-request-packages/&lt;requestId&gt;-&lt;attemptId&gt;/</code>, holding <code>delivery.zip</code> and the built <code>package/</code>. The journal records that path, its size and its sha256, so “what exactly did we send, on which attempt?” has an answer per attempt rather than one mutable folder. An attempt that fails before it is activated deletes its own room, and a room left behind by a crash is removed at the next boot — but <b>activated attempts accumulate and nothing trims them</b>, so three rooms for one request means that request was sent three times.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Why there is a system level</p>
+          <p>The mockups are extracted originals that reference <code>../assets/css/style.css</code>. Put them one level deeper and every style breaks. With a system folder, that relative path resolves by itself — <b>not one character inside the HTML is edited</b>. Editing them would also make the copies impossible to diff against the originals.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Why no skin is chosen</p>
+          <p>Choosing one would mean rewriting links inside a stored file, and the selecting code would have to hold institution folder names — the moment it does, the builder knows about the source system. The whole asset folder is copied instead, so every institution variant renders, and the manifest records where the assets came from rather than which was picked.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Every name is ASCII</p>
+          <p>Folders are screen IDs (<code>wv-card-list</code>), files are <code>dev-request.md</code> and <code>changes.md</code>. Korean names in a ZIP depend on the encoding bit and break in older tools; the human-readable screen name lives inside the markdown instead.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Zero screens is valid</p>
+          <p>A backend-only or fast-track FRD has no screen work at all. A package must be well-formed without a <code>screens/</code> folder — a check demanding “at least one screen” would mean those requests can never ship.</p>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Nothing may delete the worktree before the send finishes</div>
+        <p>as-is is the state before the completion commit and to-be is the state after, and both are read out of the same FRD worktree. Remove it early and the material for the contract is gone.</p>
+      </div>
+
+      <h2>The call itself</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>What it carries</th></tr></thead>
+          <tbody>
+            <tr><td><code>title</code></td><td>The request title — <b>without</b> the DR number, which travels separately</td></tr>
+            <tr><td><code>body</code></td><td>Structured JSON (<code>we-adp-dev-request/1</code>), not markdown, so DEVELOPER renders the same view without reinterpreting prose. The markdown is still inside the ZIP.</td></tr>
+            <tr><td><code>file</code></td><td>The ZIP as Builder stored it — 20 MB per file, 25 MB per request</td></tr>
+            <tr><td><code>requestNumber</code> · <code>workNumber</code> · <code>workType</code></td><td><code>DR-005</code> · <code>FRD-002</code> or <code>SRT-003</code> · <code>FRD</code> or <code>SRT</code></td></tr>
+            <tr><td><code>deliveryKey</code></td><td><code>DRK-0000007</code> — the key everything is looked up by afterwards</td></tr>
+            <tr><td><code>groupId</code></td><td>The registered DEVELOPER group. There is no token, so this is the connection identity.</td></tr>
+            <tr><td>dates · <code>plannerName</code></td><td>Optional; empty strings when not filled in</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <div class="note__t">The lookup key is the delivery key, not the DR number</div>
+        <p>DR numbers restart at 1 in every project, so they are not unique on the DEVELOPER side. Resending uses the same delivery key, and the same active request is not created twice — the existing confirmation comes back instead.</p>
+      </div>
+
+      <h2>Turning an answer into a state</h2>
+      <p>One rule decides everything here: <b>only a proven “they did not take it” becomes NOT_SENT; anything unknown stays SENDING.</b></p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Answer</th><th>State</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>200 / 201, delivery key echoed</td><td><code>SENT</code></td><td>Proof they hold it</td></tr>
+            <tr><td>200 / 201, nothing echoed</td><td><code>SENDING</code></td><td>Corporate proxies and login pages also answer 200</td></tr>
+            <tr><td>202</td><td><code>SENDING</code></td><td>Accepted is not processed</td></tr>
+            <tr><td>408 · 429</td><td><code>SENDING</code></td><td>“Not now”, not “no”</td></tr>
+            <tr><td>409</td><td>judged, never assumed</td><td>It can mean “already received” or a real conflict</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="states">
+        <span class="state">NOT_SENT</span>
+        <span class="states__sep">→</span>
+        <span class="state">SENDING</span>
+        <span class="states__sep">→</span>
+        <span class="state state--ok">SENT</span>
+        <span class="states__sep">→</span>
+        <span class="state state--bad">WITHDRAWN</span>
+        <span class="states__sep">fix it and send again, same key</span>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Withdrawal is not a cancellation</div>
+        <p>What went out cannot be unsent — a notification was raised and read. Withdrawing tells DEVELOPER, in their own terms, that it is retracted, and it is accepted only while the request is still at <code>INTAKE</code>. It is a separate state, never a return to <code>NOT_SENT</code>: with the request still alive on their side, “not sent” would let someone press send and open a second one.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevelopmentRequestController.java"><span class="pill">DevelopmentRequestController</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevelopmentRequestService.java"><span class="pill">DevelopmentRequestService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevRequestPrecheck.java"><span class="pill">DevRequestPrecheck</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevRequestPackageBuilder.java"><span class="pill">DevRequestPackageBuilder</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevRequestPackageZipper.java"><span class="pill">DevRequestPackageZipper</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperClient.java"><span class="pill">DeveloperClient</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeliveryOutcome.java"><span class="pill">DeliveryOutcome</span></a>
+      </div>
+      <p>Narrative reference: <a href="../10-dev-request.html">Development request</a>. Canonical: <code>docs/developer-api-contract.md</code> for the wire format, <code>docs/superpowers/specs/2026-08-22-dev-request-package-design.md</code> for the package.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="12-delivery-channel.html">← Delivery channel</a>
+        <a href="14-dev-side.html">On the dev side →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

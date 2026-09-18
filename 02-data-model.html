@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data model · ADP Builder</title>
+<meta name="description" content="What the database holds, under what names, and the rules that keep migrations from breaking the build. The canonical document is docs/data-model.md; this page is the orientation la">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Data model</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html" aria-current="page"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Start here</p>
+      <h1>Data model</h1>
+      <blockquote><p>What the database holds, under what names, and the rules that keep migrations from breaking the build. The canonical document is <code>docs/data-model.md</code>; this page is the orientation layer above it.</p></blockquote>
+<h2 id="ground-rules">Ground rules<a class="anchor" href="#ground-rules" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Rule</th>
+<th>Detail</th>
+</tr></thead><tbody>
+<tr><td>Schema</td><td><strong><code>builder</code></strong>, inside database <code>we_adk</code>. The <code>public</code> schema of the same database belongs to the neighbouring <code>we-adk-admin</code> repository and Builder never reads it.</td></tr>
+<tr><td>Managed by</td><td><strong>Flyway alone.</strong> 93 migrations, <code>V1</code> … <code>V95</code>, under <code>src/main/resources/db/migration/</code>.</td></tr>
+<tr><td>Access</td><td><strong>MyBatis only.</strong> JPA and <code>ddl-auto: validate</code> were removed on 2026-08-15. Mapper XML lives in <code>src/main/resources/mapper/&lt;package&gt;/</code>.</td></tr>
+<tr><td>Table prefix</td><td><code>adk_builder_*</code></td></tr>
+<tr><td>Column naming</td><td><strong>Column names in English, meaning in a Korean <code>COMMENT ON COLUMN</code>.</strong> The ERD generator copies those comments, so a column with no comment shows up in the diagram as an unexplained column.</td></tr>
+<tr><td>DB version</td><td>PostgreSQL 17 in production; <strong>tests run on zonky embedded PostgreSQL 14.22</strong> — using 15+ syntax breaks the tests only, which is the worst way to find out.</td></tr>
+</tbody></table></div>
+<h2 id="table-groups">Table groups<a class="anchor" href="#table-groups" aria-hidden="true">#</a></h2>
+<p><strong>55 domain tables</strong>, plus Flyway's own <code>flyway_schema_history</code> — which lives in the <code>builder</code> schema too, so <code>information_schema.tables</code> reports <strong>56</strong>. No migration drops a table, so the two numbers stay one apart.</p>
+<p>The grouping below is the one <code>docs/tools/erd_from_migrations.py</code> uses; a new table that is not added to its <code>GROUPS</code> list falls out at the bottom of the ERD as "ungrouped", on purpose, so it is noticed.</p>
+<h3 id="foundation-people-and-projects">Foundation — people and projects<a class="anchor" href="#foundation-people-and-projects" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_account</code> · <code>adk_builder_claude_credential</code> · <code>adk_builder_project</code> · <code>adk_builder_project_facet</code> · <code>adk_builder_project_system</code> · <code>adk_builder_repository_update</code> · <code>adk_builder_dev_issue_target</code> · <code>adk_builder_design_system_curation</code> · <code>adk_builder_screen_id_group</code> · <code>adk_builder_screen_standard_id</code></p>
+<h3 id="frd-the-work-unit">FRD — the work unit<a class="anchor" href="#frd-the-work-unit" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_frd</code> · <code>adk_builder_frd_item</code> · <code>adk_builder_frd_facet</code> · <code>adk_builder_frd_analysis_note</code> · <code>adk_builder_frd_backend_change</code> · <code>adk_builder_frd_interview_message</code></p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Table</th>
+<th>Responsibility</th>
+</tr></thead><tbody>
+<tr><td><code>adk_builder_frd_interview_message</code></td><td>The ordered conversation — AI questions and analysis summaries, user answers</td></tr>
+<tr><td><code>adk_builder_frd_backend_change</code></td><td>Per API / data / permission / batch / notification: needs change, or confirmed no change</td></tr>
+<tr><td><code>adk_builder_frd_analysis_note</code></td><td>Completion criteria and items needing confirmation</td></tr>
+</tbody></table></div>
+<blockquote><p>⚠ <strong>Known inconsistency — the two facet children disagree.</strong> Both <code>adk_builder_frd_facet</code> (<code>V25</code>) and <code>adk_builder_intake_facet</code> (<code>V18</code>) carry the composite FK <code>(project_id, name)</code> into <code>adk_builder_project_facet</code>, but <strong>only the intake one declares <code>on update cascade</code></strong>. So renaming or deleting a facet that an FRD holds hits a <code>NO ACTION</code> violation, while the same situation on the intake side is either cascaded or refused with a readable message. <code>ProjectService</code> checks <code>IntakeFacetMapper</code> only. Not fixed here — a fix is either a migration adding the cascade or a <code>FrdFacetMapper</code> check in the service.</p></blockquote>
+<h3 id="frd-screen-work">FRD screen work<a class="anchor" href="#frd-screen-work" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_frd_screen</code> · <code>adk_builder_frd_screen_history</code> · <code>adk_builder_frd_screen_ia_placement</code> · <code>adk_builder_frd_screen_chat_message</code> · <code>adk_builder_frd_screen_marker</code> · <code>adk_builder_frd_screen_marker_history</code> · <code>adk_builder_frd_screen_memo_comment</code></p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Table</th>
+<th>Responsibility</th>
+</tr></thead><tbody>
+<tr><td><code>adk_builder_frd_screen</code></td><td>Front-end screens to change — existing and new screens together</td></tr>
+<tr><td><code>adk_builder_frd_screen_memo_comment</code></td><td>Comment-style memos per screen, preserving author name at the time, timestamp, content</td></tr>
+<tr><td><code>adk_builder_frd_screen_marker</code></td><td>Per-element execution markers: description, author, element-anchored position</td></tr>
+<tr><td><code>adk_builder_frd_screen_marker_history</code></td><td>Marker snapshot taken alongside each screen-history entry</td></tr>
+</tbody></table></div>
+<h3 id="development-request-and-delivery">Development request and delivery<a class="anchor" href="#development-request-and-delivery" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_dev_request</code> · <code>adk_builder_dev_request_delivery</code> · <code>adk_builder_developer_target</code> · <code>adk_builder_developer_delivery</code></p>
+<h3 id="ia-menu-tree">IA (menu tree)<a class="anchor" href="#ia-menu-tree" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_ia_structure</code> · <code>adk_builder_ia_row</code> · <code>adk_builder_ia_revision</code> · <code>adk_builder_ia_screen_profile</code></p>
+<h3 id="ai-execution">AI execution<a class="anchor" href="#ai-execution" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_ai_run</code> — one row per Claude run: kind, state, owner, timings, failure.</p>
+<h3 id="green-zone-artifacts-builder-generates">Green zone — artifacts Builder generates<a class="anchor" href="#green-zone-artifacts-builder-generates" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_feature_spec</code> · <code>adk_builder_feature_spec_revision</code> · <code>adk_builder_screen_design</code> · <code>adk_builder_screen_design_revision</code> · <code>adk_builder_user_manual</code></p>
+<h3 id="business-language">Business language<a class="anchor" href="#business-language" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_business_document</code> · <code>adk_builder_business_document_revision</code> · <code>adk_builder_business_document_seed</code> · <code>adk_builder_business_document_seed_part</code> · <code>adk_builder_business_document_seed_merge</code></p>
+<h3 id="other-current-tables">Other current tables<a class="anchor" href="#other-current-tables" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_srt</code> · <code>adk_builder_frd_completion_run</code> · <code>adk_builder_frd_completion_event</code> · <code>adk_builder_screen_draft_batch</code> · <code>adk_builder_screen_draft_batch_item</code> · <code>adk_builder_notification</code> · <code>adk_builder_flow_api_key</code></p>
+<blockquote><p>⚠ <strong><code>adk_builder_srt</code> looks thinner than it is.</strong> It holds no requirements of its own — <code>bridge_frd_id</code> (UNIQUE) points at an auto-created <code>adk_builder_frd</code> row with <code>source_kind = &#x27;SRT&#x27;</code>, and the requirements and completion criteria live there as ordinary <code>adk_builder_frd_item</code> and <code>adk_builder_frd_analysis_note</code> rows. <code>dev_request_id</code> is UNIQUE too, so SRT → bridge FRD → development request is fixed 1:1. A <code>CHECK</code> also enforces the entry method: <code>DIRECT</code> must have a null <code>flow_task_number</code>, <code>FLOW</code> must have a non-blank one. Detail: <a href="09-srt.html">SRT fast track</a>.</p></blockquote>
+<h3 id="retired-front-stage-tables-only">Retired front-stage — tables only<a class="anchor" href="#retired-front-stage-tables-only" aria-hidden="true">#</a></h3>
+<p><code>adk_builder_intake</code> · <code>adk_builder_intake_facet</code> · <code>adk_builder_received_document</code> · <code>adk_builder_document_processing_run</code> · <code>adk_builder_requirement</code> · <code>adk_builder_mockup_mismatch</code></p>
+<p>These belong to the retired <code>received document → REQ → RD → BRD</code> chain. They exist for data compatibility. <strong>Do not use them as the basis for new code, screens or DB design.</strong></p>
+<h2 id="artifact-id-numbering">Artifact ID numbering<a class="anchor" href="#artifact-id-numbering" aria-hidden="true">#</a></h2>
+<p>Rules, all settled:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Rule</th>
+</tr></thead><tbody>
+<tr><td>1</td><td>Format is <code>{kind}-{3-digit zero-padded}</code> — <code>FRD-025</code>, <code>DR-009</code></td></tr>
+<tr><td>2</td><td><strong>Restarts at 1 per project</strong>, ignoring the system axis (webview / back-office). Per-system numbering would make two people's lock keys collide</td></tr>
+<tr><td>3</td><td>Assigned <strong>at the moment of creation</strong> — humans never type a number, so collisions cannot arise</td></tr>
+<tr><td>4</td><td><strong>Immutable, never reused, gaps allowed.</strong> Reuse would make a number development already received point at something else</td></tr>
+<tr><td>5</td><td><strong>Never sort by this string.</strong> Past 999 it grows to <code>FRD-1000</code>, which sorts before <code>FRD-002</code>. Sort by the numeric sequence column</td></tr>
+</tbody></table></div>
+<p><strong>Only two things carry a number today: FRD (<code>FRD-</code>) and development request (<code>DR-</code>).</strong> <code>REQ-</code>, <code>RD-</code> and <code>BRD-</code> left the flow on 2026-08-20. IA has no number (one per project + system). The two returning artifacts — unit test results and integration test scenarios — are identified by <em>development request number + kind</em>, because they arrive attached to a DR.</p>
+<p>An FRD with zero screens still gets an <code>FRD-</code> number. "Has no number" and "has no screens" are deliberately not conflated.</p>
+<h2 id="identifiers-in-paths">Identifiers in paths<a class="anchor" href="#identifiers-in-paths" aria-hidden="true">#</a></h2>
+<p><code>IdSequence.isValidId()</code> guards every ID before it becomes a filesystem path. <code>ProjectPaths</code> refuses anything that is not a valid ID, which is what keeps <code>frd-&lt;id&gt;</code> worktree names and <code>DR-NNN.zip</code> archive names from becoming a path-traversal surface.</p>
+<h2 id="migration-rules-the-six-times-burned-list">Migration rules — the six-times-burned list<a class="anchor" href="#migration-rules-the-six-times-burned-list" aria-hidden="true">#</a></h2>
+<p><strong>Read this before adding a migration.</strong></p>
+<p>Measure the next number immediately before creating the file:</p>
+<pre><code class="language-bash">ls src/main/resources/db/migration/ | sed &#x27;s/__.*//&#x27; | sort -V | tail -1</code></pre>
+<ul>
+<li>⛔ <strong>Never write a migration number into a document or a plan.</strong> The same spot has been hit six times: <code>V21</code>, <code>V46</code>, <code>V50</code>, <code>V52</code>, <code>V79</code> (duplicate) and <code>V81</code>. Two of them happened within one day, and one of those was after the plan itself said "re-measure at the moment you start".
+</li>
+<li>⛔ <strong>Never edit an applied migration — not even one character of a comment.</strong> Flyway checksums it and refuses to start with <code>Migration checksum mismatch</code>. Add a new migration instead.
+</li>
+<li>⭐ <strong>"Be careful" does not work here.</strong> An untracked migration file is invisible to <code>git log</code>, to the <code>git status</code> summary and to the worktree — only <code>ls</code> shows it. If the names differ, the git merge succeeds silently and Flyway rejects the whole context at runtime with <code>Found more than one migration with version N</code>.
+</li>
+<li>On a collision, <strong>move your own file.</strong> Never touch someone else's uncommitted or untracked file.
+</li>
+<li><code>V81</code> is the worst case seen: an untracked file was applied to the DB and then disappeared, so startup died with "applied migration not resolved locally". It was recovered by deleting the history row.
+</li></ul>
+<h2 id="redraw-the-erd-before-committing">Redraw the ERD before committing<a class="anchor" href="#redraw-the-erd-before-committing" aria-hidden="true">#</a></h2>
+<pre><code class="language-bash">python docs/tools/erd_from_migrations.py            # rewrite §2 of docs/data-model.md
+python docs/tools/erd_from_migrations.py --check    # exits 1 if stale</code></pre>
+<p>Section §2 of <code>docs/data-model.md</code> is <strong>never written by hand</strong> — the script replays every migration in version order and redraws tables, columns and relationships. New tables must be added to the script's <code>GROUPS</code>. Column meanings come from <code>COMMENT ON COLUMN</code>; if it is not in the database, it is not in the diagram.</p>
+    </article>
+    <footer class="doc-footer">
+      <a href="01-architecture.html">← Architecture</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/02-data-model.md</span>
+      <a href="works-process/index.html">Work processes →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow integration · ADP Builder</title>
+<meta name="description" content="Reference documentation — docs/adp/. Describes the system as built, not as planned.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Flow integration</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html" aria-current="page"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Platform</p>
+      <h1>Flow integration</h1>
+      <blockquote><p>Reference documentation — <code>docs/adp/</code>. Describes the system as built, not as planned. The code is the source of truth; this file points at it. Verified against the tree on 2026-09-17. Flow is an external collaboration tool. Builder reads posts out of it; it never writes back.</p></blockquote>
+<h2 id="1-what-this-is">1. What this is<a class="anchor" href="#1-what-this-is" aria-hidden="true">#</a></h2>
+<p>Builder can pull a work request straight out of Flow instead of making someone retype it. One API key serves the whole installation, and two features consume it.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th></th>
+<th></th>
+</tr></thead><tbody>
+<tr><td>Direction</td><td><strong>Read only.</strong> Builder fetches posts; nothing is ever sent to Flow</td></tr>
+<tr><td>Credential</td><td>One key for the entire Builder installation — <strong>not per project, not per person</strong></td></tr>
+<tr><td>Where the key lives</td><td>Sealed in the database, registered through a screen. ⛔ Never in a configuration file</td></tr>
+<tr><td>Consumers</td><td><a href="09-srt.html">SRT fast track</a> registration, and <code>DocumentType.FLOW</code> on received documents — see <a href="24-document-intake.html">Intake &amp; doc reading</a></td></tr>
+<tr><td>If unconfigured</td><td>Only the Flow paths close. Everything else works, and the server starts normally</td></tr>
+</tbody></table></div>
+<p>⚠ <strong>The two halves live in different packages.</strong> <code>com.bizplay.builder.flow</code> owns the <em>key</em> (four files: the admin screen, the record, the mapper, the service). <code>com.bizplay.builder.intake</code> owns the <em>fetch</em> (<code>FlowPostGateway</code>, <code>HttpFlowPostGateway</code>, <code>FlowPost</code>, <code>FlowPostException</code>). The split is why this page exists: neither package tells the whole story.</p>
+<h2 id="2-the-system-management-screen">2. The System Management screen<a class="anchor" href="#2-the-system-management-screen" aria-hidden="true">#</a></h2>
+<p>The third admin menu, after Group Management and User Management.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th></th>
+<th></th>
+</tr></thead><tbody>
+<tr><td>Menu</td><td>Admin → <strong>System Management</strong></td></tr>
+<tr><td>Route prefix</td><td><code>/admin/system</code></td></tr>
+<tr><td>Authorization</td><td><code>@PreAuthorize(&quot;hasRole(&#x27;SUPER&#x27;)&quot;)</code> on the whole controller</td></tr>
+<tr><td>Template</td><td><code>admin/system.html</code></td></tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Action</th>
+<th>Method + route</th>
+</tr></thead><tbody>
+<tr><td>View status</td><td><code>GET /admin/system</code></td></tr>
+<tr><td>Save or replace the key</td><td><code>POST /admin/system/flow</code></td></tr>
+</tbody></table></div>
+<figure><img src="assets/shots/admin-system.png" alt="System Management with no Flow key registered — the status reads 설정 필요 and the key itself is never shown (captured 2026-09-17)" loading="lazy"><figcaption>System Management with no Flow key registered — the status reads 설정 필요 and the key itself is never shown (captured 2026-09-17)</figcaption></figure>
+<p><strong>The screen never shows the key back.</strong> <code>FlowApiKeyService.status()</code> returns only <code>(configured, updatedAt, updatedBy)</code> — a boolean and an audit trail, never the secret. The controller resolves <code>updatedBy</code> to a person's name through <code>AccountMapper</code>, falling back to <code>확인할 수 없음</code> when that account no longer resolves.</p>
+<p><strong>Replacing means retyping the whole key.</strong> There is no partial edit, because there is nothing to edit against — the stored value is ciphertext.</p>
+<p><strong>Success redirects, failure does not.</strong> A saved key sets a flash message and redirects (<code>redirect:/admin/system</code>); a rejected one re-renders <code>admin/system</code> directly with the error, so the operator's typed input survives. Same pattern as the Group Management dialogs — see <a href="04-project-setup.html">Project setup</a>.</p>
+<h3 id="what-a-key-must-look-like">What a key must look like<a class="anchor" href="#what-a-key-must-look-like" aria-hidden="true">#</a></h3>
+<p><code>FlowApiKeyService.save</code> rejects three things, each with its own message:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Rule</th>
+<th>Message</th>
+</tr></thead><tbody>
+<tr><td>Not blank after trimming</td><td><code>Flow API 키를 입력해 주세요.</code></td></tr>
+<tr><td>At most 500 characters</td><td><code>Flow API 키는 500자 이하로 입력해 주세요.</code></td></tr>
+<tr><td>Every character printable ASCII (<code>0x21</code>–<code>0x7E</code>)</td><td><code>Flow API 키에 공백이나 한글이 섞여 있습니다. 발급받은 키를 그대로 붙여 주세요.</code></td></tr>
+</tbody></table></div>
+<p>⭐ <strong>The third rule is the useful one.</strong> It catches a key pasted with a stray space, a line break, or surrounding Korean text — the realistic paste accidents. Without it those reach the API and come back as an opaque rejection at fetch time, far from the screen where the mistake was made.</p>
+<p>The value is then sealed with <code>SecretSealer</code> and upserted. See <a href="03-accounts-security.html">Accounts &amp; security</a> for the sealing scheme.</p>
+<h2 id="3-the-gateway">3. The gateway<a class="anchor" href="#3-the-gateway" aria-hidden="true">#</a></h2>
+<p><code>FlowPostGateway</code> is the boundary; <code>HttpFlowPostGateway</code> is the only implementation. It uses the JDK's built-in <code>HttpClient</code> — there is no HTTP client dependency in this repository, and one call site does not justify adding one.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th></th>
+<th></th>
+</tr></thead><tbody>
+<tr><td>Base URL</td><td><code>builder.flow.base-url</code>, default <code>https://api.flow.team</code>; trailing slashes stripped</td></tr>
+<tr><td>Timeout</td><td><code>builder.flow.timeout</code>, default <code>20s</code></td></tr>
+<tr><td>Auth</td><td>header <code>x-flow-api-key: &lt;key&gt;</code></td></tr>
+<tr><td>Method</td><td><code>GET</code>, <code>Content-Type: application/json</code></td></tr>
+</tbody></table></div>
+<p><strong>The key is fetched per request, not injected once.</strong> The constructor takes a <code>Supplier&lt;String&gt;</code> bound to <code>FlowApiKeyService::apiKey</code>, so a key replaced in the admin screen takes effect on the next call without a restart.</p>
+<p><strong>Every response must pass an envelope check</strong>: <code>response.success</code> must be true <em>and</em> <code>response.data</code> must be an object. A 2xx carrying a failure envelope is treated as a failure.</p>
+<p>⛔ <strong>Failures never echo the provider's response.</strong> A non-2xx logs the status code alone; a parse failure logs only the exception's class name. Both then raise the same <code>FlowPostException</code>:</p>
+<pre><code class="language-text">Flow 원문을 가져오지 못했습니다 — 업무번호 또는 게시물 ID와 접근 권한을 확인해 주세요.</code></pre>
+<p>A missing key is distinguished, because the fix is different and belongs to someone else:</p>
+<pre><code class="language-text">Flow API 연결 설정이 없습니다 — 관리자에게 문의해 주세요.</code></pre>
+<h2 id="4-finding-a-post-by-business-number">4. Finding a post by business number<a class="anchor" href="#4-finding-a-post-by-business-number" aria-hidden="true">#</a></h2>
+<p>This is the part that is not obvious. <strong>A business number is not a post ID</strong>, and Flow offers no endpoint that maps one to the other. So <code>getByTaskNumber</code> searches:</p>
+<pre><code class="language-text">GET /user/projects?cursor=N          ─┐  page through every project the key can see
+                                      │  (cursor loop, guarded)
+   for each project:                   │
+GET /user/posts/projects/{id}/tasks/filter?searchWord={number}
+                                      │
+   for each task: compare the task&#x27;s own number  ← exact match only
+                                      │
+GET /user/posts/{postId}             ─┘  fetch the real post</code></pre>
+<p>Three details worth knowing:</p>
+<ul>
+<li>⭐ <strong><code>searchWord</code> is treated as a hint, not an answer.</strong> The gateway re-reads each returned task's own number out of <code>columns[].columnData[].customColumnData</code> and requires an <strong>exact</strong> match. A search that returns near-misses cannot import the wrong post.
+</li>
+<li>⚠ <strong>The cursor loop is guarded against repeating itself.</strong> <code>visitedCursors</code> is a <code>Set&lt;Long&gt;</code>, and the loop condition is <code>visitedCursors.add(cursor)</code> — the moment the API returns a cursor already seen, the loop ends. Without it a provider paging bug becomes an infinite loop holding a request thread.
+</li>
+<li>⚠ <strong>The page shape is accepted two ways.</strong> <code>projects</code> is read whether the array sits at the top of <code>data</code> or nested one level down, with <code>hasNext</code> / <code>lastCursor</code> read from whichever node carried it.
+</li></ul>
+<p><strong>Cost scales with the number of Flow projects the key can see</strong> — one request per project until the number is found. That is inherent to searching without a lookup endpoint.</p>
+<h3 id="input-bounds-differ-by-entry-point">Input bounds differ by entry point<a class="anchor" href="#input-bounds-differ-by-entry-point" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Where</th>
+<th>Rule</th>
+</tr></thead><tbody>
+<tr><td>Registration form</td><td><code>pattern=&quot;[0-9]{4,12}&quot; maxlength=&quot;12&quot;</code> — a browser hint only</td></tr>
+<tr><td><code>SrtService.registerFlow</code></td><td><code>^[0-9]+$</code>, at most 30 characters</td></tr>
+<tr><td><code>HttpFlowPostGateway.getByTaskNumber</code></td><td><code>^[0-9]{4,12}$</code></td></tr>
+<tr><td><code>HttpFlowPostGateway.get</code> (post ID)</td><td><code>^[0-9]{1,15}$</code></td></tr>
+</tbody></table></div>
+<p>⚠ <strong>The gateway is the binding constraint.</strong> A 20-digit number passes the SRT service's check and is then refused by the gateway with <code>Flow 업무번호는 4~12자리 숫자로 입력해 주세요.</code> If you are changing these bounds, change them where they actually bite.</p>
+<p>⚠ <strong>The field takes a number, not a URL.</strong> Pasting a Flow link fails.</p>
+<h2 id="5-reading-the-body">5. Reading the body<a class="anchor" href="#5-reading-the-body" aria-hidden="true">#</a></h2>
+<p>A Flow post's text arrives in one of two shapes, and the gateway prefers the simple one.</p>
+<ol>
+<li>If <code>outContent</code> is present, that is the text.
+</li>
+<li>Otherwise <code>content</code> is parsed as Flow's editor JSON, and <strong>only components whose <code>COMP_TYPE</code> is <code>TEXT</code> contribute</strong>, via <code>COMP_DETAIL.CONTENTS</code>. Anything else is skipped.
+</li>
+<li>If the parse fails, the raw <code>content</code> string is used rather than losing the post.
+</li></ol>
+<p>⛔ <strong>A post with no title or no body is rejected outright</strong> — <code>Flow 게시물에 제목이나 본문이 없습니다 — Flow에서 게시물을 확인해 주세요.</code> An empty import would otherwise become an SRT with nothing in it, and the AI analysis downstream would have nothing to judge.</p>
+<p><code>FlowPost</code> carries <code>postId</code>, <code>title</code>, <code>content</code>, <code>connectUrl</code>, <code>projectTitle</code>, <code>attachments</code> (<code>fileName</code>, <code>size</code>, <code>url</code>, <code>thumbnailUrl</code>) and <code>remarks</code> (comments, excluding deleted ones).</p>
+<p>⚠ <strong>Remarks are fetched but deliberately dropped when an SRT saves the original.</strong> See <a href="09-srt.html">SRT fast track</a> — the stored <code>source_json</code> keeps the post, not the conversation.</p>
+<h2 id="6-data-model">6. Data model<a class="anchor" href="#6-data-model" aria-hidden="true">#</a></h2>
+<p><code>adk_builder_flow_api_key</code></p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr></thead><tbody>
+<tr><td><code>singleton_id</code></td><td><code>smallint</code> PK, default <code>1</code></td><td><code>CHECK (singleton_id = 1)</code></td></tr>
+<tr><td><code>api_key_cipher</code> / <code>api_key_nonce</code></td><td><code>bytea</code></td><td>Meaningless apart from each other</td></tr>
+<tr><td><code>updated_at</code></td><td><code>timestamptz</code></td><td>default <code>now()</code></td></tr>
+<tr><td><code>updated_by</code></td><td><code>varchar(7)</code></td><td>FK to <code>adk_builder_account</code></td></tr>
+</tbody></table></div>
+<p>⭐ <strong>The single row is enforced by the database, not by convention.</strong> The primary key defaults to <code>1</code> and a <code>CHECK</code> forbids any other value, so a second key physically cannot be inserted — the mapper's <code>upsert</code> is the only sensible write. This is an installation-wide credential, and the schema says so.</p>
+<h2 id="7-configuration">7. Configuration<a class="anchor" href="#7-configuration" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Key</th>
+<th>Default</th>
+<th>Note</th>
+</tr></thead><tbody>
+<tr><td><code>builder.flow.base-url</code></td><td><code>https://api.flow.team</code></td><td>Trailing slashes stripped in the record's compact constructor</td></tr>
+<tr><td><code>builder.flow.timeout</code></td><td><code>20s</code></td><td></td></tr>
+</tbody></table></div>
+<p>⛔ <strong>There is no <code>builder.flow.api-key</code>, and there must not be.</strong> The key is registered through the screen and sealed into the database. Operational context: <a href="21-operations.html">Install &amp; operations</a>.</p>
+<p>⚠ <strong>A changed <code>builder.secret-key-base64</code> makes the stored key unreadable.</strong> Back up the sealing key with the database, or the Flow key must be registered again.</p>
+<h2 id="8-code-map">8. Code map<a class="anchor" href="#8-code-map" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>Role</th>
+</tr></thead><tbody>
+<tr><td><code>flow/AdminSystemController.java</code></td><td><code>/admin/system</code>, SUPER only; status and save</td></tr>
+<tr><td><code>flow/FlowApiKeyService.java</code></td><td>Validation, sealing, <code>status()</code>, <code>apiKey()</code></td></tr>
+<tr><td><code>flow/FlowApiKey.java</code></td><td>The sealed record plus its audit fields</td></tr>
+<tr><td><code>flow/FlowApiKeyMapper.java</code></td><td><code>selectOne</code> / <code>upsert</code> — one row by design</td></tr>
+<tr><td><code>config/FlowProperties.java</code></td><td>Base URL and timeout, with defaults</td></tr>
+<tr><td><code>intake/FlowPostGateway.java</code></td><td>The boundary: <code>get(postId)</code>, <code>getByTaskNumber(number)</code></td></tr>
+<tr><td><code>intake/HttpFlowPostGateway.java</code></td><td>JDK <code>HttpClient</code>, project scan, envelope check, body parsing</td></tr>
+<tr><td><code>intake/FlowPost.java</code></td><td>Post, <code>Attachment</code>, <code>Remark</code></td></tr>
+<tr><td><code>intake/FlowPostException.java</code></td><td>Carries the operator-facing next action</td></tr>
+<tr><td><code>templates/admin/system.html</code></td><td>The screen</td></tr>
+</tbody></table></div>
+<h2 id="9-guarantees-covered-by-tests">9. Guarantees covered by tests<a class="anchor" href="#9-guarantees-covered-by-tests" aria-hidden="true">#</a></h2>
+<p>Test method names in this project are Korean sentences stating what is guaranteed, by convention.</p>
+<p><strong><code>HttpFlowPostGatewayTest</code></strong> — searching projects by business number retrieves an original that has attachments and comments · in editor JSON, only <code>CONTENTS</code> is read as the document body · a post's detail is queried with the API key and its title and body are read.</p>
+<pre><code class="language-bash">./mvnw test -Dtest=&#x27;HttpFlowPostGatewayTest,Srt*Test&#x27;</code></pre>
+<h2 id="10-traps">10. Traps<a class="anchor" href="#10-traps" aria-hidden="true">#</a></h2>
+<ol>
+<li><strong>Do not put the Flow key in a configuration file.</strong> It is registered on screen and sealed into the database; a file copy would outlive the rotation.
+</li>
+<li><strong>Do not render the key back to the screen.</strong> <code>status()</code> exposes only whether one exists and who set it.
+</li>
+<li><strong>Do not accept a key with whitespace or non-ASCII.</strong> The paste accident is real, and the failure otherwise surfaces far from its cause.
+</li>
+<li><strong>Do not bind the key once at construction.</strong> The supplier is what lets a replacement take effect without a restart.
+</li>
+<li><strong>Do not trust <code>searchWord</code> results.</strong> Compare each task's own number exactly, or a near-miss imports the wrong post.
+</li>
+<li><strong>Do not page without a visited-cursor guard.</strong> A repeating cursor becomes an infinite loop.
+</li>
+<li><strong>Do not echo the provider's response into an error.</strong> Status code and exception class only.
+</li>
+<li><strong>Do not treat 2xx as success.</strong> The envelope's <code>success</code> flag and <code>data</code> object decide.
+</li>
+<li><strong>Do not import a post with no title or body.</strong> An empty SRT gives the analysis nothing to judge.
+</li>
+<li><strong>Do not widen the business-number bounds in one place only.</strong> Four different checks apply; the gateway's <code>4–12</code> is the one that actually refuses.
+</li>
+<li><strong>Do not add an HTTP client dependency for this.</strong> One call site; the JDK's is enough.
+</li></ol>
+    </article>
+    <footer class="doc-footer">
+      <a href="20-notification.html">← Notifications</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/25-flow.md</span>
+      <a href="26-large-repository.html">Large repos &amp; perf →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

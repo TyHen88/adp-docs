@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intake &amp; document reading · ADP Builder</title>
+<meta name="description" content="Reference documentation — docs/adp/. Describes the system as built, not as planned.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Intake &amp; document reading</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html" aria-current="page"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Reference material</p>
+      <h1>Intake &amp; document reading</h1>
+      <blockquote><p>Reference documentation — <code>docs/adp/</code>. Describes the system as built, not as planned. The code is the source of truth; this file points at it. Verified against the tree on 2026-09-17. <strong>This page covers two things, and only one of them is retired.</strong> Read §1 before acting on anything here.</p></blockquote>
+<h2 id="1-two-halves-read-this-first">1. Two halves — read this first<a class="anchor" href="#1-two-halves-read-this-first" aria-hidden="true">#</a></h2>
+<p>The <code>intake</code> package holds a <strong>retired workflow</strong> and a <strong>live capability</strong>, in the same 28 files. Confusing them in either direction causes a real mistake, so the split is the first thing on the page.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th></th>
+<th>Status</th>
+<th>What it is</th>
+</tr></thead><tbody>
+<tr><td><strong>The requirement chain</strong> — received document → requirement → requirement definition → BRD</td><td><strong>Retired 2026-08-20</strong></td><td>The old front end of the product. Removed from the work flow. Data, routes and tables survive.</td></tr>
+<tr><td><strong>Reading an uploaded file</strong> — read check, text extraction, multimodal transcription</td><td><strong>Live</strong></td><td>Still runs today. It is how a file that a server cannot read becomes text at all.</td></tr>
+</tbody></table></div>
+<p>⛔ <strong>Do not make the requirement chain a precondition for anything new.</strong> The current work flow starts at the FRD wizard, where a planner types the requirement directly. Nothing downstream waits on a received document. Canonical: <code>docs/artifacts.md</code>, and <a href="00-overview.html">What ADP Builder is</a>.</p>
+<p>⛔ <strong>Do not read that as "document reading is dead."</strong> The read check and the multimodal path are wired, tested and reachable. They are the live half, and §3–§5 are about them.</p>
+<p>⚠ <strong>The word "intake" means three different things in this codebase.</strong> Only the first is this page:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Where you see it</th>
+<th>What it means</th>
+</tr></thead><tbody>
+<tr><td><code>com.bizplay.builder.intake</code></td><td>this package — received documents and requirements</td></tr>
+<tr><td><code>builder.developer.intake-path</code></td><td>the DEVELOPER delivery channel's endpoint — see <a href="10-dev-request.html">Development request</a></td></tr>
+<tr><td><code>intake.FlowPostGateway</code></td><td>fetching a Flow post, used by SRT — see <a href="09-srt.html">SRT fast track</a></td></tr>
+</tbody></table></div>
+<h2 id="2-what-the-chain-was-and-why-it-went">2. What the chain was, and why it went<a class="anchor" href="#2-what-the-chain-was-and-why-it-went" aria-hidden="true">#</a></h2>
+<p>The original product started from documents the planning team received: minutes, work requests, proposals. A planner uploaded one, AI extracted candidate requirements from it, the planner confirmed or excluded each, and those fed a requirement definition and then a BRD.</p>
+<p>That chain was removed from the flow on <strong>2026-08-20</strong>. The work unit became the FRD, and the requirement became something a planner writes directly.</p>
+<p><strong>The code was not deleted, and that is deliberate</strong> — existing engagements have rows in these tables, and the screens still render them. What changed is that nothing new begins here.</p>
+<p><strong>The screens are unreachable from the menu but reachable by URL.</strong> <code>ShellContract</code> keeps <code>received-docs</code> and <code>requirements</code> in <code>ARTIFACT_KEYS</code> while leaving them out of <code>ARTIFACT_MENU_KEYS</code>, with the reason stated in the field's own comment: a hidden screen can still be opened directly, so the key has to stay valid or the shell contract rejects the render. <code>definitions</code> and <code>brd</code> remain in <code>ARTIFACT_KEYS</code> for the same reason.</p>
+<p><strong>Two removals inside the chain are worth knowing, because both were reversals of "AI always helps":</strong></p>
+<ul>
+<li><strong>2026-08-15 — AI no longer tidies every document.</strong> Previously every received document was passed through <code>claude</code> for a first pass. ⛔ <code>normalize()</code> is not to be restored: a person's typed text was being rewritten by AI, which collided head-on with the rule that the original is preserved verbatim. The <code>NORMALIZE</code> value survives in <code>run_kind</code> as history.
+</li>
+<li><strong>2026-08-15 — the content-review step went.</strong> <code>REVIEW_REQUIRED</code> was folded into <code>READY</code>, and <code>adk_builder_intake.process_type</code> was dropped outright (<code>V10</code>).
+</li></ul>
+<h2 id="3-what-still-runs-deciding-how-a-file-can-be-read">3. What still runs — deciding how a file can be read<a class="anchor" href="#3-what-still-runs-deciding-how-a-file-can-be-read" aria-hidden="true">#</a></h2>
+<p><code>DocumentReadCheck</code> answers one question about an uploaded file: <strong>how can this be read?</strong></p>
+<pre><code class="language-text">직접 입력 (typed)                      →                                    READY
+attachment · server extracts text      →                                    READY
+attachment · no text, human-readable   → QUEUED → PROCESSING →              READY
+attachment · unreadable either way     →                                    FAILED</code></pre>
+<p><code>Readability</code> has three values, and the middle one is the 2026-08-15 addition:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr><td><code>READABLE</code></td><td>The server can extract the text itself. No AI is called.</td></tr>
+<tr><td><code>NEEDS_UNDERSTANDING</code></td><td>The server cannot, <strong>but a human eye could</strong> — scanned PDFs and images. Goes to multimodal.</td></tr>
+<tr><td><code>UNREADABLE</code></td><td>Neither path works. The original is still kept; the next step closes.</td></tr>
+</tbody></table></div>
+<p>⛔ <strong>The test is "did text actually come out", not "did the read succeed".</strong> The reason is a measured failure from 2026-08-09 (issue <code>#7</code>): <strong>a Hancom document returns its compressed bytes as text with no error at all.</strong> The absence of an exception is what makes it dangerous — AI then reads garbage and invents plausible-looking requirements, and nobody notices.</p>
+<p>⛔ <strong>Compressed office formats do not go to multimodal.</strong> Hancom and OOXML files are zip containers; a multimodal model cannot read the XML inside a zip either. Only scans and images qualify.</p>
+<p>⚠ <strong>The verdict never blocks the upload.</strong> Preserving the received original is the rule. What the verdict gates is the <em>next step</em>.</p>
+<p>⚠ <strong><code>NEEDS_UNDERSTANDING</code> is not a failure</strong> and must not be rendered as an error.</p>
+<h2 id="4-extracting-the-text">4. Extracting the text<a class="anchor" href="#4-extracting-the-text" aria-hidden="true">#</a></h2>
+<p><code>DocumentTextExtractor</code> is the other half of the pair — the read check <em>measures</em>, this one <em>extracts</em>. They are not split by layer; they are together because deciding requires attempting, so <strong>the knowledge of how to run the PDF tool had to live in exactly one place.</strong></p>
+<p>⚠ <strong>Extensions are not trusted. The leading bytes are.</strong> A Hancom file arrives renamed to <code>.txt</code>. The extractor reads <code>HEAD_BYTES = 4096</code> and matches magic bytes: <code>%PDF-</code>, PNG, JPEG, GIF, BMP, TIFF (both byte orders), RIFF, and zip.</p>
+<p>⛔ <strong>It throws rather than returning an empty string.</strong> This repository was burned here twice — the Hancom case above, and a scanned PDF that ran the tool cleanly and produced zero characters. <strong>An empty string passed off as success is what lets AI invent requirements out of nothing.</strong> So: when in doubt, fail. <code>MIN_TEXT_LENGTH = 1</code>; an empty file fails too.</p>
+<p>⚠ <strong>Images are rejected explicitly rather than falling through to the plain-text branch.</strong> PNG and JPEG headers contain literal strings such as <code>PNG</code> and <code>IHDR</code>, so a byte-ratio check would see <strong>more than zero characters and call it readable.</strong></p>
+<p>⚠ <strong>The PDF tool's presence is probed once and cached.</strong> Development machines lack <code>poppler-utils</code> while production Linux can install it (<code>apt-get install poppler-utils</code>), so refusing PDFs by extension would mean installing the tool on the server changes nothing. The cache is re-evaluated on restart.</p>
+<p>A plausible-UTF-8 floor of <code>MIN_TEXT_RATIO = 0.9</code> catches binary files with neither magic bytes nor a recognisable extension.</p>
+<h2 id="5-the-multimodal-path-the-live-ai-route">5. The multimodal path — the live AI route<a class="anchor" href="#5-the-multimodal-path-the-live-ai-route" aria-hidden="true">#</a></h2>
+<p>This is the <strong>second AI provider in the product.</strong> The first is the <code>claude</code> CLI — see <a href="05-claude-cli-runtime.html">Claude CLI runtime</a>. This one is an HTTP call to Gemini.</p>
+<p><code>DocumentUnderstandingClient</code> is the interface; <code>GeminiDocumentUnderstanding</code> is the implementation.</p>
+<p>⛔ <strong>Callers must not know the implementation class.</strong> The single swap point is the whole reason the interface exists.</p>
+<p>⛔ <strong>API key, model name and endpoint are never in code</strong> — all of them come from <code>DocumentUnderstandingProperties</code>. If the key is absent, <code>available()</code> is false and the class does nothing at all.</p>
+<h3 id="what-it-is-told-to-do">What it is told to do<a class="anchor" href="#what-it-is-told-to-do" aria-hidden="true">#</a></h3>
+<p>⛔ <strong>It is told to transcribe, not to summarise.</strong> The output of this layer is <em>the document's text</em>, not its gist — anything invented here becomes the foundation every later requirement stands on. The instruction spells out: do not summarise, do not fill gaps, rebuild tables as Markdown tables, carry information out of diagrams, leave names/dates/numbers exactly as written, and <strong>mark anything illegible as <code>[확인 필요]</code> rather than guessing.</strong> Without that last rule, a blurry scan's blank spots get filled with plausible sentences and nobody can tell.</p>
+<h3 id="operating-it">Operating it<a class="anchor" href="#operating-it" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Setting</th>
+<th>Value</th>
+<th>Note</th>
+</tr></thead><tbody>
+<tr><td><code>builder.document-understanding.model</code></td><td><code>gemini-3.6-flash</code></td><td>see the expiry trap below</td></tr>
+<tr><td><code>timeout</code></td><td><code>3m</code></td><td></td></tr>
+<tr><td><code>max-inline-bytes</code></td><td><code>15728640</code> (15 MB)</td><td>Base64 inflates payloads by 4/3, so the 20 MB upload cap would otherwise exceed the provider's limit</td></tr>
+<tr><td>retries when busy</td><td>3 attempts, 3 s backoff doubling to 6 s</td><td>⛔ do not raise — each attempt re-uploads the whole file</td></tr>
+</tbody></table></div>
+<p>⛔ <strong>Model names expire, and picking the newest is wrong.</strong> Both halves are measured:</p>
+<ul>
+<li>The default first written on 2026-08-16, <code>gemini-2.5-flash</code>, <strong>was already a dead name the day it was typed</strong> — 2.0 closed on 2026-06-01 and 2.5 returns 404 to newly issued keys.
+</li>
+<li>The freshly released <code>gemini-3.7-flash</code> returned <strong>503 (<code>experiencing high demand</code>) on both attempts</strong> with the same document, while <code>gemini-3.6-flash</code> returned <strong>200 on both.</strong> This layer transcribes characters; it does not need the newest intelligence, it needs the model that is not busy.
+</li></ul>
+<p>⚠ <strong>If attachments fail with nothing but "내용 분석 오류", suspect this setting first.</strong> The provider's own deprecations page is canonical for which names are alive. The point of holding the name in configuration rather than code is that the next expiry needs no code change.</p>
+<p>⛔ <strong>These properties are deliberately separate from <code>BuilderProperties</code>.</strong> That record holds values whose absence stops the server booting. Multimodal reading applies only to scanned PDFs and images, so making the key mandatory would ground an entire engagement that never uploads one. <strong>Missing key closes that one path; the server still starts.</strong></p>
+<p>⚠ <strong>Not yet measured against the live API.</strong> Sending internal documents to an external provider was approved on 2026-08-16, but the key has not been issued, so the request body shape and response parsing are written from documentation only. <strong>Do not read "will work" as "does work."</strong></p>
+<h3 id="the-worker">The worker<a class="anchor" href="#the-worker" aria-hidden="true">#</a></h3>
+<p><code>DocumentProcessingWorker</code> is <code>@Async</code>, and ★ <strong>it is a separate bean on purpose.</strong> ⛔ Do not fold it into <code>IntakeService</code> or <code>DocumentProcessingService</code>: a self-invocation skips the Spring proxy, so <code>@Async</code> <strong>never activates at all</strong> and a multi-minute job blocks the upload request. <code>AiRunWorker</code> records the identical trap.</p>
+<p>⛔ <strong>What the model returns is not written straight into the document-content field.</strong> That field holds <strong>text a person has confirmed.</strong> Skipping confirmation puts a misread table directly into requirement analysis.</p>
+<h2 id="6-states">6. States<a class="anchor" href="#6-states" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Enum</th>
+<th>Values</th>
+</tr></thead><tbody>
+<tr><td><code>ReceivedDocument.ContentState</code></td><td><code>QUEUED</code> · <code>PROCESSING</code> · <code>READY</code> · <code>FAILED</code></td></tr>
+<tr><td><code>ReceivedDocument.DocumentType</code></td><td><code>FLOW</code> · <code>MEETING_MINUTES</code> · <code>OTHER</code></td></tr>
+<tr><td><code>Intake.RequirementState</code></td><td><code>NOT_STARTED</code> · <code>RUNNING</code> · <code>REVIEW_REQUIRED</code> · <code>COMPLETED</code> · <code>FAILED</code></td></tr>
+<tr><td><code>Requirement.ReviewState</code></td><td><code>DRAFTED</code> · <code>CONFIRMED</code> · <code>EXCLUDED</code></td></tr>
+<tr><td><code>DocumentProcessingRun.State</code></td><td><code>WAITING</code> · <code>RUNNING</code> · <code>SUCCEEDED</code> · <code>FAILED</code></td></tr>
+<tr><td><code>DocumentProcessingRun.Kind</code></td><td><code>EXTRACT</code> · <code>NORMALIZE</code> (the second is retired)</td></tr>
+</tbody></table></div>
+<p>⛔ <strong><code>NOT_STARTED</code> is neither an error nor a to-do.</strong> A document kept purely for reference sits there permanently. Do not colour it red or label it "pending" — the enum's own comment says so.</p>
+<p>⛔ <strong>Do not restore <code>PENDING</code>, <code>EXTRACTING</code> or <code>NORMALIZING</code> to <code>ContentState</code>.</strong> All three assumed "AI always does something", which is the assumption that was removed.</p>
+<p>⚠ Both <code>ContentState</code> and <code>DocumentType</code> are nested enums, so mapper XML refers to them with <code>$</code>.</p>
+<h2 id="7-requirement-analysis-the-retired-half">7. Requirement analysis — the retired half<a class="anchor" href="#7-requirement-analysis-the-retired-half" aria-hidden="true">#</a></h2>
+<p><code>RequirementAnalysisWorker</code> draws requirement drafts out of confirmed document content. <strong>It runs only when a person presses the button</strong> — never automatically. ★ It is a separate bean for the same <code>@Async</code> proxy reason as above.</p>
+<p><code>RequirementReviewService</code> handles the three human judgements: <strong>confirm, exclude, edit the text.</strong></p>
+<p>⭐ Its heart is <code>rollUpIntake</code>: when every requirement in one intake has been decided, the intake flips to <code>COMPLETED</code>. Both screens exist to let a person reach that moment.</p>
+<p>⛔ <strong>No AI calls belong in that class.</strong> Confirming and "generate the definition" were deliberately separated — confirmation does not produce the next artifact.</p>
+<p>⚠ <strong>No repository commit happens there either.</strong> The "requirement confirmed" commit belongs to the frozen push design; if it is ever thawed, this is where it would be called.</p>
+<p>Re-analysis is guarded: ⛔ not while a run is in flight (two overlapping attempts would have the later one overwrite the earlier), and ⛔ not once analysis has completed (confirmed results would be lost).</p>
+<h2 id="8-screens-and-routes">8. Screens and routes<a class="anchor" href="#8-screens-and-routes" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Screen</th>
+<th>Method + route</th>
+<th>Template</th>
+</tr></thead><tbody>
+<tr><td>Received documents</td><td><code>GET /projects/{projectId}/artifacts/received-docs</code></td><td><code>artifacts/received-docs.html</code></td></tr>
+<tr><td>Register form</td><td><code>GET …/received-docs/register</code></td><td><code>artifacts/received-doc-register.html</code></td></tr>
+<tr><td>Register</td><td><code>POST …/received-docs</code></td><td></td></tr>
+<tr><td>Detail</td><td><code>GET …/received-docs/{intakeId}</code></td><td><code>artifacts/received-doc.html</code></td></tr>
+<tr><td>Retry content analysis</td><td><code>POST …/{intakeId}/reprocess</code></td><td></td></tr>
+<tr><td>Analyse requirements</td><td><code>POST …/{intakeId}/analyze-requirements</code></td><td></td></tr>
+<tr><td>Delete requirements</td><td><code>POST …/{intakeId}/delete-requirements</code></td><td></td></tr>
+<tr><td>Delete intake</td><td><code>POST …/{intakeId}/delete</code></td><td></td></tr>
+<tr><td>Download original</td><td><code>GET …/{intakeId}/file</code></td><td></td></tr>
+<tr><td>Requirements</td><td><code>GET …/artifacts/requirements</code></td><td><code>artifacts/requirements.html</code></td></tr>
+<tr><td>Requirement detail</td><td><code>GET …/requirements/{requirementId}</code></td><td><code>artifacts/requirement.html</code></td></tr>
+<tr><td>Confirm</td><td><code>POST …/{requirementId}/confirm</code></td><td></td></tr>
+<tr><td>Exclude</td><td><code>POST …/{requirementId}/exclude</code></td><td></td></tr>
+<tr><td>Edit text</td><td><code>POST …/{requirementId}/content</code></td><td></td></tr>
+</tbody></table></div>
+<p>⚠ Retry is offered only for documents that <strong>failed while multimodal was running</strong> — not for every error. ⛔ Do not widen it: a button that changes nothing when pressed is worse than no button.</p>
+<h2 id="9-data-model">9. Data model<a class="anchor" href="#9-data-model" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Table</th>
+<th>Notes</th>
+</tr></thead><tbody>
+<tr><td><code>adk_builder_intake</code></td><td>One receipt. <code>step</code>, <code>requirement_state</code>. ⚠ <code>process_type</code> was <strong>dropped</strong> in <code>V10</code></td></tr>
+<tr><td><code>adk_builder_received_document</code></td><td><code>intake_id</code> is <strong>unique</strong> — one document per intake. <code>document_type</code>, <code>content_state</code>, <code>typed_content</code>, <code>extracted_content</code>, <code>server_path</code>, <code>byte_size</code>, <code>meeting_at</code>, <code>attendees</code>, <code>content_confirmed_at</code></td></tr>
+<tr><td><code>adk_builder_requirement</code></td><td><code>number</code> per project, <code>unique (project_id, number)</code>, <code>title</code>, <code>body</code>, <code>screen_hints</code>, <code>review_state</code></td></tr>
+<tr><td><code>adk_builder_document_processing_run</code></td><td><code>run_kind</code>, <code>state</code>, <code>provider_run_id</code>, <code>error_message</code>, <code>input_tokens</code>, <code>output_tokens</code>, <code>cost_amount</code>, timings</td></tr>
+<tr><td><code>adk_builder_intake_facet</code></td><td>PK <code>(intake_id, name)</code>, with a composite FK to <code>(project_id, name)</code> on <code>adk_builder_project_facet</code></td></tr>
+</tbody></table></div>
+<p>⚠ <strong>A received document holding an application facet is what stops that facet being deleted.</strong> The constraint is described from the side that enforces it, with its measured details, in <a href="04-project-setup.html">Project setup</a> — deliberately not restated here, because one rule written in two places ages in two directions.</p>
+<p>The <code>CHECK</code> constraints were narrowed as the design shrank: <code>document_type</code> went <code>MEETING_MINUTES/WORK_REQUEST/PROPOSAL/OTHER</code> → <code>+FLOW</code> (<code>V9</code>) → <code>FLOW/MEETING_MINUTES/OTHER</code> (<code>V12</code>), and <code>content_state</code> lost <code>REVIEW_REQUIRED</code> in <code>V10</code>. Canonical ERD: <a href="02-data-model.html">Data model</a>.</p>
+<h2 id="10-files-on-disk">10. Files on disk<a class="anchor" href="#10-files-on-disk" aria-hidden="true">#</a></h2>
+<p>Originals are stored at <code>&lt;data-root&gt;/projects/&lt;projectId&gt;/received/</code>, named <code>&lt;intakeId&gt;-&lt;safeFileName(originalName)&gt;</code>.</p>
+<p>⛔ <strong>Outside <code>clone/</code>, deliberately.</strong> A received document is not something to push to the planning repository — see <a href="git.html">Git layer</a>.</p>
+<p>⛔ <strong>The original filename never reaches the path unsanitised.</strong> <code>IntakeService.safeFileName</code> strips path separators and <code>..</code>.</p>
+<p>Multimodal runs get their own tree at <code>&lt;data-root&gt;/doc-runs/&lt;runId&gt;/</code>, separate from <code>runs/&lt;runId&gt;/</code> for AI runs, because both sequences are 7 digits and would otherwise collide.</p>
+<p>Upload limits are Spring's: <code>max-file-size: 20MB</code>, <code>max-request-size: 25MB</code>.</p>
+<h2 id="11-code-map">11. Code map<a class="anchor" href="#11-code-map" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>Role</th>
+</tr></thead><tbody>
+<tr><td><code>intake/IntakeController.java</code></td><td>Nine routes for received documents</td></tr>
+<tr><td><code>intake/RequirementController.java</code></td><td>Five routes for requirements</td></tr>
+<tr><td><code>intake/IntakeService.java</code></td><td>Registration, storage, deletion, re-analysis guards</td></tr>
+<tr><td><code>intake/DocumentReadCheck.java</code></td><td>The three-way readability verdict</td></tr>
+<tr><td><code>intake/DocumentTextExtractor.java</code></td><td>Magic bytes, extraction, "never return empty"</td></tr>
+<tr><td><code>intake/DocumentProcessingWorker.java</code></td><td>Async multimodal run — separate bean by necessity</td></tr>
+<tr><td><code>intake/DocumentProcessingService.java</code></td><td>Run bookkeeping</td></tr>
+<tr><td><code>intake/DocumentProcessingBootSweep.java</code></td><td>Reclaims runs interrupted by a restart</td></tr>
+<tr><td><code>intake/RequirementAnalysisWorker.java</code></td><td>Async requirement extraction — separate bean</td></tr>
+<tr><td><code>intake/RequirementReviewService.java</code></td><td>Confirm / exclude / edit, and <code>rollUpIntake</code></td></tr>
+<tr><td><code>intake/FlowPostGateway.java</code>, <code>HttpFlowPostGateway.java</code></td><td>Flow post fetch — also used by <a href="09-srt.html">SRT</a></td></tr>
+<tr><td><code>ai/DocumentUnderstandingClient.java</code></td><td>The provider-neutral interface</td></tr>
+<tr><td><code>ai/GeminiDocumentUnderstanding.java</code></td><td>The only place that knows the provider</td></tr>
+<tr><td><code>config/DocumentUnderstandingProperties.java</code></td><td>Key, model, timeout, inline cap</td></tr>
+</tbody></table></div>
+<h2 id="12-guarantees-covered-by-tests">12. Guarantees covered by tests<a class="anchor" href="#12-guarantees-covered-by-tests" aria-hidden="true">#</a></h2>
+<p>Test method names in this project are Korean sentences stating what is guaranteed, by convention. Translated:</p>
+<p><strong><code>DocumentReadCheckTest</code></strong> — a Hancom document is compressed bytes, so no text comes out and it is marked unreadable · plain text reads · a PDF on a machine without the tool is marked unreadable, not "unknown" · a Hancom file merely named <code>.txt</code> is caught by its leading bytes · a binary file with neither magic bytes nor an extension is caught by its character ratio · an empty file is not marked readable.</p>
+<p><strong><code>DocumentTextExtractorTest</code></strong> — plain text comes out intact · a compressed document reaching this point is rejected rather than passed through silently · a PDF with no text is not passed off as success whether or not the tool is present · an empty file is not passed off as success.</p>
+<p><strong><code>DocumentProcessingWorkerTest</code></strong> — typed input is not picked up by the worker · an attachment the server can extract is not picked up either · a PDF with no text is read by multimodal and requirement analysis opens immediately afterwards · a missing multimodal configuration is reported as a configuration problem · failure to reach the provider is not blamed on the document · a busy provider does not tell the user to change the document · a failed analysis settles as an error and can be retried · compressed documents are not sent to multimodal either · only documents that failed <em>during</em> multimodal get the retry.</p>
+<p>Others: <code>IntakeUploadTest</code>, <code>RequirementAnalysisTest</code>, <code>RequirementScreenTest</code>, <code>HttpFlowPostGatewayTest</code>, <code>V7LegacyDataMigrationTest</code>.</p>
+<pre><code class="language-bash">./mvnw test -Dtest=&#x27;Document*Test,Intake*Test,Requirement*Test&#x27;</code></pre>
+<h2 id="13-traps">13. Traps<a class="anchor" href="#13-traps" aria-hidden="true">#</a></h2>
+<p>Each one is a bug that actually happened.</p>
+<ol>
+<li><strong>Do not treat "the read succeeded" as "text came out."</strong> Hancom returns compressed bytes with no exception, and AI then invents requirements from garbage.
+</li>
+<li><strong>Do not return an empty string from extraction.</strong> Throw. An empty success is indistinguishable from a real document downstream.
+</li>
+<li><strong>Do not trust file extensions.</strong> Hancom files arrive renamed to <code>.txt</code>.
+</li>
+<li><strong>Do not let images fall through to the text branch.</strong> PNG/JPEG headers contain enough literal characters to pass a ratio check.
+</li>
+<li><strong>Do not send zip-based office documents to multimodal.</strong> It cannot read XML inside a zip.
+</li>
+<li><strong>Do not block the upload on an unreadable verdict.</strong> Preserving the original is the rule; the verdict gates the next step only.
+</li>
+<li><strong>Do not render <code>NEEDS_UNDERSTANDING</code> as an error.</strong> It is a routing decision.
+</li>
+<li><strong>Do not colour <code>NOT_STARTED</code> as pending or failed.</strong> Reference-only documents live there.
+</li>
+<li><strong>Do not put the async workers inside <code>IntakeService</code>.</strong> Self-invocation bypasses the proxy and <code>@Async</code> silently never fires.
+</li>
+<li><strong>Do not write the model's output straight into the confirmed-content field.</strong> A misread table would flow into requirement analysis unreviewed.
+</li>
+<li><strong>Do not ask the model to summarise.</strong> This layer transcribes; invention poisons everything built on it.
+</li>
+<li><strong>Do not pick the newest model.</strong> Measured: <code>3.7-flash</code> 503 twice, <code>3.6-flash</code> 200 twice.
+</li>
+<li><strong>Do not hardcode the model name or API key.</strong> Names expire; configuration is the fix.
+</li>
+<li><strong>Do not merge <code>DocumentUnderstandingProperties</code> into <code>BuilderProperties</code>.</strong> A missing key must close one path, not stop the server.
+</li>
+<li><strong>Do not raise the busy-retry count.</strong> Each attempt re-uploads the entire file.
+</li>
+<li><strong>Do not restore <code>normalize()</code>,</strong> or <code>PENDING</code>/<code>EXTRACTING</code>/<code>NORMALIZING</code>. They encoded "AI always does something", which was removed for rewriting people's own words.
+</li>
+<li><strong>Do not reopen re-analysis while a run is active or after it completed.</strong> Overwrites and lost confirmations respectively.
+</li>
+<li><strong>Do not add AI calls to <code>RequirementReviewService</code>.</strong> Confirming is not generating.
+</li>
+<li><strong>Do not use the raw filename in a path.</strong> <code>safeFileName</code> exists for <code>..</code> and separators.
+</li>
+<li><strong>Do not build new features on the requirement chain.</strong> It is history. The FRD wizard is the entry point.
+</li></ol>
+    </article>
+    <footer class="doc-footer">
+      <a href="19-checker.html">← Spec checker</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/24-document-intake.md</span>
+      <a href="21-operations.html">Install &amp; operations →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRD workbench · Work processes · ADP Builder</title>
+<meta name="description" content="What DRAFTING actually is: the screen-by-screen loop, the AI draft, the suggestion menu, direct edits, markers, history and the write lock.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · FRD workbench</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html" aria-current="page"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 4</p>
+      <h1>FRD workbench — the drafting loop</h1>
+      <p class="wp-lede">One worktree, one person, one screen at a time. An FRD with no screens selected works on out-of-screen implementation requirements and document scope instead — the loop is the same, minus the preview.</p>
+
+      <h2>The loop</h2>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Pick a screen in the left list</div><div class="flow__cmd">artifacts/frd.html · one FRD, many screens</div></div>
+          <div class="flow__aside">Screen states are independent of the FRD's own state.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Make the draft, then work on detail</div><div class="flow__cmd">ScreenMockupWorker · Edit(/&lt;target&gt;/&lt;screen&gt;.html) — one path, nothing else</div></div>
+          <div class="flow__aside">Claude edits one HTML file directly inside the worktree; the resulting HTML is not returned in the response.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">Ask for the change you need, specifically</div><div class="flow__cmd">FrdScreenChatWorker · 4,000 characters per message · one AI edit at a time per FRD</div></div>
+          <div class="flow__aside">Routing is decided by the last message, not the button — typing the sentence takes the same path as the menu item.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Check the screen and the explanation together</div><div class="flow__cmd">preview · change list · markers</div></div>
+          <div class="flow__aside flow__aside--fail">Only the screen that failed is <code>FAILED</code>; the others and the FRD are unaffected.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">05</div>
+          <div><div class="flow__title">Undo a bad run, or save and check the criteria</div><div class="flow__cmd">실행 되돌리기 → /screens/{id}/history/step</div></div>
+          <div class="flow__aside">Saving runs the spec checker automatically and reports back only when something fails.</div>
+        </div>
+      </div>
+
+      <div class="states">
+        <span class="state">WAITING</span>
+        <span class="states__sep">대기</span>
+        <span class="states__sep">→</span>
+        <span class="state">GENERATING</span>
+        <span class="states__sep">초안 생성 중</span>
+        <span class="states__sep">→</span>
+        <span class="state state--ok">GENERATED</span>
+        <span class="states__sep">or</span>
+        <span class="state state--bad">FAILED</span>
+      </div>
+
+      <h2>The AI 제안 menu</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>What comes back</th></tr></thead>
+          <tbody>
+            <tr><td>디자인 시안 비교</td><td>Two design proposals and an apply button</td></tr>
+            <tr><td>문구·용어 맞추기</td><td>The corrected screen plus a <code>before → after (basis)</code> list</td></tr>
+            <tr><td>요건 대비 누락 점검</td><td>The screen with missing inputs, items and buttons added, plus what was added and why</td></tr>
+            <tr><td>빠진 상태 화면 찾기</td><td>Candidate state screens — empty list, error, no permission, done — with a <code>이 상태 만들기</code> button</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <div class="note__t">Only items that produce an outcome are listed</div>
+        <p>Pressing one must change the screen or give something to choose. An item that returns a review comment leaves the planner to turn that comment back into a request, and that was measured getting stuck: <i>“review the design rules”</i> → <i>“you are following the rules”</i> → <i>“fix what you pointed out”</i> → <i>“I did not say anything was a violation.”</i> Design rules are read on every edit anyway.</p>
+      </div>
+
+      <p>Wording alignment needs the policy and standard-terminology documents registered in <code>정책·표준용어</code>. With none registered the AI is not run at all and the planner is told to register them. Words with the same meaning but different spelling are corrected; anything whose business meaning would change is left as <code>확인 필요</code>.</p>
+
+      <h2>Changing a screen without an AI run</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Direct element edits</p>
+          <p>Text and a deliberately narrow set of properties on one selected element, saved as a new screen version. Spacing and font sizes come from a fixed list; <code>color</code> and <code>background-color</code> accept <b>design tokens only</b>, so a direct edit cannot break the design system.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Markers vs memos</p>
+          <p>A marker is an execution note pinned to an element — 기능, 정책, 예외, 권한, 확인 요청 — and it is fed into the AI conversation and into the development request. A memo is a comment for people. Marker text is worth writing carefully; memo text is not read by anything.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">State cases</p>
+          <p><code>상태 추가</code> creates a sub-screen from the current one — 검색 결과 없음, 권한 없음, 저장 실패. A state screen cannot nest another, and none can be added to a screen the AI is working on.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">History and comparison</p>
+          <p>Restoring a history entry restores the files and that point's marker snapshot. The comparison view lines up only the same screen and the same facet — and it <b>does not restore anything</b>: looking at a version is not applying it, which is what makes it safe to browse while work is in flight.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">Writing into the worktree is expected</div>
+        <p>The draft worker writes <code>pages/&lt;screenId&gt;.html</code> inside the worktree branch, and the development-request package takes its material from exactly there. The prohibition is only on carrying that into the default branch, where <code>pages/</code> must stay as-is.</p>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Write admission — completion beats the planner</div>
+        <p>While completion holds the FRD, an interceptor on <code>/projects/**</code> refuses user writes with a message telling them to check the progress first. While an ordinary AI run is in flight it keeps a <i>reservation</i>, not a lock, so reads and other screens are untouched.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdController.java"><span class="pill">FrdController</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/ScreenMockupWorker.java"><span class="pill">ScreenMockupWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdScreenChatWorker.java"><span class="pill">FrdScreenChatWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdScreenDirectEditService.java"><span class="pill">FrdScreenDirectEditService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdScreenHistoryService.java"><span class="pill">FrdScreenHistoryService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdWriteAdmission.java"><span class="pill">FrdWriteAdmission</span></a>
+      </div>
+      <p>Narrative reference: <a href="../07-frd-workbench.html">FRD workbench</a>. Related: <a href="../19-checker.html">Spec checker</a>, <a href="../12-ia.html">IA</a>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="05-frd-wizard.html">← FRD wizard</a>
+        <a href="07-frd-completion.html">FRD completion →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

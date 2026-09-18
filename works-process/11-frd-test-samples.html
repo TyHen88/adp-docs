@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRD test samples · Work processes · ADP Builder</title>
+<meta name="description" content="Five paste-ready requirement bodies for exercising FRD work end to end, what each one is meant to prove, what it actually did when it was run, and what to check at every stage.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · FRD test samples</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html" aria-current="page"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Trying it out</p>
+      <h1>FRD test samples</h1>
+      <p class="wp-lede">Five requirement bodies to paste into step 1 of the wizard, chosen so that between them they walk every branch of FRD work: an existing-screen change, a new screen, a back-office screen, a screen-less change, and a one-line edit for resume and re-complete. They were run end to end on 2026-09-13 — 27 of 30 scenarios — so the “what actually happened” column below is measurement, not expectation.</p>
+
+      <div class="note">
+        <div class="note__t">The bodies are Korean on purpose</div>
+        <p>The planning repository, the screen documents and the interview are all Korean, and every run carries a system rule telling the model to write for a Korean-speaking planner. An English requirement will be analysed, but the screens it is matched against are named in Korean, so the samples stay in the language the product runs in. The explanation around them is English.</p>
+      </div>
+
+      <h2>Before you start</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Preconditions</p>
+          <ul>
+            <li>A project in <code>READY</code> — its clone must have landed</li>
+            <li>The signed-in account has Claude connected</li>
+            <li>A planning repo with real screens in the area you write about</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Two safety rules</p>
+          <ul>
+            <li><b>Do not send the development request.</b> Completion stops at the FRD branch commit and the package — nothing reaches the remote</li>
+            <li>Start every test title with <code>[e2e]</code> so test FRDs never mix with real ones</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <p class="panel__t">What it costs in time</p>
+          <p>Measured on a clone of 4,511 files / ~181 MB: the wizard takes 2–12 minutes depending on how many questions the interview asks, an AI screen draft 54–130 seconds, and one completion 217–294 seconds.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">If your project is different</p>
+          <p>These five sit in one area of one planning repo — 가맹점 방문 예약 in a regional-currency project — deliberately, so the AI has neighbouring screens to find. For another repo, keep the shape and swap the domain: see <a href="#writing">writing your own</a>.</p>
+        </div>
+      </div>
+
+      <h2>The five samples</h2>
+
+      <h3>R1 — an existing screen changes</h3>
+      <p>Title: <code>[e2e] 익산 웹뷰 방문 예약 취소</code></p>
+      <div class="tree">이용자가 「나의 방문 예약」에서 확정된 방문 예약을 직접 취소할 수 있어야 한다.
+
+- 취소는 방문 예정 시각 1시간 전까지만 가능하고, 그 뒤에는 취소 버튼을 보여 주지 않는다.
+- 취소할 때 취소 사유를 목록에서 하나 고르고, 「기타」를 고르면 사유를 직접 적는다.
+- 취소가 끝나면 예약 목록으로 돌아가 상태가 「취소됨」으로 바뀐 것이 보여야 한다.
+- 이미 방문이 끝났거나 가맹점이 취소한 예약은 이용자가 취소할 수 없다.</div>
+      <p><b>Meant to prove:</b> the baseline path — one or two existing screens change, nothing new. <b>What actually happened:</b> the repository had no 「나의 방문 예약」 screen, so the interview corrected the scope to two new screens plus one existing (the 전체메뉴 modal) after 4 turns, about 5 minutes. That correction <i>is</i> the interview working.</p>
+
+      <h3>R2 — a new screen appears</h3>
+      <p>Title: <code>[e2e] 익산 웹뷰 가맹점 즐겨찾기</code></p>
+      <div class="tree">이용자가 자주 가는 가맹점을 즐겨찾기로 등록해 두고 모아 볼 수 있어야 한다.
+
+- 가맹점 상세 화면에서 즐겨찾기 등록·해제를 한 번의 동작으로 바꾼다.
+- 「즐겨찾는 가맹점」 목록 화면을 새로 만들어 등록한 가맹점을 최근 등록순으로 보여 준다.
+- 목록에서 가맹점을 누르면 기존 가맹점 상세로 이동한다.
+- 전체메뉴에 「즐겨찾는 가맹점」 진입 항목을 더한다.
+- 로그인하지 않은 이용자가 즐겨찾기를 누르면 로그인 안내를 보여 준다.</div>
+      <p><b>Meant to prove:</b> two existing screens plus one new list — the mixed case, and the one to use for the AI draft and the screen chat. <b>What actually happened:</b> 5 interview turns over about 12 minutes; answering one question by hand and then correcting the summary made the AI point out a contradiction in the correction and ask two more questions.</p>
+
+      <h3>R3 — the other system and the other facet</h3>
+      <p>Title: <code>[e2e] 제주 백오피스 방문 예약 현황 조회</code> · register it with facet 제주 and system 백오피스</p>
+      <div class="tree">운영 담당자가 가맹점별 방문 예약 현황을 기간으로 조회하고 엑셀로 내려받을 수 있어야 한다.
+
+- 조회 조건은 기간(시작일·종료일)과 가맹점이고, 기간은 최대 3개월로 제한한다.
+- 목록에는 예약일시·가맹점·이용자·인원·상태를 보여 주고, 상태로 한 번 더 걸러 볼 수 있다.
+- 행을 누르면 예약 상세를 옆에서 보여 준다.
+- 조회 결과를 엑셀로 내려받을 수 있고, 내려받기는 조회 조건을 그대로 따른다.</div>
+      <p><b>Meant to prove:</b> the facet axis and the skin — the workbench preview should come up in the back-office skin, and the candidates should be back-office screens. <b>What actually happened:</b> 2 turns, about 4 minutes, two new screens and six backend items; the AI said plainly that the repository has no visit-reservation screens rather than inventing a match.</p>
+
+      <h3>R4 — no screen at all</h3>
+      <p>Title: <code>[e2e] 방문 예약 알림 문구 정책</code></p>
+      <div class="tree">방문 예약 알림 문구를 표준용어에 맞춰 정리해야 한다. 화면 변경은 없다.
+
+- 예약 확정·예약 취소·방문 1시간 전 세 가지 알림의 문구를 정한다.
+- 문구에는 가맹점명과 방문 일시를 넣고, 표준용어에 없는 말은 쓰지 않는다.
+- 이용자가 알림 수신을 꺼 두었으면 보내지 않는다.
+- 발송에 실패하면 다시 보내지 않고 기록만 남긴다.</div>
+      <p><b>Meant to prove:</b> the backend-only branch — zero screens, and the <code>개발요청서 바로 만들기</code> exit. <b>What actually happened:</b> the AI settled on 0 screens and 5 backend items, but left 4 items under 확인 필요, and the fast-track button only appears when none are open — so it did not show. Pressing <code>FRD 작업하기</code> instead saw zero screens and completed straight into a development request.</p>
+
+      <h3>R5 — one line, for resume and re-complete</h3>
+      <p>Title: <code>[e2e] 익산 웹뷰 방문 예약 상세 안내문</code></p>
+      <div class="tree">방문 예약 상세 화면 아래쪽에 방문 유의사항 안내문을 더해야 한다.
+
+- 안내문은 예약 상태가 「확정」일 때만 보여 준다.
+- 내용은 신분증 지참 · 방문 시간 준수 · 취소 기한 세 줄이다.
+- 기존 버튼과 겹치지 않도록 버튼 위에 둔다.</div>
+      <p><b>Meant to prove:</b> the smallest possible FRD, so it can be completed, resumed from the development request, and completed again without waiting for a long interview. <b>What actually happened:</b> 2 turns, about 2 minutes, one existing screen.</p>
+
+      <h2>A run that covers the important paths</h2>
+      <p>Creating an FRD is the slow part, so make five and layer the scenarios on top of them. The first four lines below cover every high-priority path in about 90 minutes.</p>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">1</div>
+          <div><div class="flow__title">R1 — the baseline</div><div class="flow__cmd">wizard → 작업하기 → 직접 수정 one label → 완료</div></div>
+          <div class="flow__aside">Gives you the reference timing table for every later completion.</div>
+        </div>
+        <div class="flow__step">
+          <div class="flow__num">2</div>
+          <div><div class="flow__title">R2 — the AI paths</div><div class="flow__cmd">answer one question by hand → 다시 인터뷰하기 → AI draft → screen chat</div></div>
+          <div class="flow__aside">Try 완료 while a draft is still running: it must be refused, with no run created.</div>
+        </div>
+        <div class="flow__step">
+          <div class="flow__num">3</div>
+          <div><div class="flow__title">R5 — the completion gate</div><div class="flow__cmd">drop files into the worktree, complete, read the refusal, remove, repeat</div></div>
+          <div class="flow__aside">A conflict marker and a NUL byte must be refused; broken HTML and an oversized HTML must pass with a diagnostic. Then resume from the DR and complete again.</div>
+        </div>
+        <div class="flow__step">
+          <div class="flow__num">4</div>
+          <div><div class="flow__title">Two FRDs at once</div><div class="flow__cmd">press 작업하기 in two tabs within 3 seconds · complete one while editing the other</div></div>
+          <div class="flow__aside">Both must reach <code>DRAFTING</code> with one worktree each; the second may wait on the project lock but must not fail.</div>
+        </div>
+        <div class="flow__step">
+          <div class="flow__num">5</div>
+          <div><div class="flow__title">R4 and R3 — the edges</div><div class="flow__cmd">zero screens · the other facet and system · markers, memos, state cases</div></div>
+          <div class="flow__aside">Widening, not proving: run these when the four above are green.</div>
+        </div>
+      </div>
+
+      <h2>What to look at, and where</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Moment</th><th>Check</th><th>Where</th></tr></thead>
+          <tbody>
+            <tr><td>Through the whole wizard</td><td>No worktree folder and no branch exist yet</td><td><code>&lt;data-root&gt;/projects/&lt;id&gt;/worktrees/</code></td></tr>
+            <tr><td>After <code>FRD 작업하기</code></td><td><code>frd-{DB id}</code> folder and <code>frd/{DB id}</code> branch exist; state is <code>DRAFTING</code></td><td>disk, <code>git branch</code>, the FRD list</td></tr>
+            <tr><td>An AI draft or chat</td><td>The file in the worktree changed, and the preview shows it</td><td>the worktree, the preview pane</td></tr>
+            <tr><td>Completion, step timing</td><td>Six steps, none of them silent</td><td>log <code>FRD 완료 구간 시간 step=… elapsedMs=</code></td></tr>
+            <tr><td>Completion, file scan</td><td>Two lines — baseline and candidate — with file counts near the clone's</td><td>log <code>FRD 파일 검사 files= bytes=</code></td></tr>
+            <tr><td>Completion, preservation</td><td>Bytes read and written</td><td>log <code>FRD 내용 보존 sourceReadBytes= …</code></td></tr>
+            <tr><td>Anything concurrent</td><td>Waits and holds — only waits over 100 ms and holds over 1 s are logged</td><td>log <code>FRD 잠금 … waitMs= heldMs=</code></td></tr>
+            <tr><td>After completion</td><td>A commit on the FRD branch, a development request created, <b><code>origin/main</code> unchanged</b></td><td><code>git log</code>, the DR list</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Already known — do not re-report these</h2>
+      <div class="branch">
+        <div class="branch__t">Rough edges the 2026-09-13 run found, filed as issues</div>
+        <p>A completion refusal shows only “결과 검증 단계에서 중단”; the file and the code are in the log alone. The post-edit 375px check does not compare against a baseline, so a pre-existing overflow can block a new edit. Starting the same FRD twice drops the second request on an empty <code>/pick</code> screen. A zero-screen FRD still creates a worktree and branch. Re-completing rewrites most of the preserved material rather than reusing it. And the planning repo's node checker exceeds the two-minute cap on a very large document.</p>
+      </div>
+
+      <h2 id="writing">Writing your own</h2>
+      <p>A body the interview can work with names four things: <b>who</b> acts, <b>why</b>, <b>from what starting condition</b>, and <b>what the outcome should be</b>. Add the conditions that change the answer — permissions, error cases, limits, retention — because those are exactly what the AI would otherwise have to ask about, and every avoided question saves a turn.</p>
+      <div class="note">
+        <div class="note__t">Pick an area with neighbours</div>
+        <p>All five samples sit in one neighbourhood on purpose: the AI finds screen candidates by reading the repository, so a requirement in an area with several existing screens produces a realistic mix of existing and new. A requirement about something the repo has never heard of produces all-new screens, which is a thinner test — and, as R1 shows, the interview will tell you so.</p>
+      </div>
+
+      <h2>Where this comes from</h2>
+      <p>The scenario set, the measurements and the run record are in <code>docs/superpowers/specs/2026-09-13-frd-e2e-scenarios.md</code> — 30 scenarios across the wizard, the workbench, the completion contract, concurrency and refusals. This page is the part you need in front of you while testing. Process detail: <a href="05-frd-wizard.html">FRD wizard</a>, <a href="06-frd-workbench.html">FRD workbench</a>, <a href="07-frd-completion.html">FRD completion</a>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="13-data-root.html">← The data root</a>
+        <a href="index.html">Process map →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

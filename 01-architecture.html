@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture · ADP Builder</title>
+<meta name="description" content="The stack, the package map, how one request flows, the async worker pattern that every long-running feature reuses, and the on-disk layout under data-root.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Architecture</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html" aria-current="page"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Start here</p>
+      <h1>Architecture</h1>
+      <blockquote><p>The stack, the package map, how one request flows, the async worker pattern that every long-running feature reuses, and the on-disk layout under <code>data-root</code>.</p></blockquote>
+<h2 id="stack">Stack<a class="anchor" href="#stack" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Layer</th>
+<th>Choice</th>
+</tr></thead><tbody>
+<tr><td>Language / runtime</td><td>Java 17</td></tr>
+<tr><td>Framework</td><td>Spring Boot 3.5.9 (<code>spring-boot-starter-web</code>)</td></tr>
+<tr><td>View</td><td>Thymeleaf + <code>thymeleaf-extras-springsecurity6</code>, server-rendered</td></tr>
+<tr><td>Security</td><td>Spring Security, form login</td></tr>
+<tr><td>Persistence</td><td><strong>MyBatis</strong> 3.0.4 over <code>spring-boot-starter-jdbc</code>. No JPA — all data access moved to MyBatis on 2026-08-15</td></tr>
+<tr><td>Schema</td><td>Flyway (<code>flyway-core</code> + <code>flyway-database-postgresql</code>), schema <code>builder</code></td></tr>
+<tr><td>Database</td><td>PostgreSQL 17 target. <strong>Tests run on zonky embedded PostgreSQL 14.22</strong> — 15+ syntax breaks tests only</td></tr>
+<tr><td>HTML processing</td><td>jsoup 1.23.1</td></tr>
+<tr><td>Screen capture</td><td>Playwright Java 1.62.0 with <strong>full Chromium</strong> (not <code>--only-shell</code>)</td></tr>
+<tr><td>AI</td><td><strong>Two providers.</strong> The <code>claude</code> CLI, executed as a subprocess, for everything in the work flow; <strong>Gemini over HTTP</strong> (<code>builder.document-understanding</code>) for transcribing uploaded files a server cannot read — see <a href="24-document-intake.html">intake &amp; doc reading</a></td></tr>
+<tr><td>Build</td><td>Maven wrapper (<code>./mvnw</code>), artifact <code>builder-&lt;version&gt;.jar</code></td></tr>
+</tbody></table></div>
+<p>There is no SPA build step and no JavaScript bundler. The front end is Thymeleaf templates plus hand-written CSS and small ES5-compatible scripts under <code>src/main/resources/static/</code>.</p>
+<h2 id="package-map">Package map<a class="anchor" href="#package-map" aria-hidden="true">#</a></h2>
+<p>All production code lives under <code>com.bizplay.builder</code>. Package = feature area; the reference page for each is linked.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Package</th>
+<th>Files</th>
+<th>What it owns</th>
+<th>Page</th>
+</tr></thead><tbody>
+<tr><td><code>frd</code></td><td>101</td><td>FRD lifecycle: wizard, interview, workbench, screens, markers, history, completion</td><td><a href="06-frd-wizard.html">wizard</a> · <a href="07-frd-workbench.html">workbench</a> · <a href="08-frd-completion.html">completion</a></td></tr>
+<tr><td><code>devrequest</code></td><td>59</td><td>DR package build, pre-check, GitLab delivery, status sync, result apply</td><td><a href="10-dev-request.html">dev request</a> · <a href="11-dev-result.html">dev result</a></td></tr>
+<tr><td><code>businesslanguage</code></td><td>34</td><td>Business policy + standard terminology documents, seeding, revisions</td><td><a href="15-business-language.html">policy &amp; terms</a></td></tr>
+<tr><td><code>intake</code></td><td>28</td><td>Received documents and requirement drafts (<strong>retired chain</strong>) — but also the <strong>live</strong> file-reading and multimodal transcription path</td><td><a href="24-document-intake.html">intake &amp; doc reading</a></td></tr>
+<tr><td><code>project</code></td><td>25</td><td>Project registration, clone, systems, facets, repository refresh, paths</td><td><a href="04-project-setup.html">project setup</a></td></tr>
+<tr><td><code>ai</code></td><td>24</td><td>The Claude runner, isolation, common rules, AI-run records and worker</td><td><a href="05-claude-cli-runtime.html">Claude CLI runtime</a></td></tr>
+<tr><td><code>screendesign</code></td><td>16</td><td>Screen-design document generation + Playwright capture</td><td><a href="16-green-zone.html">green zone</a></td></tr>
+<tr><td><code>featurespec</code></td><td>14</td><td>Feature-spec generation, revisions, rendering</td><td><a href="16-green-zone.html">green zone</a></td></tr>
+<tr><td><code>design</code></td><td>14</td><td>Design guide, design index, style vocabulary, curation</td><td><a href="14-design-guide.html">design guide</a></td></tr>
+<tr><td><code>claude</code></td><td>13</td><td>Per-account Claude credentials, auth gateway, identity, locks</td><td><a href="05-claude-cli-runtime.html">Claude CLI runtime</a></td></tr>
+<tr><td><code>solution</code></td><td>12</td><td>Solution templates (mockups), preview, skin rewriting, mismatch flags</td><td><a href="13-solution-mockup.html">solution templates</a></td></tr>
+<tr><td><code>screenid</code></td><td>12</td><td>Standard screen-ID numbering</td><td><a href="18-screen-id.html">screen IDs</a></td></tr>
+<tr><td><code>ia</code></td><td>12</td><td>Menu tree / information architecture</td><td><a href="12-ia.html">IA</a></td></tr>
+<tr><td><code>config</code></td><td>12</td><td>Properties, security, async executors, interceptor registration, static resources</td><td>this page</td></tr>
+<tr><td><code>usermanual</code></td><td>10</td><td>User-manual generation and capture</td><td><a href="16-green-zone.html">green zone</a></td></tr>
+<tr><td><code>srt</code></td><td>10</td><td>SRT fast track</td><td><a href="09-srt.html">SRT</a></td></tr>
+<tr><td><code>notification</code></td><td>10</td><td>In-app notifications, screen-draft batches</td><td><a href="20-notification.html">notifications</a></td></tr>
+<tr><td><code>account</code></td><td>10</td><td>Accounts, login, password, super-account bootstrap</td><td><a href="03-accounts-security.html">accounts &amp; security</a></td></tr>
+<tr><td><code>checker</code></td><td>9</td><td>Running the planning repository's checker, diffing findings</td><td><a href="19-checker.html">spec checker</a></td></tr>
+<tr><td><code>integrationtest</code> / <code>unittest</code></td><td>6 / 4</td><td>Reading returned test result documents</td><td><a href="17-tests.html">tests</a></td></tr>
+<tr><td><code>git</code></td><td>4</td><td><code>GitCommand</code>, <code>RepoProbe</code> — every git call goes through here</td><td><a href="git.html">git layer</a></td></tr>
+<tr><td><code>flow</code></td><td>4</td><td>Flow API key administration</td><td><a href="04-project-setup.html">project setup</a></td></tr>
+<tr><td><code>secret</code></td><td>3</td><td><code>SecretSealer</code>, <code>Sealed</code>, temporary passwords</td><td><a href="03-accounts-security.html">accounts &amp; security</a></td></tr>
+<tr><td><code>web</code></td><td>2</td><td><code>FirstLoginFilter</code>, <code>ProjectContextInterceptor</code></td><td>this page</td></tr>
+<tr><td><code>shell</code></td><td>1</td><td><code>ShellContract</code> — the layout fragment's argument contract</td><td>this page</td></tr>
+<tr><td><code>id</code></td><td>1</td><td><code>IdSequence</code> — artifact numbering</td><td><a href="02-data-model.html">data model</a></td></tr>
+<tr><td><code>artifact</code></td><td>1</td><td><code>ArtifactListController</code> — the generic artifact landing screens</td><td>this page</td></tr>
+</tbody></table></div>
+<h2 id="how-one-request-flows">How one request flows<a class="anchor" href="#how-one-request-flows" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">browser
+  → Spring Security filter chain        (form login; /login and static are public)
+  → FirstLoginFilter                    (forces password change before anything else)
+  → ProjectContextInterceptor           (/projects/** — resolves the project, puts it in the model)
+  → FrdWriteInterceptor                 (/projects/** — refuses writes while an FRD is locked)
+  → NotificationInterceptor             (/** — puts the unread notification list in the model)
+  → @Controller
+      → @Service  (transaction boundary)
+          → MyBatis mapper  → PostgreSQL `builder` schema
+          → ProjectPaths    → the clone / worktrees on disk
+          → an @Async worker → the `claude` CLI subprocess
+  → Thymeleaf template
+      → fragments/shell :: layout       (ShellContract.check() validates the arguments)</code></pre>
+<h3 id="the-shell-contract">The shell contract<a class="anchor" href="#the-shell-contract" aria-hidden="true">#</a></h3>
+<p><code>fragments/shell.html</code> is the single layout. Because Thymeleaf fragment arguments are plain strings, a typo produces <strong>a normal-looking page with the menu and project name missing</strong> rather than a 500 — the hardest failure for a human to notice. So <code>ShellContract.check()</code> throws on any unknown value.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Argument</th>
+<th>Allowed values</th>
+</tr></thead><tbody>
+<tr><td><code>shape</code></td><td><code>산출물</code> (artifact, has left menu) · <code>관리</code> (admin, has left menu) · <code>카드</code> (card, login family) · <code>꽉</code> (full, no menu)</td></tr>
+<tr><td><code>current</code></td><td>For <code>산출물</code>: one of <code>ARTIFACT_KEYS</code>. For <code>관리</code>: <code>projects</code> · <code>accounts</code> · <code>system</code>. For the other two: must be <code>null</code></td></tr>
+<tr><td><code>projectName</code>, <code>projectId</code></td><td>Required whenever <code>shape</code> is <code>산출물</code> or <code>꽉</code> — an empty <code>projectId</code> produces links like <code>/projects//artifacts/brd</code></td></tr>
+</tbody></table></div>
+<blockquote><p>Changing the menu means changing <strong>three</strong> files together: <code>ShellContract.java</code>, <code>fragments/parts.html</code>, and <code>_shell.js</code>. <code>ShellContractTest</code> compares the table against the rendered menu text and fails if they drift.</p></blockquote>
+<h2 id="the-async-worker-pattern">The async worker pattern<a class="anchor" href="#the-async-worker-pattern" aria-hidden="true">#</a></h2>
+<p>Every long-running feature (AI analysis, cloning, package building, document generation) uses the same shape. Learn it once and the other 20 read themselves.</p>
+<pre><code class="language-text">Controller               → Service                 → Worker (@Async)      → external process
+  accepts the POST          claims the row            runs `claude` / git      claude, git, Playwright
+  returns immediately       in one transaction        parses the result
+  the page polls a          (state = RUNNING,         writes the outcome
+  /status endpoint           owner, started_at)       in a new transaction</code></pre>
+<p>Rules that hold across all of them:</p>
+<ul>
+<li><strong>The worker is always a separate bean from the service.</strong> Calling an <code>@Async</code> method from inside the same class skips the Spring proxy, so the annotation <em>silently does nothing</em>. <code>ScreenPickWorker</code> carries this warning in its javadoc because it was learned the hard way.
+</li>
+<li><strong>The claim is a conditional update.</strong> State moves <code>WAITING → RUNNING</code> only if the row is still <code>WAITING</code>; that is what prevents two workers doing the same job.
+</li>
+<li><strong>The result lands in a new transaction</strong>, so a failure while recording the outcome cannot roll back the work itself. <code>NotificationPublisher</code> follows the same rule and swallows its own exceptions — a notification failure must never fail the real work.
+</li>
+<li><strong>Long input never goes on the command line.</strong> Pasted source text is written to a run-only file and the instruction carries the path. Two reasons: the Windows argv limit (~32 KB), and imperative sentences inside pasted text being read as instructions.
+</li>
+<li><strong>The page polls a <code>/status</code> endpoint</strong> and re-renders a fragment. There is no websocket.
+</li></ul>
+<h3 id="thread-pools">Thread pools<a class="anchor" href="#thread-pools" aria-hidden="true">#</a></h3>
+<p>Defined in <code>AsyncConfig</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Executor</th>
+<th>Size</th>
+<th>Used by</th>
+</tr></thead><tbody>
+<tr><td><code>aiExecutor</code></td><td><code>builder.ai-concurrency</code> core = max, queue <code>builder.ai-queue-capacity</code></td><td>every Claude run</td></tr>
+<tr><td><code>cloneExecutor</code></td><td>core 2, max 4, queue 50</td><td>repository clone and refresh</td></tr>
+<tr><td><code>deliveryExecutor</code></td><td>core 1, max 1, queue <code>builder.delivery.queue-capacity</code> (default 20)</td><td>development-request delivery — deliberately serial</td></tr>
+</tbody></table></div>
+<h2 id="on-disk-layout">On-disk layout<a class="anchor" href="#on-disk-layout" aria-hidden="true">#</a></h2>
+<p><code>builder.data-root</code> (for example <code>/var/lib/we-adk-builder</code>) holds everything that is not in the database. <code>ProjectPaths</code> is the only class that composes these paths, and it validates every ID before using it in a path.</p>
+<pre><code class="language-text">&lt;data-root&gt;/
+├── claude/
+│   └── common-rules.md              unpacked from the jar at every boot; the jar always wins
+├── credentials/                     per-account CLAUDE_CONFIG_DIR (sealed)
+└── projects/&lt;projectId&gt;/
+    ├── clone/                       the planning repository clone (read-mostly)
+    │   └── core/&lt;systemCode&gt;/ia.md
+    ├── worktrees/
+    │   ├── frd-&lt;frdId&gt;/             one per FRD  → branch frd/&lt;frdId&gt;
+    │   ├── srt-&lt;srtId&gt;/             one per SRT  → branch srt/&lt;srtId&gt;
+    │   └── dev-request-merge-&lt;id&gt;/  transient, for applying returned results
+    ├── received/                    uploaded source documents
+    ├── dev-request-attachments/
+    └── dev-request-packages/&lt;requestId&gt;/
+        └── DR-NNN.zip</code></pre>
+<blockquote><p><strong>Back up the database and <code>data-root</code> together.</strong> Restoring one without the other leaves the DB state and the on-disk clone/worktree state disagreeing.</p></blockquote>
+<h2 id="where-state-lives-db-or-git">Where state lives — DB or git?<a class="anchor" href="#where-state-lives-db-or-git" aria-hidden="true">#</a></h2>
+<p>This split is the single most important thing to internalise:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Kind of thing</th>
+<th>Source of truth</th>
+</tr></thead><tbody>
+<tr><td>Screens, screen markdown, domain documents, IA snapshot, design derivatives</td><td><strong>The planning repository</strong> (the clone). Builder mostly reads.</td></tr>
+<tr><td>FRD state, interview transcript, screen work status, markers, memos, history</td><td><strong>Builder's database</strong></td></tr>
+<tr><td>IA rows being edited</td><td><strong>Builder's database</strong>; the repo <code>ia.md</code> gets a read-only snapshot on confirm</td></tr>
+<tr><td>Mockup "differs from production" flags</td><td><strong>Builder's database</strong> (the screen itself is the repo's)</td></tr>
+<tr><td>Work in progress on screens</td><td><strong>The FRD's git worktree</strong>, committed on that FRD's branch</td></tr>
+</tbody></table></div>
+<h2 id="testing">Testing<a class="anchor" href="#testing" aria-hidden="true">#</a></h2>
+<p><code>./mvnw test</code> is the finish line for behaviour and logic changes. Tests run on the JDK 17 pinned by the repository and on zonky embedded PostgreSQL. Verification effort is tiered by risk — see <a href="22-conventions.html">Conventions</a>.</p>
+    </article>
+    <footer class="doc-footer">
+      <a href="00-overview.html">← What ADP Builder is</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/01-architecture.md</span>
+      <a href="02-data-model.html">Data model →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

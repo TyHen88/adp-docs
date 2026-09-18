@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policy &amp; standard terms · ADP Builder</title>
+<meta name="description" content="The two business documents a project defines for itself — the policy document and the standard terminology — how a first draft is generated in batches rather than one long run, and">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Policy &amp; standard terms</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html" aria-current="page"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Reference material</p>
+      <h1>Policy &amp; standard terms</h1>
+      <blockquote><p>The two business documents a project defines for itself — the policy document and the standard terminology — how a first draft is generated in batches rather than one long run, and how they reach the AI without being pasted into every prompt.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.businesslanguage</code> (34 files). Screens: <code>artifacts/business-language.html</code>, <code>business-language-history.html</code>. Routes: <code>/projects/{projectId}/artifacts/business-language</code>. Menu: <code>정책·표준용어</code>.</p>
+<h2 id="the-two-documents">The two documents<a class="anchor" href="#the-two-documents" aria-hidden="true">#</a></h2>
+<p><code>BusinessDocumentKind</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Kind</th>
+<th>What</th>
+</tr></thead><tbody>
+<tr><td><code>POLICY</code></td><td>The business policy document — rules the screens must obey</td></tr>
+<tr><td><code>STANDARD_TERMS</code></td><td>Standard terminology — the agreed word for each concept</td></tr>
+</tbody></table></div>
+<p>Both are <strong>owned by the project and edited in Builder</strong> (<code>adk_builder_business_document</code>), with full revision history (<code>adk_builder_business_document_revision</code>).</p>
+<h2 id="why-they-exist">Why they exist<a class="anchor" href="#why-they-exist" aria-hidden="true">#</a></h2>
+<p>They are what makes <code>문구·용어 맞추기</code> in the <a href="07-frd-workbench.html">FRD workbench</a> possible. Without them registered, that AI action <strong>is not run at all</strong> — the user is told to register the documents first, rather than the AI inventing a standard.</p>
+<p>The rule it applies: words with the same meaning but different spelling get corrected; words whose business meaning would change, and anything with no basis in these documents, are left as <code>확인 필요</code>.</p>
+<h2 id="getting-them-to-the-ai-businesslanguagecontextwriter">Getting them to the AI — <code>BusinessLanguageContextWriter</code><a class="anchor" href="#getting-them-to-the-ai-businesslanguagecontextwriter" aria-hidden="true">#</a></h2>
+<p>⭐ The database is the source of truth, but a prompt cannot carry a whole policy document. So the writer turns both documents into <strong>an index plus fragments the AI reads only where it needs to</strong>, under <code>&lt;inputDir&gt;/business-language</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Writer</th>
+<th>Produces</th>
+</tr></thead><tbody>
+<tr><td><code>BusinessPolicyIndexWriter</code></td><td>A policy index plus a sections directory</td></tr>
+<tr><td><code>BusinessTermIndexWriter</code></td><td>A term index plus a sections directory</td></tr>
+</tbody></table></div>
+<p><strong>The term index carries every term name and synonym on one page.</strong> That is the point of it: one read tells the AI whether a word is governed at all, and only then does it open the one batch that defines it.</p>
+<p>⛔ <strong>If either document is missing, the writer returns empty</strong> rather than writing a partial context. A run then proceeds without business language instead of with half of it.</p>
+<p>That context is loaded on a <strong>new</strong> session. ⚠ For <code>문구·용어 맞추기</code> it is reloaded even on a <strong>resumed</strong> session, because that is the one request that cannot work without it — every other request loads it only on a new session. See the <code>--system-prompt-snapshot</code> note in <a href="05-claude-cli-runtime.html">Claude CLI runtime</a> for why resumed sessions differ.</p>
+<blockquote><p>⛔ <strong>The instruction block has two forms, and the reason is a real collision.</strong> <code>ContextFiles.instruction(grepAvailable)</code> exists because the screen-picking run using the codebase MCP <strong>strips <code>Grep</code> and instructs the model not to grep</strong>, while this block was telling it to grep — two contradictory orders in one prompt (2026-09-10). Policy sections and term batches live in the input folder, <strong>outside the clone</strong>, so the MCP index cannot see them either. That run therefore picks from the index and uses <code>Read</code> only.</p></blockquote>
+<h2 id="seeding-a-first-draft">Seeding a first draft<a class="anchor" href="#seeding-a-first-draft" aria-hidden="true">#</a></h2>
+<p>A project rarely starts with these documents written, so seeding generates a first draft from the <code>domains</code> material already in the planning repository.</p>
+<p><code>POST /seed</code> refuses in three distinct ways before any AI runs:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Guard</th>
+<th>Message</th>
+</tr></thead><tbody>
+<tr><td>Documents already exist</td><td>"이미 초안이 만들어져 있습니다."</td></tr>
+<tr><td>No <code>domains</code> documents in the clone</td><td>"저장소의 domains 문서를 찾지 못했습니다…"</td></tr>
+<tr><td><code>seeds.begin(...)</code> did not claim the row</td><td>"초안을 이미 만들고 있습니다."</td></tr>
+</tbody></table></div>
+<p>The third is the atomic one — the claim is a single-row update, so two people pressing at once cannot both start.</p>
+<h3 id="why-it-is-split-into-parts-measured-not-assumed">Why it is split into parts — measured, not assumed<a class="anchor" href="#why-it-is-split-into-parts-measured-not-assumed" aria-hidden="true">#</a></h3>
+<p>⭐ <strong>One run doing the whole thing fails in two different ways, and the numbers are recorded</strong> (2026-09-02):</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Attempt</th>
+<th>Result</th>
+</tr></thead><tbody>
+<tr><td>Finished in 7m38s</td><td>Compressed 4,938 lines of domain rules into 94 policy bullets — roughly 78:1</td></tr>
+<tr><td>Re-run of the same input</td><td>Hit the 20-minute wall and produced <strong>nothing at all</strong></td></tr>
+</tbody></table></div>
+<p>Worse, the relationship was <strong>inverse</strong> — the larger the file, the less came back. A 461KB file yielded 3 bullets; a 192KB file yielded <strong>zero</strong>. So the split is not about speed. A single run silently under-reads large input, and a failure costs the entire draft rather than one piece.</p>
+<h3 id="how-the-batches-are-decided-businesslanguagebatches">How the batches are decided — <code>BusinessLanguageBatches</code><a class="anchor" href="#how-the-batches-are-decided-businesslanguagebatches" aria-hidden="true">#</a></h3>
+<p>Domain markdown is grouped by <strong>byte total</strong>, largest-first, first-fit, against <code>POLICY_BATCH_LIMIT_BYTES</code> = 250,000.</p>
+<p>⚠ <strong>The limit is a target, not a wall.</strong> A single file larger than the limit cannot be split, so it becomes its own batch.</p>
+<p>⛔ <strong>The sort is size descending, then path ascending — and the second key is not decoration.</strong> Two files of equal size would otherwise order arbitrarily, so a retry could group the batches differently and lose the correspondence with the parts already stored.</p>
+<p>⚠ <strong>Batching does not read the files, only their sizes.</strong> Keeping it pure is what makes it unit-testable and deterministic: the same clone always yields the same batches, so a retry inherits the previous run's part numbering.</p>
+<h2 id="the-three-state-machines">The three state machines<a class="anchor" href="#the-three-state-machines" aria-hidden="true">#</a></h2>
+<p>Seeding tracks a run, its parts, and its merges <strong>separately</strong>, because they fail separately.</p>
+<pre><code class="language-text">BusinessDocumentSeedState        RUNNING → DONE | FAILED          the run as a whole
+BusinessDocumentSeedPartState    PENDING → RUNNING → DONE | FAILED   one batch
+BusinessDocumentSeedMergeState   PENDING → RUNNING → DONE | FAILED   parts → one document</code></pre>
+<p><code>BusinessDocumentSeedDispatcher</code> drives it:</p>
+<ul>
+<li><strong>Dispatch happens <code>AFTER_COMMIT</code></strong> (<code>@TransactionalEventListener</code>), so the worker never starts against a row that has not landed.
+</li>
+<li><strong>A full queue is a recorded failure</strong>, not a dropped request — <code>TaskRejectedException</code> becomes <code>fail(projectId, &quot;QUEUE_REJECTED&quot;)</code>.
+</li>
+<li>⭐ <strong>On boot, every run still marked <code>RUNNING</code> is closed as <code>SERVER_RESTARTED</code></strong> (<code>@EventListener(ApplicationReadyEvent)</code>). Without this, a restart mid-seed would leave the project permanently unable to start another draft, because the "already generating" guard would keep matching.
+</li></ul>
+<p>Failure reasons are short codes in an 80-character column, which is why they read like <code>QUEUE_REJECTED</code> and <code>SERVER_RESTARTED</code> rather than sentences.</p>
+<h3 id="what-the-parts-guarantee">What the parts guarantee<a class="anchor" href="#what-the-parts-guarantee" aria-hidden="true">#</a></h3>
+<p>From <code>BusinessDocumentBatchedSeedRunner</code> and the part mapper:</p>
+<ul>
+<li><strong>Only unfinished batches run.</strong> A finished batch is never redone, and a retry picks up only <code>FAILED</code> ones.
+</li>
+<li><strong>Two workers cannot claim the same batch</strong> — the claim is atomic.
+</li>
+<li><strong>One batch failing does not stop the others</strong>, and does not delete their fragments.
+</li>
+<li><strong>Merging waits for every batch.</strong> If even one is unfinished, nothing merges.
+</li>
+<li><strong>A failed merge does not delete the fragments</strong> — it closes and leaves them for a retry.
+</li>
+<li><strong>Policy and terms have independent part numbering</strong>, which the primary key <code>(project_id, kind, part_no)</code> enforces.
+</li>
+<li><strong>The two merges are independent.</strong> A successful policy merge survives a failed terms merge and is not re-run.
+</li>
+<li><strong>Source references are collected without duplication</strong> across fragments before the document is written.
+</li></ul>
+<p>⭐ <strong>Standard terms are extracted from the completed policy fragment of the same number</strong>, not from the raw domain files. Terms therefore describe the policy that was actually produced, rather than a second independent reading of the same input.</p>
+<p>⚠ <strong>If the input fingerprint changes, a previous merge result is discarded and prepared again</strong> — otherwise a merge would combine fragments from two different readings of the repository.</p>
+<p>⛔ <strong>A draft with no term rows is rejected with a specific failure code</strong>, not saved as an empty document. And a single-batch draft still <strong>excludes generic UI operation words</strong>, so "저장", "취소" and the like do not become business terminology.</p>
+<p>When a seed closes, its parts for that project are deleted; the documents and their revisions are what remain.</p>
+<h2 id="editing-revisions-and-restore">Editing, revisions and restore<a class="anchor" href="#editing-revisions-and-restore" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Route</th>
+<th>Action</th>
+</tr></thead><tbody>
+<tr><td><code>GET /</code></td><td>The document screen</td></tr>
+<tr><td><code>POST /policy</code></td><td>Save the policy document</td></tr>
+<tr><td><code>POST /terms/new</code></td><td>Add a term</td></tr>
+<tr><td><code>POST /terms/{termIndex}</code></td><td>Update one term row</td></tr>
+<tr><td><code>POST /terms/{termIndex}/delete</code></td><td>Delete one term row</td></tr>
+<tr><td><code>POST /upload</code></td><td>Upload a document</td></tr>
+<tr><td><code>POST /seed</code></td><td>Start seeding</td></tr>
+<tr><td><code>GET /policy/download</code></td><td>Download the policy</td></tr>
+<tr><td><code>GET /history</code></td><td>Revision history</td></tr>
+<tr><td><code>POST /history/restore</code></td><td>Restore a revision</td></tr>
+</tbody></table></div>
+<p><strong>Every save writes two things</strong> — the current document and a new revision row. <code>BusinessDocumentRevisionType</code> records why a revision exists: <code>INITIAL_DRAFT</code>, <code>EDIT</code> or <code>RESTORE</code>.</p>
+<p>⭐ <strong>Restoring an old revision creates a new <code>RESTORE</code> revision; it does not rewind history.</strong> The document returns to the earlier content while the record of every step, including the restore, stays intact.</p>
+<p><strong>A term edit touches one row.</strong> Updating a single term rewrites just that row and leaves a new revision, rather than rewriting the whole terminology document.</p>
+<h3 id="the-history-view-compares-in-human-units">The history view compares in human units<a class="anchor" href="#the-history-view-compares-in-human-units" aria-hidden="true">#</a></h3>
+<p><code>BusinessDocumentHistoryService</code> diffs in units a person can check — <strong>policy items</strong> for <code>POLICY</code>, <strong>term rows</strong> for <code>STANDARD_TERMS</code> — not as raw text. <code>BusinessDocumentChangeType</code> marks each as <code>ADDED</code>, <code>MODIFIED</code> or <code>REMOVED</code>, which <code>business-language.css</code> colours green, yellow and red.</p>
+<p><strong>Per-term "last modified" comes from the revision in which that row actually changed</strong> (<code>StandardTermAudit</code>), not from the document's <code>updated_at</code>. Editing one term therefore does not restamp every other term as recently changed. ⚠ <strong>When there is nothing to audit, the revision history is not read at all</strong> — the audit is skipped rather than scanning the whole history to produce an empty answer.</p>
+<h2 id="tables">Tables<a class="anchor" href="#tables" aria-hidden="true">#</a></h2>
+<p>Measured against the live schema at v95.</p>
+<p><strong><code>adk_builder_business_document</code></strong> — primary key <code>(project_id, kind)</code>, so <strong>one row per kind per project</strong>. This is the current document, not a history.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr></thead><tbody>
+<tr><td><code>project_id</code> / <code>kind</code></td><td><code>varchar(7)</code> / <code>varchar(30)</code></td><td>PK. <code>kind</code> CHECK-constrained to the two values</td></tr>
+<tr><td><code>content</code></td><td><code>text</code></td><td><code>CHECK (length(trim(content)) &gt; 0)</code> — an empty document cannot be stored</td></tr>
+<tr><td><code>source_refs</code></td><td><code>text</code></td><td>JSON list, default <code>[]</code>, via <code>JsonStringListTypeHandler</code></td></tr>
+<tr><td><code>updated_at</code> / <code>updated_by</code></td><td><code>timestamptz</code> / <code>varchar(7)</code></td><td><code>updated_by</code> FK to the account</td></tr>
+</tbody></table></div>
+<p><code>adk_builder_business_document_revision</code> references <code>(project_id, kind)</code> as a <strong>composite FK with <code>ON DELETE CASCADE</code></strong> — revisions cannot outlive their document.</p>
+<p><strong><code>adk_builder_business_document_seed_part</code></strong> — primary key <code>(project_id, kind, part_no)</code>, which is what keeps policy and term numbering from colliding.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Column</th>
+<th>Notes</th>
+</tr></thead><tbody>
+<tr><td><code>part_no</code></td><td><code>CHECK (part_no &gt; 0)</code></td></tr>
+<tr><td><code>scope</code></td><td>The batch's assigned input</td></tr>
+<tr><td><code>state</code></td><td>CHECK-constrained to the four part states</td></tr>
+<tr><td><code>content</code></td><td>Nullable while pending</td></tr>
+<tr><td><code>failed_reason</code></td><td><code>varchar(80)</code> — short codes</td></tr>
+<tr><td><code>started_at</code> / <code>finished_at</code></td><td></td></tr>
+</tbody></table></div>
+<p>⭐ <strong>One CHECK constraint enforces the invariant that matters</strong>: <code>state &lt;&gt; &#x27;DONE&#x27; OR length(trim(coalesce(content,&#x27;&#x27;))) &gt; 0</code>. A batch <strong>cannot be marked done with nothing in it</strong> — the database refuses, so an empty fragment can never be merged into a document.</p>
+<p>Plus <code>adk_builder_business_document_seed</code> (the run) and <code>adk_builder_business_document_seed_merge</code> (the merge per kind).</p>
+<h2 id="code-map">Code map<a class="anchor" href="#code-map" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>Role</th>
+</tr></thead><tbody>
+<tr><td><code>BusinessLanguageController.java</code></td><td>The eleven routes</td></tr>
+<tr><td><code>BusinessDocumentService.java</code></td><td>Save, term CRUD, restore, <code>hasDomainDocuments</code></td></tr>
+<tr><td><code>BusinessDocumentSeedService.java</code></td><td>Start guards, part planning, closing a run</td></tr>
+<tr><td><code>BusinessDocumentSeedDispatcher.java</code></td><td>After-commit dispatch, queue-full failure, boot cleanup</td></tr>
+<tr><td><code>BusinessDocumentBatchedSeedRunner.java</code></td><td>Runs the unfinished batches, then merges</td></tr>
+<tr><td><code>BusinessDocumentSeedWorker.java</code></td><td>One batch's AI run</td></tr>
+<tr><td><code>BusinessLanguageBatches.java</code></td><td>The size-based grouping, with the measurements in its javadoc</td></tr>
+<tr><td><code>BusinessLanguageContextWriter.java</code></td><td>Index plus fragments for a run</td></tr>
+<tr><td><code>BusinessPolicyIndexWriter.java</code> · <code>BusinessTermIndexWriter.java</code></td><td>The two indexes</td></tr>
+<tr><td><code>BusinessDocumentHistoryService.java</code></td><td>Revision comparison in human units</td></tr>
+<tr><td><code>BusinessLanguageMarkdown.java</code></td><td>Parses and renders the markdown form</td></tr>
+<tr><td><code>StandardTerm.java</code> · <code>StandardTermAudit.java</code></td><td>The term model and per-row change provenance</td></tr>
+<tr><td><code>JsonStringListTypeHandler.java</code></td><td>MyBatis handler for the JSON list columns</td></tr>
+<tr><td><code>BusinessLanguagePartAiGateway.java</code> · <code>BusinessLanguageAiGateway.java</code></td><td>The AI call sites</td></tr>
+</tbody></table></div>
+<p>Canonical plan: <code>docs/superpowers/plans/2026-08-31-plan-business-language.md</code>.</p>
+<h2 id="what-the-tests-guarantee">What the tests guarantee<a class="anchor" href="#what-the-tests-guarantee" aria-hidden="true">#</a></h2>
+<p>Nineteen test classes. Translated from their Korean names:</p>
+<p><strong>Batching</strong> (<code>BusinessLanguageBatchesTest</code>) — a file over the limit becomes its own batch · small files gather into one batch within the limit.</p>
+<p><strong>Parts</strong> (<code>BusinessDocumentSeedPartMapperTest</code>) — a stored batch returns its assigned input unchanged · two workers cannot claim the same batch · a finished batch is never claimed again · only failed batches are re-claimed · one batch's failure does not delete a neighbour's fragment · policy and term numbering do not collide · re-inserting does not overwrite a finished batch · closing a draft deletes that project's batches.</p>
+<p><strong>Runner</strong> (<code>BusinessDocumentBatchedSeedRunnerTest</code>) — finished batches are not re-run · only unfinished ones run · one failure still lets the rest run · nothing merges until every batch is done · a failed merge closes without deleting fragments · source references are collected without overlap · only fragment bodies go to the merge step · term batches are drawn from the completed policy fragment of the same number · a failed terms merge does not re-run a successful policy merge.</p>
+<p><strong>Merge</strong> (<code>BusinessDocumentSeedMergeMapperTest</code>) — a successful policy merge survives a terms-merge failure · a changed input fingerprint discards the previous merge result and prepares again.</p>
+<p><strong>Seed service</strong> (<code>BusinessDocumentSeedServiceTest</code>) — policy and terms are planned from the same domain batches · a draft with no term rows is rejected with a specific failure code · a project already generating does not start twice · no AI work starts without <code>domains</code> documents · saving a draft also records the first revision of both documents · a single-batch draft still excludes generic UI operation words · a whole-run failure makes running batches and merges retryable · validation failure codes are recorded on the run state.</p>
+<p><strong>Documents</strong> (<code>BusinessDocumentServiceTest</code>) — saving the policy stores both the current version and a new revision · restoring an old revision leaves a new restore revision · editing one term row updates only that row and leaves a new revision · a term's last-modified comes from the revision where that row changed · only the selected term is audited · no audit means the revision history is not read.</p>
+<p><strong>History</strong> (<code>BusinessDocumentHistoryServiceTest</code>) — the policy distinguishes added, modified and removed per item · terms distinguish them per term.</p>
+<p>Plus <code>BusinessLanguageContextWriterTest</code>, <code>BusinessPolicyIndexWriterTest</code>, <code>BusinessTermIndexWriterTest</code>, <code>BusinessLanguageMarkdownTest</code>, <code>BusinessDocumentSeedWorkerTest</code>, and the screen/view tests.</p>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-hidden="true">#</a></h2>
+<ol>
+<li>⛔ <strong>Do not generate the draft in one run.</strong> Measured: large input silently yields less, and a single failure costs the whole draft.
+</li>
+<li>⛔ <strong>Do not sort batches by size alone.</strong> Equal sizes reorder, and a retry then regroups and loses the stored parts' correspondence.
+</li>
+<li>⛔ <strong>Do not make batching read file contents.</strong> Purity is what makes it deterministic across retries.
+</li>
+<li>⛔ <strong>Do not delete fragments when a merge fails.</strong> The retry needs them.
+</li>
+<li>⛔ <strong>Do not let a part reach <code>DONE</code> empty.</strong> The database check prevents it; do not work around it.
+</li>
+<li>⛔ <strong>Do not leave <code>RUNNING</code> runs after a restart.</strong> The boot listener closes them, otherwise the project can never start another draft.
+</li>
+<li>⛔ <strong>Do not write a partial AI context.</strong> If either document is missing, write none.
+</li>
+<li>⛔ <strong>Do not instruct a run to grep when its tools exclude <code>Grep</code>.</strong> That contradiction shipped once; <code>instruction(grepAvailable)</code> exists to prevent it.
+</li>
+<li>⛔ <strong>Do not make restore rewind history.</strong> It appends a <code>RESTORE</code> revision.
+</li>
+<li>⚠ <strong>Do not take a term's last-modified from the document timestamp.</strong> It comes from the revision where that row changed.
+</li></ol>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="07-frd-workbench.html">FRD workbench</a> — <code>문구·용어 맞추기</code>, the main consumer
+</li>
+<li><a href="05-claude-cli-runtime.html">Claude CLI runtime</a> — how context reaches a run, and resumed sessions
+</li>
+<li><a href="16-green-zone.html">Green-zone artifacts</a> — generated documents that should also obey these terms
+</li>
+<li><a href="04-project-setup.html">Project setup</a> — the clone whose <code>domains</code> material seeds the draft
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="14-design-guide.html">← Design guide</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/15-business-language.md</span>
+      <a href="16-green-zone.html">Green-zone artifacts →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

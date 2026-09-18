@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What ADP Builder is</title>
+<meta name="description" content="The product purpose, the three-repository topology it lives in, the boundaries it must not cross, and the stage it is currently at.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">What ADP Builder is</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html" aria-current="page"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Start here</p>
+      <h1>What ADP Builder is</h1>
+      <blockquote><p>The product purpose, the three-repository topology it lives in, the boundaries it must not cross, and the stage it is currently at.</p></blockquote>
+<h2 id="the-product-in-one-paragraph">The product in one paragraph<a class="anchor" href="#the-product-in-one-paragraph" aria-hidden="true">#</a></h2>
+<p>ADP Builder is a <strong>web application installed on one server</strong>. Planners open it in a browser. It clones a <strong>planning repository</strong> (owned by the planning team, hosted on GitLab) and manages the life of the planning artifacts inside it: an FRD is analysed with AI, screens are drafted in a dedicated git worktree, and the finished work is packaged into a <strong>development request</strong> that goes to the development organisation as a ZIP plus a GitLab issue. When development replies, Builder takes the returned material back into the planning repository and generates the downstream documents from it.</p>
+<p>It is <strong>100% new code</strong>. Nothing was carried over from the frozen <code>we-adk-builder-v1</code> repository.</p>
+<h2 id="the-three-repositories">The three repositories<a class="anchor" href="#the-three-repositories" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">extractor ──▶ planning repo ──(a human pushes)──▶ GitLab ──▶ builder clones and uses it
+            (carries the spec, the checker and the merge tool)        ▲
+                                                                      └─ this repository</code></pre>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Repository</th>
+<th>What it is</th>
+<th>Does it know <code>g2c</code>?</th>
+</tr></thead><tbody>
+<tr><td><code>we-adk-builder-extractor</code></td><td>A Claude Code skill run once, at project kick-off. Production source → standard structure.</td><td><strong>Yes — that is where the original lives.</strong></td></tr>
+<tr><td>planning repo × N</td><td>Owned by the planning team, on GitLab. Screens, requirements, domain docs + the <strong>spec and the checker</strong>.</td><td><strong>No</strong> — the rules for reading source never ship there.</td></tr>
+<tr><td><code>we-adk-builder</code> ← <strong>this one</strong></td><td>One server, browser access. Manages the life of the artifacts.</td><td>No.</td></tr>
+</tbody></table></div>
+<p>Build order is <strong>extractor → planning repo → builder</strong>. The extractor fixes the planning repository's structure, so the order cannot be reversed. Builder is last.</p>
+<blockquote><p>"Does not know <code>g2c</code>" is about <strong>the rules for reading source</strong>. Where something came from is still recorded — <code>source-index.json</code> carries <code>dino-*</code> paths and commits.</p></blockquote>
+<h2 id="hard-boundaries">Hard boundaries<a class="anchor" href="#hard-boundaries" aria-hidden="true">#</a></h2>
+<p>These are not style preferences. Crossing one makes the rebuild pointless.</p>
+<ul>
+<li><strong>Builder does not know <code>g2c</code>.</strong> No code that reads the source system (Thymeleaf, <code>dino-*</code>) lives here. Extraction is run by a human in a Claude Code session with the <code>we-adk-builder-extractor</code> skill.
+</li>
+<li><strong>Institution skin folder names (<code>iks</code>, <code>tnj</code>) never appear in code.</strong> Builder swaps skins at render time, but which institution maps to which CSS folder is <em>business knowledge</em>; the single source is the clone's <code>manifest.json</code> → <code>systems[].skins</code>. The moment that string is held in code, Builder knows <code>g2c</code>. Design: <code>docs/superpowers/specs/2026-08-22-preview-skin-design.md</code>.
+</li>
+<li><strong>The planning repository belongs to the planning team.</strong> Only a clone arrives here. The spec and the checker live inside the planning repository, not here.
+</li>
+<li><strong>No cross-repository section references.</strong> If another repository's document is needed, copy the text. References are what grew the previous 15 documents to 6,695 lines.
+</li></ul>
+<h2 id="the-current-product-flow">The current product flow<a class="anchor" href="#the-current-product-flow" aria-hidden="true">#</a></h2>
+<p>Revised 2026-08-20: received documents, requirements (REQ), requirement definitions (RD) and BRD were <strong>removed</strong> from the Builder flow.</p>
+<pre><code class="language-text">FRD 작업하기 ─┬ step 1  enter the requirement directly
+              ├ step 2  AI interview          → FRD workbench → development request (DR)
+              └ step 3  confirm the dev scope</code></pre>
+<blockquote><p>The three steps are <strong>not siblings of the workbench</strong> — they are the inside of the <code>FRD 작업하기</code> wizard. The canonical definition is <code>FrdWizardController</code> plus the three progress markers in <code>templates/artifacts/frd-wizard.html</code>. In state terms: <code>ANALYZING</code> · <code>WAITING_ANSWER</code> · <code>PICKED</code> (step 2) → <code>SCOPE_REVIEW</code> (step 3) → <code>DRAFTING</code> (workbench). Never draw five boxes in one row.</p></blockquote>
+<h2 id="what-builder-handles-the-artifacts">What Builder handles — the artifacts<a class="anchor" href="#what-builder-handles-the-artifacts" aria-hidden="true">#</a></h2>
+<p>The count and the list are owned by <code>docs/artifacts.md</code>. Summary:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Group</th>
+<th>Artifact</th>
+<th>Who owns it</th>
+</tr></thead><tbody>
+<tr><td>Builder creates and manages</td><td><strong>FRD work</strong> (<code>FRD-</code>), <strong>development request</strong> (<code>DR-</code>)</td><td>Builder</td></tr>
+<tr><td>The planner manages</td><td><strong>IA / menu tree</strong></td><td>Planner, one per system</td></tr>
+<tr><td>Shows current production</td><td><strong>Solution template (mockup)</strong></td><td>Extractor produces, Builder reads</td></tr>
+<tr><td>Arrives from development</td><td>as-is resync, <strong>unit test</strong> results, <strong>integration test</strong> scenarios</td><td>Development returns them</td></tr>
+<tr><td>Builder generates from returned material</td><td><strong>Feature spec</strong>, <strong>screen design</strong>, <strong>user manual</strong></td><td>Builder</td></tr>
+</tbody></table></div>
+<p><strong>The green zone</strong> — opened 2026-08-27 — is the five artifacts <code>기능명세서</code> · <code>화면설계서</code> · <code>단위테스트</code> · <code>통합테스트</code> · <code>사용자 매뉴얼</code>, shown as the green block in the left menu. The requirements traceability matrix was <strong>deleted the same day</strong>; do not revive the <code>matrix</code> menu key.</p>
+<h2 id="what-builder-is-explicitly-not-responsible-for">What Builder is explicitly not responsible for<a class="anchor" href="#what-builder-is-explicitly-not-responsible-for" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>What</th>
+<th>Whose job</th>
+</tr></thead><tbody>
+<tr><td>Extracting screens from the production source</td><td><code>we-adk-builder-extractor</code>, run by a human in a separate Claude Code session</td></tr>
+<tr><td>Judging planning-repository spec compliance</td><td>The checker carried inside the planning repository</td></tr>
+<tr><td>Knowing <code>g2c</code> and the original system</td><td><code>we-adk-builder-extractor</code></td></tr>
+</tbody></table></div>
+<h2 id="current-stage">Current stage<a class="anchor" href="#current-stage" aria-hidden="true">#</a></h2>
+<p><strong>Stage 3.</strong> It starts only once the first two (extractor → planning repo) stand. The finish condition is: <strong>a planner fixes one screen through the browser.</strong></p>
+<h2 id="retired-chains-do-not-build-on-them">Retired chains — do not build on them<a class="anchor" href="#retired-chains-do-not-build-on-them" aria-hidden="true">#</a></h2>
+<p>The <code>received document → requirement (REQ) → requirement definition (RD) → BRD</code> chain was retired on 2026-08-20. Tables and screen addresses may still exist for data compatibility, but they are <strong>not a prerequisite step for any new work</strong>, and must not be used as justification for new code, screens or DB design.</p>
+<p>Likewise, the old v1 decision IDs (<code>AR*</code>, <code>RQ*</code>, <code>IM*</code>, <code>AN*</code>, <code>D*</code>) came from a "one repository + locally installed tool" premise that has been discarded. <code>we-adk-builder-v1</code> may be read as reference, never as authority.</p>
+<h2 id="where-to-go-next">Where to go next<a class="anchor" href="#where-to-go-next" aria-hidden="true">#</a></h2>
+<ul>
+<li>How it is built: <a href="01-architecture.html">Architecture</a>
+</li>
+<li>What the database holds: <a href="02-data-model.html">Data model</a>
+</li>
+<li>How the AI actually runs: <a href="05-claude-cli-runtime.html">Claude CLI runtime</a>
+</li>
+<li>The main user loop: <a href="06-frd-wizard.html">FRD wizard</a>
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="index.html">← Overview map</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/00-overview.md</span>
+      <a href="01-architecture.html">Architecture →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

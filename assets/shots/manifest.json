@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-09-17T12:11:18+00:00",
+  "baseUrl": "http://localhost:8080",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "deviceScaleFactor": 1,
+  "sourceRevision": null,
+  "count": 1,
+  "shots": {
+    "admin-system": {
+      "file": "admin-system.png",
+      "bytes": 38521
+    },
+    "business-language": {
+      "file": "business-language.png",
+      "bytes": 64834
+    },
+    "design-guide": {
+      "file": "design-guide.png",
+      "bytes": 59538
+    },
+    "dev-requests": {
+      "file": "dev-requests.png",
+      "bytes": 65989
+    },
+    "frds": {
+      "file": "frds.png",
+      "bytes": 73136
+    },
+    "functional-specs": {
+      "file": "functional-specs.png",
+      "bytes": 49927
+    },
+    "integration-tests": {
+      "file": "integration-tests.png",
+      "bytes": 59179
+    },
+    "menu-tree": {
+      "file": "menu-tree.png",
+      "bytes": 48997
+    },
+    "screen-designs": {
+      "file": "screen-designs.png",
+      "bytes": 50365
+    },
+    "solution-mockups": {
+      "file": "solution-mockups.png",
+      "bytes": 51434
+    },
+    "srts": {
+      "file": "srts.png",
+      "bytes": 51748
+    },
+    "unit-tests": {
+      "file": "unit-tests.png",
+      "bytes": 51990
+    },
+    "user-manual": {
+      "file": "user-manual.png",
+      "bytes": 50384
+    }
+  }
+}

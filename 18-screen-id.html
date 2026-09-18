@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screen IDs · ADP Builder</title>
+<meta name="description" content="Two identifiers live side by side: the planning repository&#x27;s key (wv-card-list) and Builder&#x27;s standard label (PS-WV-MRC-010-L01-S). This page explains why both exist and how the la">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Screen IDs</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html" aria-current="page"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Reference material</p>
+      <h1>Screen IDs</h1>
+      <blockquote><p>Two identifiers live side by side: the planning repository's key (<code>wv-card-list</code>) and Builder's standard label (<code>PS-WV-MRC-010-L01-S</code>). This page explains why both exist and how the label is assigned.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.screenid</code> Canonical design: <code>docs/superpowers/specs/2026-08-20-screen-standard-id-design.md</code>, <code>2026-08-22-new-screen-id-design.md</code></p>
+<h2 id="it-is-a-mapping-not-a-replacement">It is a mapping, not a replacement<a class="anchor" href="#it-is-a-mapping-not-a-replacement" aria-hidden="true">#</a></h2>
+<p><strong>The standard ID does not replace the existing screen ID.</strong> It stands next to it.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th></th>
+<th>Key</th>
+<th>Label</th>
+</tr></thead><tbody>
+<tr><td>Value</td><td><code>bo-usag-list</code> · <code>wv-card-list</code></td><td><code>PS-WB-MRC-010-L01-S</code></td></tr>
+<tr><td>Source of truth</td><td><strong>The planning repository</strong> — <code>index.json</code>, <code>pages/&lt;screenId&gt;.html</code> / <code>.md</code></td><td><strong>Builder's DB</strong> — the mapping table</td></tr>
+<tr><td>Used for</td><td>File paths · concurrent-edit locks · FRD target screens · work-mockup paths · IA links</td><td>Screen list display · reports · development requests</td></tr>
+<tr><td>Nature</td><td>Came from outside. Builder cannot change it</td><td>Builder made it. Five segments are immutable</td></tr>
+</tbody></table></div>
+<p>⭐ <strong>Why a mapping.</strong> Replacing would force the extractor to renumber 508 screens in bulk, with the checker, the spec and every existing document following. A mapping <strong>asks nothing of the extractor</strong>.</p>
+<h2 id="the-format-standardscreenidformat">The format — <code>StandardScreenIdFormat</code><a class="anchor" href="#the-format-standardscreenidformat" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">PS  -  WV  -  MRC  -  010  -  L01  -  S
+│      │      │       │       │  │    └ origin
+│      │      │       │       │  └ sequence within the group (2 digits)
+│      │      │       │       └ letter (screen kind/type)
+│      │      │       └ group number (3 digits)
+│      │      └ business area code
+│      └ system code (2 letters)
+└ platform code</code></pre>
+<pre><code class="language-java">&quot;%s-%s-%s-%03d-%s%02d&quot;.formatted(platform, systemCode2, areaCode, groupNo, letter, seq)</code></pre>
+<p>The letter, from <code>letterOf(kind, screenType)</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Condition</th>
+<th>Letter</th>
+</tr></thead><tbody>
+<tr><td>kind is <code>팝업</code></td><td><code>P</code></td></tr>
+<tr><td>kind is <code>모달</code></td><td><code>M</code></td></tr>
+<tr><td>screen type <code>목록</code> / <code>상세</code> / <code>등록</code> / <code>수정</code> / <code>안내</code></td><td><code>L</code> / <code>D</code> / <code>R</code> / <code>U</code> / <code>G</code></td></tr>
+<tr><td>anything else, or no type</td><td><code>X</code></td></tr>
+</tbody></table></div>
+<p>The display form appends the origin: <code>display(core, origin)</code> → <code>&lt;core&gt;-&lt;ORIGIN&gt;</code>.</p>
+<blockquote><p>The <strong>platform code</strong> is fixed when the project is registered (<code>^[A-Z0-9]{2,4}$</code>) and <strong>cannot be corrected later</strong> — it is the first segment of every assigned ID, numbering starts as soon as the clone lands, and assigned IDs are never rewritten. A later edit would only split the project's IDs into two generations. See <a href="04-project-setup.html">Project setup</a>.</p></blockquote>
+<h2 id="assignment-screenstandardidservice">Assignment — <code>ScreenStandardIdService</code><a class="anchor" href="#assignment-screenstandardidservice" aria-hidden="true">#</a></h2>
+<p>⭐ <strong>Initial and incremental assignment use the same algorithm.</strong> Line up the screens that have no ID, ordered by <code>(pathKey, screenId)</code>, and number each group <strong>starting from its current max + 1</strong>. Initially the max is 0, so it produces <code>1..N</code>; incrementally it appends.</p>
+<p>⛔ <strong>Do not split it into two branches.</strong> Re-sorting on the incremental path would push every existing number down by one whenever a screen lands in the middle alphabetically.</p>
+<p>⛔ <strong>A row that is already assigned is never updated.</strong> The absence of an <code>update</code> statement in this class is deliberate — a number already printed into a development request would start pointing at a different screen.</p>
+<p>Tables: <code>adk_builder_screen_standard_id</code>, <code>adk_builder_screen_id_group</code>. <code>V94__development_screen_name_unique.sql</code> enforces uniqueness on the development-side name.</p>
+<p><code>ScreenStandardIdWorker</code> runs the assignment asynchronously; <code>ScreenIdMaterialReader</code> gathers the material from the clone.</p>
+<h2 id="the-business-area-code">The business area code<a class="anchor" href="#the-business-area-code" aria-hidden="true">#</a></h2>
+<p><code>BusinessAreaCoder</code> / <code>ClaudeBusinessAreaCoder</code> / <code>BusinessAreaCodes</code> — the <code>MRC</code> segment. The AI proposes the area code from the screen material; <code>BusinessAreaCodes</code> holds the agreed set so the AI cannot invent a new one silently.</p>
+<h2 id="new-screens">New screens<a class="anchor" href="#new-screens" aria-hidden="true">#</a></h2>
+<p>A screen created inside an FRD has no repository key yet — it carries a <code>TemporaryScreenId</code> while the work is in progress. <code>V80__frd_screen_slug.sql</code> added the slug that makes that temporary identity stable.</p>
+<p>⚠ <strong>Only the new-screen delivery copies rewrite the internal <code>tmp</code> identifier into a development-facing screen ID</strong> when the package is built. Existing screens' mockup HTML is not touched by one character — see <a href="10-dev-request.html">Development request</a>.</p>
+<blockquote><p>⛔ <strong>Who assigns the key (<code>bo-usag-list</code> shape) for a new screen is a separate open question</strong>, tracked in <code>docs/requests-to-planning-repo.md</code> §5. The standard-ID design deliberately does not close it. The <code>C</code> (change) segment rule is likewise deferred.</p></blockquote>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="13-solution-mockup.html">Solution templates</a> — where the key comes from
+</li>
+<li><a href="12-ia.html">IA</a> — the tree built around these identifiers
+</li>
+<li><a href="10-dev-request.html">Development request</a> — where the label is printed and becomes permanent
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="16-green-zone.html">← Green-zone artifacts</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/18-screen-id.md</span>
+      <a href="19-checker.html">Spec checker →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRD workbench · ADP Builder</title>
+<meta name="description" content="What DRAFTING actually is: screen-by-screen AI chat, the preview, markers and memos, direct element edits, history and undo, state cases, and the whole-flow canvas.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">FRD workbench</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html" aria-current="page"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">FRD work</p>
+      <h1>FRD workbench</h1>
+      <blockquote><p>What <code>DRAFTING</code> actually is: screen-by-screen AI chat, the preview, markers and memos, direct element edits, history and undo, state cases, and the whole-flow canvas.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.frd</code> — <code>FrdController</code>, <code>FrdCanvasController</code>, <code>FrdScreenChatService</code> / <code>FrdScreenChatWorker</code>, <code>ScreenMockupWorker</code>, <code>FrdScreenMarkerService</code>, <code>FrdScreenHistoryService</code>, <code>FrdScreenDirectEditService</code>, <code>FrdScreenStateCaseService</code> Screens: <code>artifacts/frd.html</code>, <code>artifacts/frd-chat.html</code>, <code>artifacts/frd-canvas*.html</code>, <code>fragments/frd-screen-dialog.html</code></p>
+<h2 id="the-working-loop">The working loop<a class="anchor" href="#the-working-loop" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">1. pick a screen in the left list
+2. look at the current result in the preview
+3. ask for the change you need, specifically, in the AI chat panel
+4. check the result — the screen and the explanation together
+5. undo a bad run with 실행 되돌리기
+6. save the screen&#x27;s work and check the FRD&#x27;s completion criteria</code></pre>
+<p>An FRD started with no screens selected works on out-of-screen implementation requirements and document scope instead. Saving runs the checker automatically and only reports back when something fails — see <a href="19-checker.html">Spec checker</a>.</p>
+<h2 id="screen-work-states">Screen work states<a class="anchor" href="#screen-work-states" aria-hidden="true">#</a></h2>
+<p><code>FrdScreen.State</code> — independent of the FRD's own state:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>State</th>
+<th>Label</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr><td><code>WAITING</code></td><td>대기</td><td>No AI draft yet. A new screen starts here; make the draft first, then work on detail</td></tr>
+<tr><td><code>GENERATING</code></td><td>초안 생성 중</td><td>The AI is working on this screen. Other screens stay viewable; this one takes no new requests</td></tr>
+<tr><td><code>GENERATED</code></td><td>완료</td><td>The current result is saved. Review the preview and the change list</td></tr>
+<tr><td><code>FAILED</code></td><td>실패</td><td>Only this screen failed. Other screens and the FRD as a whole are unaffected</td></tr>
+</tbody></table></div>
+<h2 id="drafting-a-screen-screenmockupworker">Drafting a screen — <code>ScreenMockupWorker</code><a class="anchor" href="#drafting-a-screen-screenmockupworker" aria-hidden="true">#</a></h2>
+<p>The AI slot that produces a to-be mockup for each picked (or manually added) screen.</p>
+<ul>
+<li>Claude edits <strong>one HTML file, directly, inside the FRD's own worktree</strong>. The full resulting HTML is <strong>not</strong> returned in the response.
+</li>
+<li>Write permission is narrowed to a single path: <code>Edit(/&lt;target&gt;/&lt;screen&gt;.html)</code>.
+</li>
+<li>DB bookkeeping (<code>ScreenMockupService</code>) is separated from executor submission (<code>ScreenMockupWorker</code>); the reservation is taken under the same lock that guards completion start, then processed on the AI executor.
+</li>
+<li><code>ScreenMockupBatchWorker</code> handles "draft them all", tracked as a <code>adk_builder_screen_draft_batch</code> with per-screen items — see <a href="20-notification.html">Notifications</a>.
+</li></ul>
+<blockquote><p>⚠ Writing <code>pages/&lt;screenId&gt;.html</code> <strong>inside the worktree branch is allowed and expected</strong>. The prohibition is on merging that to the default branch, where <code>pages/</code> must stay as-is (fact). See <a href="08-frd-completion.html">FRD completion</a>.</p></blockquote>
+<h2 id="per-screen-chat-frdscreenchatworker">Per-screen chat — <code>FrdScreenChatWorker</code><a class="anchor" href="#per-screen-chat-frdscreenchatworker" aria-hidden="true">#</a></h2>
+<p>The chat answers questions about the selected screen, modifies it, or creates a new screen. Messages cap at 4,000 characters. One AI edit runs at a time per FRD (<code>FrdScreenChatService</code>).</p>
+<p>Routing is decided by the <strong>user's last message</strong>, not by which button was pressed (<code>isDesignRequest</code>, <code>isWordingRequest</code>, <code>isGapRequest</code>, <code>isStateGapRequest</code>) — so typing the same sentence takes the same path as the menu item.</p>
+<h3 id="the-ai-제안-menu">The <code>AI 제안</code> menu<a class="anchor" href="#the-ai-제안-menu" aria-hidden="true">#</a></h3>
+<p><strong>Only items that produce an outcome are listed</strong> (decision, 2026-09-10). Pressing one must change the screen or give something to choose. Items that only return a review comment are not listed — the planner then has to turn that comment back into a request, and that request was measured getting stuck: <em>"review the design rules"</em> → <em>"you are following the rules"</em> → <em>"fix what you pointed out"</em> → <em>"I did not say anything was a violation."</em> Design rules are read on every edit anyway.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Outcome</th>
+</tr></thead><tbody>
+<tr><td>디자인 시안 비교</td><td>Two design proposals plus an apply button (<code>docs/frd-screen-design-proposals.md</code>)</td></tr>
+<tr><td>문구·용어 맞추기</td><td>The screen with wording corrected against the policy/terminology documents, plus a <code>before → after (basis)</code> list</td></tr>
+<tr><td>요건 대비 누락 점검</td><td>The screen with missing inputs, display items and buttons added, plus <code>missing: requirement N — what was added</code>; asks only about things that need a decision</td></tr>
+<tr><td>빠진 상태 화면 찾기</td><td>Candidate state screens (empty list, error, no permission, done) with name, trigger condition and handling pre-filled, plus a <code>이 상태 만들기</code> button</td></tr>
+</tbody></table></div>
+<p><strong>Wording alignment</strong> uses the policy and standard-terminology documents registered in the <code>정책·표준용어</code> menu. With none registered, the AI is not run at all and the user is told to register them. That context is reloaded even on resumed sessions (other requests load it only on a new session). Words with the same meaning but different spelling are corrected; words whose business meaning would change, and anything without a basis, are left as <code>확인 필요</code>.</p>
+<p><strong>Gap check</strong> uses the same material as the AI draft: the requirement text (<code>requirement.md</code>) and the screens linked to it.</p>
+<h3 id="design-proposals-and-review">Design proposals and review<a class="anchor" href="#design-proposals-and-review" aria-hidden="true">#</a></h3>
+<ul>
+<li><code>FrdScreenDesigns</code> / <code>design-proposal.md</code> produce the two-proposal comparison.
+</li>
+<li><code>FrdDesignCritic</code> judges whether a result can be shown, by <strong>reading the actual original and the proposal captures</strong> — it deliberately does <em>not</em> reuse the generating conversation. Failures that are worth retrying get a bounded number of rounds; a timeout is not one of them.
+</li>
+<li><code>FrdScreenVisualReview</code> gives the model a local tool to look at <em>only the current screen</em> while a request is in flight.
+</li>
+<li><code>FrdChatReferenceImageService</code> accepts a reference image attached to a message.
+</li></ul>
+<h2 id="markers-frdscreenmarkerservice">Markers — <code>FrdScreenMarkerService</code><a class="anchor" href="#markers-frdscreenmarkerservice" aria-hidden="true">#</a></h2>
+<p>A marker is an <strong>execution note pinned to an element</strong> of the screen.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Kind</th>
+<th>Label</th>
+</tr></thead><tbody>
+<tr><td><code>FUNCTION</code></td><td>기능</td></tr>
+<tr><td><code>POLICY</code></td><td>정책</td></tr>
+<tr><td><code>EXCEPTION</code></td><td>예외</td></tr>
+<tr><td><code>PERMISSION</code></td><td>권한</td></tr>
+<tr><td><code>QUESTION</code></td><td>확인 요청</td></tr>
+</tbody></table></div>
+<p>Limits: selector 2,000 characters, label 300, description 4,000. Markers carry author and element-anchored position, can be reordered, and are snapshotted into <code>adk_builder_frd_screen_marker_history</code> alongside each screen-history entry.</p>
+<blockquote><p>Since 2026-09-11, a marker description on an ordinary screen is also written into the physical screen MD and into the completed screen history's <code>md</code>. The number, coordinates and author stay in the marker tables. No new table or column; the save/auto-update contract is <code>docs/frd-screen-description-sync.md</code>.</p></blockquote>
+<p>Markers are also fed into the AI conversation, which is why their text is worth writing carefully.</p>
+<h2 id="memos">Memos<a class="anchor" href="#memos" aria-hidden="true">#</a></h2>
+<p><code>FrdScreenMemoService</code> — comment-style memos per screen, preserving the author's name <strong>as it was at the time</strong>, the timestamp and the content, in order (<code>adk_builder_frd_screen_memo_comment</code>). Memos are for people; markers are for the AI and the development request.</p>
+<h2 id="direct-element-edits-frdscreendirecteditservice">Direct element edits — <code>FrdScreenDirectEditService</code><a class="anchor" href="#direct-element-edits-frdscreendirecteditservice" aria-hidden="true">#</a></h2>
+<p>Change the text or a restricted set of properties of <strong>one selected element</strong> in the preview, without an AI run, preserving the result as a new screen version.</p>
+<p>Deliberately narrow:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Property</th>
+<th>Allowed values</th>
+</tr></thead><tbody>
+<tr><td><code>padding</code>, <code>gap</code></td><td><code>0</code>, <code>4px</code>, <code>8px</code>, <code>12px</code>, <code>16px</code>, <code>24px</code>, <code>32px</code>, <code>40px</code></td></tr>
+<tr><td><code>font-size</code></td><td><code>12px</code>, <code>14px</code>, <code>16px</code>, <code>17px</code>, <code>20px</code>, <code>24px</code>, <code>28px</code>, <code>32px</code></td></tr>
+<tr><td><code>font-weight</code></td><td><code>400</code>, <code>500</code>, <code>600</code>, <code>700</code></td></tr>
+<tr><td><code>color</code>, <code>background-color</code></td><td>Design tokens only — <code>var(--token-name)</code></td></tr>
+<tr><td>Text</td><td>Up to 1,000 characters</td></tr>
+</tbody></table></div>
+<p><code>__RESET__</code> clears a property. Colours are restricted to token references so a direct edit cannot break the design system. There is also a direct image replacement route.</p>
+<h2 id="history-and-undo">History and undo<a class="anchor" href="#history-and-undo" aria-hidden="true">#</a></h2>
+<p><code>FrdScreenHistoryService</code> restores a history entry into the current worktree and screen state (<code>adk_builder_frd_screen_history</code>).</p>
+<ul>
+<li><code>실행 되돌리기</code> steps back one AI run (<code>/screens/{id}/history/step</code>).
+</li>
+<li><code>POST /{frdId}/history/{historyId}/restore</code> restores a specific point.
+</li>
+<li>The history preview is served through a same-origin-framed URL — see the frame-options note in <a href="03-accounts-security.html">Accounts &amp; security</a>.
+</li>
+<li>Restoring also restores the marker snapshot of that point.
+</li></ul>
+<h2 id="state-cases">State cases<a class="anchor" href="#state-cases" aria-hidden="true">#</a></h2>
+<p>A screen often needs several conditional appearances. <code>상태 추가</code> creates a <strong>sub-screen</strong> under the base screen — for example <code>검색 결과 없음</code>, <code>권한 없음</code>, <code>저장 실패</code> — with a state name, a trigger condition and what the screen does.</p>
+<p>Rules:</p>
+<ul>
+<li>A state screen <strong>cannot nest another state screen</strong>.
+</li>
+<li>A state cannot be added to a screen the AI is currently working on.
+</li>
+<li><code>FrdScreenStateCaseService</code> builds it via <code>FrdScreenDuplicationService</code>, so it starts from the current screen.
+</li>
+<li><code>FrdScreenStateProposals</code> generates the candidate list for the <code>빠진 상태 화면 찾기</code> menu item.
+</li></ul>
+<h2 id="version-comparison">Version comparison<a class="anchor" href="#version-comparison" aria-hidden="true">#</a></h2>
+<p><code>GET …/canvas/compare</code> → <code>FrdScreenComparisonService</code>, rendered by <code>frd-canvas-compare.html</code>.</p>
+<p>It picks the comparison candidates for <strong>the same screen and the same facet</strong> as the currently applied history entry, so a comparison never silently lines up two different institutions' variants of a screen.</p>
+<p>⛔ <strong>It does not restore files.</strong> Choosing a version to look at is not choosing a version to apply — restoring is <code>POST /{frdId}/history/{historyId}/restore</code>, a separate action. Keeping the two apart is what makes it safe to browse history while work is in progress.</p>
+<p>The compare view is one of the same-origin-framed URL patterns (<code>FrdCanvasController.COMPARE_URL_PATTERN</code>) — see <a href="03-accounts-security.html">accounts &amp; security</a>.</p>
+<h2 id="the-canvas">The canvas<a class="anchor" href="#the-canvas" aria-hidden="true">#</a></h2>
+<p><code>FrdCanvasController</code> + <code>FrdCanvasService</code> draw the <strong>whole-flow map</strong> for an FRD: screens plus the navigation relationships between them.</p>
+<p>Relationships are read from the screen MD's movement fields — <code>이동</code>, <code>이동modal</code>, <code>이동native</code>, <code>이동cross</code>. From the canvas a planner can exclude a screen, delete it, promote it, duplicate it into an independent new work screen, edit relationships, and add state cases in bulk. <code>frd-canvas-compare.html</code> is the before/after comparison layer, and <code>frd-canvas-chat.html</code> is a chat scoped to the whole flow rather than one screen.</p>
+<p><code>FrdScreenIaPlacementService</code> records where a new screen belongs in the menu tree — see <a href="12-ia.html">IA</a>.</p>
+<h2 id="write-admission">Write admission<a class="anchor" href="#write-admission" aria-hidden="true">#</a></h2>
+<p><code>FrdWriteAdmission</code> serialises <strong>completion start against user writes</strong> on one server.</p>
+<ul>
+<li><code>FrdWriteInterceptor</code> is registered on <code>/projects/**</code> and refuses writes while completion holds the FRD, with: <em>"FRD 완료 작업을 처리하고 있습니다. 진행 상태를 확인한 뒤 다시 수정해 주세요."</em>
+</li>
+<li>While an AI run is in flight it keeps a <strong>reservation</strong>, not a lock, so ordinary reads and other screens are unaffected.
+</li></ul>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="08-frd-completion.html">FRD completion</a> — what <code>FRD 작업 완료</code> checks and commits
+</li>
+<li><a href="05-claude-cli-runtime.html">Claude CLI runtime</a> — the runner under every chat message
+</li>
+<li><a href="13-solution-mockup.html">Solution templates</a> — the as-is screen a draft starts from
+</li>
+<li><a href="19-checker.html">Spec checker</a> — what runs on save
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="06-frd-wizard.html">← FRD wizard</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/07-frd-workbench.md</span>
+      <a href="08-frd-completion.html">FRD completion →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

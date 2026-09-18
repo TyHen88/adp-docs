@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solution templates · ADP Builder</title>
+<meta name="description" content="The current production screens, extracted by the extractor. Where they are stored (not the database), how a repository update reaches them, the three sources each screen is assembl">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Solution templates</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html" aria-current="page"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Reference material</p>
+      <h1>Solution templates</h1>
+      <blockquote><p>The current production screens, extracted by the extractor. Where they are stored (not the database), how a repository update reaches them, the three sources each screen is assembled from, and the three-stage preview pipeline.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.solution</code> Screens: <code>artifacts/solution-mockups.html</code>, <code>artifacts/solution-mockup.html</code> Routes: <code>/projects/{projectId}/artifacts/solution-mockups</code>, preview under <code>…/solution-mockups/files/**</code> Canonical design: <code>docs/superpowers/specs/2026-08-22-preview-skin-design.md</code>, <code>2026-09-10-preview-shell-fill-design.md</code>, <code>2026-09-10-preview-width-design.md</code></p>
+<h2 id="what-they-are">What they are<a class="anchor" href="#what-they-are" aria-hidden="true">#</a></h2>
+<p><strong>솔루션 템플릿 (solution templates)</strong> are the current production screens as the extractor captured them. Builder never reads the production source itself — it reads the clone. Every link uses the planning repository's <strong>screen ID</strong> (<code>wv-card-list</code> shape).</p>
+<p>⭐ <strong>An FRD starts from the current solution template, not from the previous FRD's result.</strong></p>
+<h2 id="are-they-stored-in-the-database">Are they stored in the database?<a class="anchor" href="#are-they-stored-in-the-database" aria-hidden="true">#</a></h2>
+<p><strong>No. Never — not at clone time, not at repository update.</strong></p>
+<p>There is no table for them. The only screen-shaped tables in the schema belong to other things:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Table</th>
+<th>What it is for</th>
+</tr></thead><tbody>
+<tr><td><code>adk_builder_frd_screen</code> (+ history, markers, memos, chat, IA placement)</td><td>Screens <strong>inside an FRD's work</strong>, not production screens</td></tr>
+<tr><td><code>adk_builder_ia_screen_profile</code></td><td>Menu-tree profile data</td></tr>
+<tr><td><code>adk_builder_screen_standard_id</code>, <code>adk_builder_screen_id_group</code></td><td>The standard-ID mapping</td></tr>
+<tr><td><code>adk_builder_screen_design*</code></td><td>Generated screen-design documents</td></tr>
+<tr><td><code>adk_builder_mockup_mismatch</code></td><td>Builder's "differs from production" flags</td></tr>
+</tbody></table></div>
+<p>Solution templates themselves live <strong>only as files in the clone</strong>, and are read on demand:</p>
+<pre><code class="language-text">&lt;data-root&gt;/projects/&lt;projectId&gt;/clone/
+├── index.json                              ← screen catalogue
+└── core/&lt;system&gt;/
+    ├── pages/&lt;screenId&gt;.html               ← the mockup
+    ├── pages/&lt;screenId&gt;.md                 ← the screen document
+    ├── assets/                             ← css · js · images (all skins)
+    └── shell.md                            ← markup for the shell slots</code></pre>
+<h2 id="so-what-does-a-clone-or-update-actually-write">So what does a clone or update actually write?<a class="anchor" href="#so-what-does-a-clone-or-update-actually-write" aria-hidden="true">#</a></h2>
+<p>This is the precise answer to "does it insert into the DB, or at clone?" — <strong>neither writes screens</strong>, but both write <em>three other things</em>.</p>
+<p><code>CloneWorker</code> (first clone) and <code>RepositoryUpdateWorker</code> (later updates) both finish with the same three steps:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Step</th>
+<th>Writes to</th>
+<th>What</th>
+</tr></thead><tbody>
+<tr><td><code>projects.cloneSucceeded</code> / <code>repositoryUpdateSucceeded</code></td><td><code>adk_builder_project</code></td><td>State, and for updates the before/after <code>HEAD</code> SHA so it knows whether anything moved</td></tr>
+<tr><td><code>projectSystems.syncQuietly</code></td><td><code>adk_builder_project_system</code></td><td>The repository may have gained or lost a system. Display names already entered are left alone</td></tr>
+<tr><td><code>screenIds.assignQuietly</code></td><td><code>adk_builder_screen_standard_id</code></td><td>New screens get standard IDs. <strong>Fills only what is missing</strong>, so re-running costs nothing — and it doubles as a retry for a previous failed assignment</td></tr>
+</tbody></table></div>
+<p>Both of the last two are deliberately "quiet": ⛔ if they throw, the clone or update is <strong>already a success</strong> and the next run retries. A failure to assign an ID must not turn a good clone into a failed project.</p>
+<p>The update path adds one guard the clone path cannot need — <code>merge --ff-only</code>, so an update that is not a clean fast-forward <strong>does not happen at all</strong> (see <a href="01-architecture.html">architecture</a> and the fetch rules in <a href="git.html">git layer</a>).</p>
+<h2 id="how-an-update-becomes-visible">How an update becomes visible<a class="anchor" href="#how-an-update-becomes-visible" aria-hidden="true">#</a></h2>
+<p>Since nothing is inserted, there is no "refresh the data" step. The mechanism is a <strong>content stamp on an in-memory cache</strong> in <code>SolutionScreenReader</code>:</p>
+<pre><code class="language-java">stamp = &lt;git HEAD of the clone&gt; + &quot;:&quot; + &lt;index.json last-modified millis&gt; + &quot;:&quot; + &lt;facet list&gt;</code></pre>
+<ul>
+<li>Read a project's screens → if the cached snapshot's stamp matches, return it.
+</li>
+<li>A repository update moves <code>HEAD</code> → the stamp changes → the next read re-sweeps the clone.
+</li></ul>
+<p>⚠ <strong><code>HEAD</code> alone is not enough.</strong> Someone editing the clone by hand can change <code>index.json</code> <strong>without committing</strong>, which really happens when people inspect a planning-repository clone. The file's modification time catches that.</p>
+<p>The facet list is in the stamp because renaming a facet changes what the screens resolve to — see <a href="04-project-setup.html">project setup</a>.</p>
+<p>So: <strong>update the repository → the cache invalidates itself → the next page load shows the new screens.</strong> No insert, no migration, no manual reindex.</p>
+<h2 id="the-three-sources-behind-one-screen">The three sources behind one screen<a class="anchor" href="#the-three-sources-behind-one-screen" aria-hidden="true">#</a></h2>
+<p><code>SolutionScreenReader</code> assembles each <code>SolutionScreen</code> from three places (measured 2026-08-16, clone <code>9886e9c</code>, 274 screens):</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Source</th>
+<th>What it gives</th>
+</tr></thead><tbody>
+<tr><td><code>index.json</code></td><td>Screen ID · system · kind · screen type · type basis · institution variant</td></tr>
+<tr><td><code>core/&lt;system&gt;/pages/&lt;screenId&gt;.md</code></td><td>Screen name and purpose (<code>--- 화면명세 ---</code>) · menu path · main functions · linked screens</td></tr>
+<tr><td><code>git log</code></td><td>First written · last modified · who modified it · what changed</td></tr>
+</tbody></table></div>
+<p>The assembled record:</p>
+<pre><code class="language-java">record SolutionScreen(
+    String screenId, String screenName, String summary,
+    String system, String kind, String screenType, String typeSource,
+    String menuPath, String iaPath,
+    String facetCode, String facetName,
+    List&lt;SolutionVariant&gt; variants, List&lt;String&gt; projectFacetNames,
+    String parentScreenId, List&lt;String&gt; openingScreenIds,
+    boolean shared, ScreenHistory history)</code></pre>
+<h3 id="the-git-history-is-swept-once">The git history is swept once<a class="anchor" href="#the-git-history-is-swept-once" aria-hidden="true">#</a></h3>
+<p>⛔ <strong>Never call <code>git log</code> per screen</strong> — 274 screens would spawn 274 processes. One sweep with <code>--name-only</code> over <code>core</code>, then split by file, gives the same result at 1/274 of the cost:</p>
+<pre><code class="language-bash">git log --date=short --format=@@@%ad%x09%an%x09%s --name-only -- core</code></pre>
+<p>⚠ <strong>If it fails, the map is empty and screens still render.</strong> A shallow clone, or no git at all, must not blank the screen list.</p>
+<p>⚠ Likewise, an unreadable <code>index.json</code> returns an empty list rather than throwing — the same discipline as <code>PlanningManifestReader</code>.</p>
+<h2 id="the-preview-pipeline">The preview pipeline<a class="anchor" href="#the-preview-pipeline" aria-hidden="true">#</a></h2>
+<p><code>SolutionPreviewController</code> serves files under <code>/projects/*/artifacts/solution-mockups/files/**</code> and the detail screen embeds them in an <code>iframe</code>. An HTML file passes through <strong>three stages, in this order</strong>:</p>
+<pre><code class="language-text">read file
+  → SkinRewriter.draw()      swap the institution skin folder in href/src
+  → ShellSlotFiller.fill()   fill the slots the demo script used to fill
+  → sanitizeHtml()           strip &lt;script&gt;
+  → serve</code></pre>
+<p>Only whitelisted types are served at all: <code>html</code>, <code>css</code>, <code>js</code>, <code>png</code>, <code>jpg</code>, <code>jpeg</code>, <code>gif</code>, <code>svg</code> (<code>SERVABLE</code>).</p>
+<h3 id="1-skin-rewriting-skinrewriter">1. Skin rewriting — <code>SkinRewriter</code><a class="anchor" href="#1-skin-rewriting-skinrewriter" aria-hidden="true">#</a></h3>
+<p>⭐ <strong>g2c's 252 webview screens share a single common mockup</strong>, so without swapping at render time <strong>there is no way to view them as 제주</strong>.</p>
+<p>The contract came from extractor reply #5, and the boundary is theirs: <strong>markup differs → the extractor's job (variant mockups); only style differs → Builder's job (here).</strong></p>
+<p>Three deterministic steps:</p>
+<ol>
+<li>Resolve <code>href</code> and <code>src</code> <strong>relative to the folder the mockup sits in</strong>, producing repository-root-relative paths.
+</li>
+<li>If that path falls under some institution's skin folder (boundary at <code>/</code>), replace that prefix with the chosen institution's folder.
+</li>
+<li>Re-relativise against the mockup folder and write it back into the link.
+</li></ol>
+<p>⛔ <strong>The stored copy is never modified — substitution happens in the response only.</strong> That is <code>SkinRewriter</code>'s own contract, and it is why the <a href="10-dev-request.html">development request package</a> ships <em>all</em> of <code>core/&lt;system&gt;/assets/</code> rather than selecting a skin: selecting would require rewriting links on a stored copy, and it would put <code>iks</code>/<code>tnj</code>-shaped strings into Builder's code.</p>
+<p>⛔ <strong>The institution → CSS folder mapping is business knowledge. Its single source is the clone's <code>manifest.json</code> → <code>systems[].skins</code>.</strong> The moment Builder's code holds one of those folder names, Builder knows <code>g2c</code> — the boundary the whole rebuild exists to keep.</p>
+<p><code>PreviewFacets</code> decides which facet, and therefore which skin, the current preview uses.</p>
+<h3 id="2-shell-slot-filling-shellslotfiller">2. Shell slot filling — <code>ShellSlotFiller</code><a class="anchor" href="#2-shell-slot-filling-shellslotfiller" aria-hidden="true">#</a></h3>
+<p>Because scripts are stripped, the slots the mockup's demo script used to fill stay empty and the planner sees <strong>a white strip with no icons</strong>.</p>
+<p>⭐ The markup for those slots <strong>already arrives as <code>core/&lt;system&gt;/shell.md</code></strong> — nothing is invented.</p>
+<p>⛔ <strong>Do not guess which slots.</strong> An earlier version located them by HTML sectioning elements (<code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>); measured across the whole set, <strong>what was meant to fill eight filled a hundred and fifty</strong> — including sub-headers whose own CSS already drew a title, and slots that <strong>are legitimately empty in the source too</strong>.</p>
+<h3 id="3-script-stripping-sanitizehtml">3. Script stripping — <code>sanitizeHtml</code><a class="anchor" href="#3-script-stripping-sanitizehtml" aria-hidden="true">#</a></h3>
+<p>The preview is not a running application; it is a picture of one. Stripping <code>&lt;script&gt;</code> also means the browser logs no blocked-script noise. The FRD screen and history previews go through the same fence.</p>
+<p>Same-origin framing is granted to exactly this pattern and a few siblings — see <a href="03-accounts-security.html">accounts &amp; security</a>.</p>
+<h2 id="mismatch-flags-the-one-writable-half">Mismatch flags — the one writable half<a class="anchor" href="#mismatch-flags-the-one-writable-half" aria-hidden="true">#</a></h2>
+<blockquote><p>⚠ <strong>The two halves of this screen have different natures.</strong> The screens belong to the planning repository, so Builder only reads them. The flags belong to Builder, so Builder writes them. They appear side by side, but <strong>only the flag is editable.</strong></p></blockquote>
+<p><code>POST /{screenId}/mismatch</code> → <code>SolutionMockupService.report(...)</code> inserts into <code>adk_builder_mockup_mismatch</code>. A reason is required:</p>
+<blockquote><p>"어디가 다른지 한 줄 적어야 표시할 수 있습니다." — <em>write one line saying what differs.</em></p></blockquote>
+<p>This is a signal back to the extractor that the mockup does not match the real production screen. It is <strong>not</strong> a repair — Builder cannot fix the mockup, because it cannot read the production source.</p>
+<h2 id="who-consumes-solution-templates">Who consumes solution templates<a class="anchor" href="#who-consumes-solution-templates" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Consumer</th>
+<th>How</th>
+</tr></thead><tbody>
+<tr><td><a href="06-frd-wizard.html">FRD wizard</a></td><td>The interview picks target screens from this list</td></tr>
+<tr><td><a href="07-frd-workbench.html">FRD workbench</a></td><td>An AI draft starts from the as-is mockup</td></tr>
+<tr><td><a href="16-green-zone.html">Feature spec</a></td><td><code>FeatureSpecMaterialService</code> goes through <code>SolutionMockupService</code> rather than re-reading the clone — ⛔ a second sweep would read the same 274 screens twice</td></tr>
+<tr><td><a href="10-dev-request.html">Development request</a></td><td><code>as-is.html</code> in the package comes from here</td></tr>
+<tr><td><a href="12-ia.html">IA</a></td><td>The menu tree is built from the same index</td></tr>
+</tbody></table></div>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="04-project-setup.html">Project setup</a> — clone, repository update, facets
+</li>
+<li><a href="git.html">Git layer</a> — fetch and <code>merge --ff-only</code> mechanics
+</li>
+<li><a href="14-design-guide.html">Design guide</a> — the visual rules these screens follow
+</li>
+<li><a href="18-screen-id.html">Screen IDs</a> — how they are identified
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="12-ia.html">← IA (menu tree)</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/13-solution-mockup.md</span>
+      <a href="14-design-guide.html">Design guide →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

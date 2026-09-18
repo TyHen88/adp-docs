@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conventions · ADP Builder</title>
+<meta name="description" content="The rules this repository actually enforces: naming, screen work, testing effort, documentation, and the traps that have already cost time more than once.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Conventions</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html" aria-current="page"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Working on it</p>
+      <h1>Conventions</h1>
+      <blockquote><p>The rules this repository actually enforces: naming, screen work, testing effort, documentation, and the traps that have already cost time more than once.</p></blockquote>
+<p>Canonical documents: <code>docs/coding-conventions.md</code>, <code>docs/mockup-conventions.md</code>, <code>docs/data-model.md</code>, <code>CLAUDE.md</code></p>
+<h2 id="the-one-naming-law">The one naming law<a class="anchor" href="#the-one-naming-law" aria-hidden="true">#</a></h2>
+<blockquote><p><strong>Names the machine calls are English. Words spoken to a person are Korean.</strong></p></blockquote>
+<p>This is not a new principle — <code>data-model.md</code> §0 already set it for the database ("column names in English snake_case", "meaning in a Korean <code>COMMENT</code>, written in detail"). The same law is extended to Java and to the screens. One rule means there is nowhere for two rules to disagree.</p>
+<p>⚠ <strong>This is not a rule to reduce Korean.</strong> Writing explanations in detailed Korean is the house style and <strong>stays</strong>. Only the <em>called names</em> change.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Place</th>
+<th>Form</th>
+<th>Example</th>
+</tr></thead><tbody>
+<tr><td>Class / interface / enum / record</td><td>English PascalCase</td><td><code>DocumentReadCheck</code>, <code>ReadVerdict</code></td></tr>
+<tr><td>Method</td><td>English camelCase</td><td><code>register(...)</code>, <code>canRead()</code></td></tr>
+<tr><td>Field / local / parameter</td><td>English camelCase</td><td><code>documentType</code></td></tr>
+<tr><td>Enum constant, constant</td><td>English SCREAMING_SNAKE_CASE</td><td><code>MEETING_MINUTES</code>, <code>MIN_TEXT_RATIO</code></td></tr>
+<tr><td>View model key, fragment argument</td><td>English camelCase</td><td><code>${title}</code>, <code>layout(title, shape, current, content)</code></td></tr>
+<tr><td>DB table / column</td><td>English snake_case, <code>adk_builder_</code> prefix</td><td><code>adk_builder_received_document.preparation_state</code></td></tr>
+<tr><td>URL path, query name</td><td>English kebab-case</td><td><code>/artifacts/received-docs</code></td></tr>
+<tr><td>Form field <code>name</code></td><td>English camelCase</td><td><code>name=&quot;documentType&quot;</code></td></tr>
+<tr><td><strong>Comments / Javadoc</strong></td><td><strong>Korean</strong></td><td><code>/** 올린 파일에서 글자가 실제로 나오나를 잰다. */</code></td></tr>
+<tr><td><strong>DB <code>COMMENT</code></strong></td><td><strong>Korean</strong></td><td></td></tr>
+<tr><td><strong>Test method names</strong></td><td><strong>Korean</strong></td><td><code>void 못_읽는_파일도_등록은_되고_상세에_까닭이_뜬다()</code></td></tr>
+<tr><td><strong>On-screen text</strong></td><td><strong>Korean</strong></td><td><code>문서 등록</code>, <code>처리 대기</code></td></tr>
+<tr><td><strong>Exception messages, logs</strong></td><td><strong>Korean</strong></td><td><code>throw new IllegalArgumentException(&quot;문서명을 입력해 주세요.&quot;)</code></td></tr>
+<tr><td><strong>Commit messages, documents</strong></td><td><strong>Korean</strong></td><td></td></tr>
+</tbody></table></div>
+<p>⚠ <strong>A test method name is a Korean sentence on purpose</strong> — it is not a name anyone calls, it is a statement of <strong>what is guaranteed</strong>.</p>
+<h2 id="vocabulary">Vocabulary<a class="anchor" href="#vocabulary" aria-hidden="true">#</a></h2>
+<p>⛔ <strong>Do not use 과업.</strong> The general noun is <strong>작업</strong>. Three exceptions:</p>
+<ol>
+<li>Describing the past ("종전에는 과업이…")
+</li>
+<li>The name of a document received from outside (<code>과업요청서</code>)
+</li>
+<li>Quoting another spec's wording in order to compare against it — the extractor spec's <code>과업ID</code> and <code>과업 축</code>. Renaming those would make comparison impossible.
+</li></ol>
+<h2 id="screen-work">Screen work<a class="anchor" href="#screen-work" aria-hidden="true">#</a></h2>
+<p><strong>Before creating or changing any screen — mockup or template — read <code>docs/mockup-conventions.md</code> first.</strong> It holds the screen composition, what to build with, UX copy, accessibility and the shared-shell verification rules.</p>
+<ul>
+<li><strong>The mockup is the source of truth for a screen.</strong> Where it disagrees with a design document, the mockup wins. Editing a mockup is deciding the product, not editing a document.
+</li>
+<li><strong>One HTML renders one real product state.</strong> Filled, empty, error and loading states do not appear together on one screen.
+</li>
+<li><strong>Do not put design notes into the product screen</strong> as visible elements. Reasons go in the document or an HTML comment.
+</li>
+<li><strong>Do not mix a list and a workbench in one screen.</strong> Layers are for simple confirmation; registration and editing with many fields, or needing original-text comparison, get their own screen.
+</li>
+<li>Default hierarchy: <code>title and main action → one sentence of purpose → search/filter → table or body</code>.
+</li>
+<li>⛔ <strong>Before inventing a new CSS class, look for whether the thing already exists.</strong> Mockups and templates share a stylesheet.
+</li>
+<li>⛔ <strong>Changing the menu means changing <code>ShellContract.java</code>, <code>fragments/parts.html</code> and <code>_shell.js</code> together.</strong> <code>ShellContractTest</code> fails if they drift. The mockups' <code>_shell.js</code> is a copy — never write the order from memory; read the <code>nav</code> fragment in <code>parts.html</code>.
+</li></ul>
+<h2 id="verification-is-proportional-to-risk">Verification is proportional to risk<a class="anchor" href="#verification-is-proportional-to-risk" aria-hidden="true">#</a></h2>
+<p><strong>Running more is not itself quality.</strong></p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Change</th>
+<th>Verification</th>
+</tr></thead><tbody>
+<tr><td><strong>Pure design change</strong> — wording, button names and positions, spacing, colour, HTML/CSS arrangement, with no routing, conditional, view model or server behaviour touched</td><td><code>git diff --check</code> + look at the changed screen at desktop and 375px + <code>check_mockups.py</code> if a mockup changed. <strong>No full Maven run, no separate broad review.</strong></td></tr>
+<tr><td><strong>Thymeleaf conditionals, form values, permission exposure, DOM contract</strong></td><td>Only the test classes that cover that contract</td></tr>
+<tr><td><strong>Java behaviour, routing, DB, security, shared shell</strong></td><td>Start from the related tests; widen to <code>./mvnw test</code> only when the blast radius is wide</td></tr>
+</tbody></table></div>
+<p>Pre-existing unrelated failures are <strong>not</strong> chased down in this work — confirm as much as needed and report.</p>
+<p>⚠️ <strong>"Fast" is bought by narrowing feature scope, not by verifying less.</strong> Logic changes do not get shallow tests, and TDD applies to features and bug fixes as before.</p>
+<p><strong>The finish line for a feature or logic change is a green <code>./mvnw test</code>.</strong> Whether the screen actually renders is checked by a human — that is the boundary between what a machine measures and what a person sees.</p>
+<h2 id="migrations-and-the-erd">Migrations and the ERD<a class="anchor" href="#migrations-and-the-erd" aria-hidden="true">#</a></h2>
+<p>Measure the next number <strong>immediately before creating the file</strong>:</p>
+<pre><code class="language-bash">ls src/main/resources/db/migration/ | sed &#x27;s/__.*//&#x27; | sort -V | tail -1</code></pre>
+<p>⛔ Never write a migration number into a document or plan. ⛔ Never edit an applied migration. ⛔ Redraw the ERD before committing:</p>
+<pre><code class="language-bash">python docs/tools/erd_from_migrations.py</code></pre>
+<p>Full detail, including the six times this was got wrong, is in <a href="02-data-model.html">Data model</a>.</p>
+<h2 id="documentation">Documentation<a class="anchor" href="#documentation" aria-hidden="true">#</a></h2>
+<ul>
+<li><strong>One document = one question.</strong> The question goes at the top as a blockquote.
+</li>
+<li><strong>Unresolved items do not go in the body — they go to a GitHub issue.</strong> Previously 510 markers (one every 13 lines) rotted inside the documents.
+</li>
+<li><strong>500 lines is an alarm, not a limit.</strong> Past it, look for the question to split out.
+</li>
+<li>⛔ <strong>Do not reference another repository's <code>§section</code>.</strong> Copy the text instead. References are what grew the previous 15 documents to 6,695 lines.
+</li>
+<li>⛔ <strong>Do not write artifact counts into the shared topology block.</strong> "12 artifacts" becoming 14 is where the extractor and Builder actually diverged — the extractor dropped the count first and Builder followed late. The canonical count lives in <code>docs/artifacts.md</code> alone.
+</li></ul>
+<h3 id="measure-what-is-from-code-take-why-from-the-design-documents">Measure <em>what is</em> from code; take <em>why</em> from the design documents<a class="anchor" href="#measure-what-is-from-code-take-why-from-the-design-documents" aria-hidden="true">#</a></h3>
+<p>A design document goes stale in one direction only, and knowing which direction saves re-deriving it:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Kind of claim</th>
+<th>Source of truth</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr><td><strong>What is the case</strong> — input fields, how many values an enum has, which route runs, what a constraint enforces</td><td><strong>The code, and the DB for schema</strong></td><td>This is what drifts. The document was written before the code settled</td></tr>
+<tr><td><strong>Why it was decided</strong></td><td><strong>The design document</strong> — it is the <em>only</em> source</td><td>Reasons are not in the code, and once lost they are unrecoverable</td></tr>
+</tbody></table></div>
+<p>⛔ <strong>Never cite a design document for a fact about current behaviour.</strong> Measured twice in one session, both times wrong in the same direction:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Claim taken from a document</th>
+<th>What the code does</th>
+</tr></thead><tbody>
+<tr><td><code>README.md</code>: the account name and email become the git commit author</td><td>Every commit hardcodes <code>user.name=Builder</code>; no git call reads the account</td></tr>
+<tr><td>SRT spec: Flow registration accepts "a task number <strong>or a URL</strong>"</td><td><code>SrtService.registerFlow</code> enforces <code>^[0-9]+$</code> — a URL is rejected</td></tr>
+</tbody></table></div>
+<p>⛔ And the converse: <strong>do not try to reconstruct a reason from the code.</strong> The 2026-09-02 decision that moved "a simple change to one existing screen" out of the FRD fast track exists in exactly one place — line 11 of <code>2026-08-18-frd-fast-track-design.md</code>. No amount of reading <code>SrtService</code> recovers it.</p>
+<h2 id="traps-that-have-already-cost-time">Traps that have already cost time<a class="anchor" href="#traps-that-have-already-cost-time" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Trap</th>
+<th>What happens</th>
+</tr></thead><tbody>
+<tr><td><code>@Async</code> called from the same class</td><td>The proxy is skipped and it runs <strong>on the request thread</strong> — six minutes on <code>nio-8080-exec-2</code> in production</td></tr>
+<tr><td>Instruction placed last on the <code>claude</code> command line</td><td>Swallowed by a multi-value flag; the prompt vanishes entirely</td></tr>
+<tr><td>Reading one process stream to completion first</td><td>Deadlock on a full pipe, and the timeout stops meaning anything</td></tr>
+<tr><td>Leaving <code>claude</code>'s stdin open</td><td>Three seconds lost on <strong>every</strong> run</td></tr>
+<tr><td>Editing an applied migration</td><td>Flyway refuses to start</td></tr>
+<tr><td>An untracked migration file</td><td>Invisible to <code>git log</code>, <code>git status</code> and the worktree; visible only to <code>ls</code>. Flyway rejects the whole context at runtime</td></tr>
+<tr><td>A wrong <code>ShellContract</code> argument</td><td>Not a 500 — a normal-looking page with the menu and project name missing</td></tr>
+<tr><td>Checking inside the shared clone</td><td>Two simultaneous saves mix drafts and the before/after verdict becomes false</td></tr>
+</tbody></table></div>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="01-architecture.html">Architecture</a> — the patterns these rules protect
+</li>
+<li><a href="02-data-model.html">Data model</a> — migration and ERD rules in full
+</li>
+<li><a href="23-glossary.html">Glossary</a> — the Korean terms used throughout
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="21-operations.html">← Install &amp; operations</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/22-conventions.md</span>
+      <a href="23-glossary.html">Glossary →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

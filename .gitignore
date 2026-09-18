@@ -1,0 +1,7 @@
+# 파이썬 생성물
+__pycache__/
+*.py[cod]
+
+# OS 부스러기
+Thumbs.db
+.DS_Store

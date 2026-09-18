@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRD wizard · Work processes · ADP Builder</title>
+<meta name="description" content="Turning a typed sentence into a confirmed development scope: direct input, the turn-based AI interview, scope review, and the two ways out.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · FRD wizard</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html" aria-current="page"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 3</p>
+      <h1>FRD wizard — a sentence becomes a scope</h1>
+      <p class="wp-lede">Three steps, and they are the <b>inside of one wizard</b>, not three siblings of the workbench. That is why the left menu does not list them — they live inside <code>FRD 작업하기</code>, they were not removed.</p>
+
+      <div class="chain">
+        <div class="chain__box">
+          <div class="chain__k">STEP 1</div>
+          <div class="chain__t">요구사항 직접 입력</div>
+          <div class="chain__d">Write what should change, in business language, and pick what it applies to. Selecting a screen is optional.</div>
+        </div>
+        <div class="chain__box">
+          <div class="chain__k">STEP 2</div>
+          <div class="chain__t">AI 인터뷰</div>
+          <div class="chain__d">Not one-shot analysis: the AI investigates, asks one question at a time, and only then fixes a result.</div>
+        </div>
+        <div class="chain__box">
+          <div class="chain__k">STEP 3</div>
+          <div class="chain__t">개발 범위 확인</div>
+          <div class="chain__d">The confirmed analysis shown as work scope. Still no worktree.</div>
+        </div>
+      </div>
+
+      <h2>The interview loop</h2>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">The AI investigates the requirement and the planning repo</div><div class="flow__cmd">ScreenPickWorker · read-only · working directory = the clone</div></div>
+          <div class="flow__aside">It reads the index and the screen documents; it changes nothing.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Is there a judgement it cannot ground in evidence?</div><div class="flow__cmd">new screen or existing? · API, batch, permission or data too? · operation or new development? · which system? · error, permission and retention conditions</div></div>
+          <div class="flow__aside">Five questions at most, one at a time. The planner can stop early with <code>현재 내용으로 범위 정리</code>.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">If yes: one question as structured JSON, and the run ends</div><div class="flow__cmd">question + investigation summary saved → state WAITING_ANSWER</div></div>
+          <div class="flow__aside flow__aside--ok">Nothing is held while a human thinks: no process, no credential file, no account lock.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">The answer starts the next run, which resumes the session</div><div class="flow__cmd">--resume · FrdRunSpace · continuation sends only a short instruction</div></div>
+          <div class="flow__aside">Measured: 220 of 350 seconds per run were exploration, and every one-line answer used to pay it again.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">05</div>
+          <div><div class="flow__title">No questions left → the analysis result is written</div><div class="flow__cmd">screens · backend changes · completion criteria · items to confirm → state PICKED</div></div>
+          <div class="flow__aside">Questions, answers and the final result are saved as one state transition.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">One Claude run per turn, not one long-lived conversation</div>
+        <p>A bidirectional process held open would die with the browser, the server restart, or the lunch break. Turn-based runs survive all three — and a session that the reader rejected is deliberately <i>not</i> remembered, so a bad turn does not poison the next one.</p>
+      </div>
+
+      <h2>Eight states</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>State</th><th>Label</th><th>What the planner does</th></tr></thead>
+          <tbody>
+            <tr><td><code>ANALYZING</code></td><td>요구사항 분석 중</td><td>Wait. Closing the browser does not stop it</td></tr>
+            <tr><td><code>WAITING_ANSWER</code></td><td>답변 필요</td><td>Answer, or finish with what is there</td></tr>
+            <tr><td><code>ANALYSIS_FAILED</code></td><td>분석 오류</td><td>Read the reason, press <code>다시 분석하기</code></td></tr>
+            <tr><td><code>PICKED</code></td><td>분석 결과 확인</td><td>Confirm, or <code>다시 인터뷰하기</code> to fill a gap</td></tr>
+            <tr><td><code>SCOPE_REVIEW</code></td><td>개발 범위 확인</td><td>Press <code>FRD 작업하기</code> — or the backend-only fast track</td></tr>
+            <tr><td><code>DRAFTING</code></td><td>수정 중</td><td>Work in the FRD's own worktree</td></tr>
+            <tr><td><code>REVIEW</code> · <code>DONE</code></td><td>— · 완료</td><td>Completion is running, or the DR content is fixed and the FRD is read-only</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Pasted text is never inlined into the instruction</div>
+        <p><code>source_text</code> has no length limit, so “short enough to fit” was never true: inlining can exceed the Windows argv limit of about 32 KB, and imperative sentences inside pasted text land somewhere they can be read as instructions. The text is written to a run-only file and the instruction carries only its path.</p>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Two beans, on purpose</div>
+        <p><code>ScreenPickService</code> is the database half; <code>ScreenPickWorker</code> submits to the executor. Merging them makes the call a self-invocation, the Spring proxy is skipped, and <code>@Async</code> never fires at all — the “background” work runs on the request thread. The same split appears in the development-result apply path.</p>
+      </div>
+
+      <h2>Two ways out of scope review</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">FRD 작업하기 — the normal path</p>
+          <p>The first write, so this is where the branch and worktree are cut from the clone's <code>HEAD</code> and the state moves to <code>DRAFTING</code>. The full creation contract is on <a href="02-git-worktree.html">Git &amp; worktrees</a>.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">개발요청서 바로 만들기 — backend only</p>
+          <p>Offered only when no screen is selected and no question is open. It skips the workbench and the worktree, but the requirement and the AI's evidence still travel into the development request. Since 2026-09-02 this means <b>backend-only, and nothing else</b>: a simple screen change is an <a href="08-srt-fast-track.html">SRT</a>.</p>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Not every FRD row is planner work</div>
+        <p>Every SRT quietly creates a bridge FRD with <code>source_kind = SRT</code>, born at <code>SCOPE_REVIEW</code> and never shown in the UI. A query that counts FRDs without filtering <code>source_kind</code> counts those too.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdWizardController.java"><span class="pill">FrdWizardController</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdInterviewService.java"><span class="pill">FrdInterviewService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/ScreenPickWorker.java"><span class="pill">ScreenPickWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdRunSpace.java"><span class="pill">FrdRunSpace</span></a>
+        <a href="../../../src/main/resources/templates/artifacts/frd-wizard.html"><span class="pill">frd-wizard.html</span></a>
+      </div>
+      <p>Narrative reference: <a href="../06-frd-wizard.html">FRD wizard</a>. Canonical: <code>docs/frd-requirement-interview-design.md</code>, <code>docs/superpowers/specs/2026-08-18-frd-fast-track-design.md</code>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="02-git-worktree.html">← Git &amp; worktrees</a>
+        <a href="06-frd-workbench.html">FRD workbench →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

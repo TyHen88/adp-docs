@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery channel · Work processes · ADP Builder</title>
+<meta name="description" content="The development request transmission method in full: what the Developer panel and the GitLab issue link actually are, every call each makes, how one is chosen, why connections are versioned, and how to tell which one is wrong.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · Delivery channel</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html" aria-current="page"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 7</p>
+      <h1>Delivery channel — where a request goes</h1>
+      <p class="wp-lede">A project sends its development requests one of two ways, and the super account picks which. The setting looks like a preference; it behaves like a contract, because the choice is <b>frozen per request at first send</b> and everything afterwards — status, withdrawal, results — follows the frozen one.</p>
+
+      <h2>What the two sides actually are</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Developer connection → the DEVELOPER application</p>
+          <p>A <b>separate web application</b> the development organisation runs, with its own accounts, its own group management and a work inbox (작업 수신함). It lives in its own repository, <code>we-adk-developer</code>; Builder only ever talks to it over HTTP. This is the intended channel.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">GitLab issue link → the development team's tracker</p>
+          <p>The fallback for a group whose DEVELOPER environment is not ready yet: the request is opened as an issue in the <b>development organisation's</b> GitLab repository, with the ZIP attached.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Neither one is the planning repository</p>
+          <p>The planning repo and its token are a different registration on the same admin screen. Pointing the issue target at the planning repository would turn the planning team's own repository into somebody else's task list.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">And neither is a person</p>
+          <p>There is no email step and no manual hand-off in either channel. What a human does is press send; everything after that is one of the two machines below.</p>
+        </div>
+      </div>
+
+      <h2>The screen</h2>
+      <p>Project management → the project → the <b>개발요청 전송 방식</b> card → a dialog with one radio pair and two forms behind it. Each radio says whether that side already has its details stored, so you can see which one is ready without opening it. The admin controller is behind <code>hasRole('SUPER')</code>, so only the super account can change a channel.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>What you type</th><th>Where it posts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Developer connection</b></td>
+              <td>Developer base URL, Developer group ID — <b>no token</b></td>
+              <td><code>POST /admin/projects/{id}/developer-target</code></td>
+            </tr>
+            <tr>
+              <td><b>GitLab issue link</b></td>
+              <td>GitLab URL, development repository (<code>group/project</code>), GitLab token</td>
+              <td><code>POST /admin/projects/{id}/dev-issue-target</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Choosing is a side effect of saving</h2>
+      <p>There is no separate apply step. Whichever form you save becomes the method.</p>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Save the Developer form</div><div class="flow__cmd">retire every version → reactivate the matching one, or insert a new version</div></div>
+          <div class="flow__aside">Re-saving the same URL and group ID reuses the existing version instead of piling up duplicates.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Save the GitLab form</div><div class="flow__cmd">store the GitLab target → retire every Developer version</div></div>
+          <div class="flow__aside flow__aside--ok">The Developer history is <b>not deleted</b> — switching back later does not mean typing the address again.</div>
+        </div>
+      </div>
+
+      <h2>Versions, not one overwritable row</h2>
+      <div class="tree">adk_builder_developer_target    id · project_id · base_url · group_id · <b>current_target</b> · created_at
+                                <i>partial unique index — at most one current_target = true per project</i>
+                                <i>all of them false ⇒ GitLab is the selected method</i>
+
+adk_builder_developer_delivery  request_id · <b>target_id</b> · rejection_reason
+                                <i>pins the exact version one request was sent with</i>
+
+adk_builder_dev_request         … · <b>legacy_delivery</b>
+                                <i>marks requests that already had GitLab history when these tables landed</i></div>
+      <div class="note">
+        <div class="note__t">Why not just overwrite the row</div>
+        <p>A request that has already gone out must keep asking the address and group it was actually handed to. Overwriting would silently redirect every in-flight request's status poll, withdrawal and result download to a connection that never received it. The GitLab side needs no versioning for the same reason it needs a token: there is one target per project, and the issue itself carries the identity.</p>
+      </div>
+
+      <h2>The rule that matters — bound at first send</h2>
+      <p>Every outbound operation asks the same question first, in the same order.</p>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Is this request already bound to a Developer version?</div><div class="flow__cmd">send · lookup · withdraw · inspect · results · download</div></div>
+          <div class="flow__aside flow__aside--ok">Yes → use that exact version, even if the project setting has changed since.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Not bound — does the project have a current Developer connection?</div><div class="flow__cmd">targets.current(projectId)</div></div>
+          <div class="flow__aside">Yes → bind the request to it now, then send. The binding is what freezes the channel.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">No current connection → GitLab</div><div class="flow__cmd">falls through to the issue gateway</div></div>
+          <div class="flow__aside">A request sent as an issue keeps using GitLab afterwards, whatever the setting becomes.</div>
+        </div>
+      </div>
+      <p><b>So changing the setting only affects requests that have not been sent yet.</b> That is the whole behavioural difference between this screen and an ordinary preference: switch a project to Developer and yesterday's issues are still read from GitLab; switch it back to GitLab and the requests Developer already accepted are still polled there.</p>
+
+      <h2>Nothing is verified when you save</h2>
+      <div class="note">
+        <div class="note__t">The first real send is the test</div>
+        <p>Registration never calls Developer — the token round-trip was removed on 2026-09-08. Validation is local only: the base URL must parse as http or https (trailing slashes are stripped), and the group ID must be non-blank, whitespace-free and 255 characters or fewer.</p>
+      </div>
+      <p>This is the opposite of the planning-repository token, which is proven before the row is saved because <code>git ls-remote</code> costs a second (see <a href="01-project-setup.html">Project setup</a>). Here there is nothing cheap to call: no auth endpoint, no credential to check. So the cost is deferred to the first send instead of being faked with a request that proves nothing.</p>
+      <div class="note">
+        <div class="note__t">How you know it worked</div>
+        <p>Builder counts a send as complete only when the answer <b>echoes the delivery key back</b>. A wrong host that still answers 200 — a proxy, an SSO login page — leaves the request at “sending” instead of falsely reporting success. On the far side, a successful first intake raises a notification on their admin account reading <code>[DR-005] {title} 접수</code>, linking to <code>/requests/{id}</code>. If you see that, the channel is right.</p>
+      </div>
+
+      <h2>Developer connection, in detail</h2>
+      <p>Five calls, all against the base URL you registered, all keyed by the delivery key:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Call</th><th>When</th><th>What it carries</th></tr></thead>
+          <tbody>
+            <tr><td><code>POST {base}/intake</code></td><td>Send, and every resend</td><td>multipart, eleven fields plus the ZIP, <b>no auth header</b></td></tr>
+            <tr><td><code>POST {base}/intake/withdraw</code></td><td>The planner retracts</td><td>JSON: <code>groupId</code>, <code>requestNumber</code>, <code>deliveryKey</code>, <code>reason</code></td></tr>
+            <tr><td><code>GET {base}/intake/{deliveryKey}</code></td><td>Every 60 s while open</td><td>→ <code>{deliveryKey, requestNumber, status}</code></td></tr>
+            <tr><td><code>GET {base}/intake/{deliveryKey}/results</code></td><td>Every 60 s</td><td>→ <code>[{id, body, zip}]</code>, newest first</td></tr>
+            <tr><td><code>GET {base}/intake/{deliveryKey}/results/{id}.zip</code></td><td>When a result is applied</td><td>The archive — attachment, no auth, host must be the registered one</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <div class="note__t">Only two of those paths are configurable</div>
+        <p><code>builder.developer.intake-path</code> (default <code>/intake</code>) and <code>builder.developer.withdrawal-path</code> (default <code>/intake/withdraw</code>), overridable with <code>BUILDER_DEVELOPER_INTAKE_PATH</code> and <code>BUILDER_DEVELOPER_WITHDRAWAL_PATH</code>. The status and result paths are <b>derived</b> from the intake path, so there is nothing separate to misconfigure. Changes need a Builder restart, and the client's per-call timeout is a flat two minutes.</p>
+      </div>
+      <div class="branch">
+        <div class="branch__t">There is no token, so the group ID is the identity</div>
+        <p>Copy exactly what DEVELOPER's group-management screen shows under 「그룹 ID」. The API contract describes it as a zero-padded seven-digit number and the form's placeholder shows <code>group-001</code>, but the server accepts <b>any</b> non-blank string without spaces, up to 255 characters — so the shape of the hint proves nothing. A group that does not exist over there fails the send with <code>404</code>, and a delivery key already accepted under a <i>different</i> group fails with <code>409</code>.</p>
+      </div>
+
+      <h2>GitLab issue link, in detail</h2>
+      <p>Two calls to send, and then the issue itself is the channel.</p>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Upload the ZIP</div><div class="flow__cmd">POST {base}/api/v4/projects/{url-encoded path}/uploads · multipart · PRIVATE-TOKEN</div></div>
+          <div class="flow__aside">The response's <code>markdown</code> field is the attachment link that goes into the issue body.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Open the issue</div><div class="flow__cmd">POST …/issues · title · body carrying the delivery key · labels=intake</div></div>
+          <div class="flow__aside flow__aside--ok">GitLab returns the created issue, and our key is in the body it returns — that is the receipt.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">Status comes from the labels</div><div class="flow__cmd">GET …/issues/{iid} → exactly one of intake · progress · done · rejected</div></div>
+          <div class="flow__aside flow__aside--fail">Two state labels at once, or none, reads as unknown and changes nothing.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Results come from the comments</div><div class="flow__cmd">GET …/issues/{iid}/notes?per_page=100 → notes tagged [RSLT] &lt;DR number&gt;</div></div>
+          <div class="flow__aside">Only tagged comments are read, each with one attachment; ordinary discussion is ignored.</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Label</th><th>Means</th></tr></thead>
+          <tbody>
+            <tr><td><code>intake</code></td><td>Received, not yet picked up — and the only state in which a withdrawal is accepted</td></tr>
+            <tr><td><code>progress</code></td><td>In development</td></tr>
+            <tr><td><code>done</code></td><td>Development complete</td></tr>
+            <tr><td><code>rejected</code></td><td>Sent back. Not part of the original issue flow — it arrived with the Developer status model</td></tr>
+            <tr><td><code>withdrawn</code></td><td>Not a state: it records <i>why</i> <code>intake</code> was removed</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Withdrawing performs one update — remove <code>intake</code>, add <code>withdrawn</code>, close the issue — and then comments the reason. If that comment fails the withdrawal still stands; only a log line is left.</p>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">Duplicate protection only GitLab can offer</p>
+          <p>Before sending, the gateway searches issues for the delivery key. If one exists, that issue <i>is</i> the answer — which is why pressing send again from “sending” is allowed on this channel. <b>Not zero risk:</b> where GitLab search is backed by Elasticsearch a just-created issue may not be indexed yet, and then a second issue does open. The default database-backed search is immediate.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Two things the client refuses to do</p>
+          <p>It never follows redirects (<code>Redirect.NEVER</code>): a 302 on a POST becomes a GET that discards the body and returns a cheerful 2xx having sent nothing. And it never enables silent POST retries — Java's client has that off by default, and it stays off.</p>
+        </div>
+      </div>
+
+      <h2>The two side by side</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>&nbsp;</th><th>Developer connection</th><th>GitLab issue link</th></tr></thead>
+          <tbody>
+            <tr><td>Identity</td><td>Group ID, no token</td><td>A GitLab token, sealed at rest</td></tr>
+            <tr><td>What it creates</td><td>A work request in their inbox</td><td>An issue labelled <code>intake</code>, with the ZIP attached</td></tr>
+            <tr><td>Proof of receipt</td><td>The response echoes the delivery key</td><td>The returned issue body contains the delivery key</td></tr>
+            <tr><td>Duplicate protection</td><td>Their side returns the existing active request (200)</td><td>We search by delivery key before sending</td></tr>
+            <tr><td>Status source</td><td>One <code>status</code> code, eight values folded into four</td><td>Exactly one state label on the issue</td></tr>
+            <tr><td>Result source</td><td><code>…/results</code> — <code>id</code>, <code>body</code>, <code>zip</code></td><td>Comments tagged <code>[RSLT] &lt;DR&gt;</code> with an attachment</td></tr>
+            <tr><td>Withdrawal</td><td><code>POST …/intake/withdraw</code>, accepted only at <code>INTAKE</code></td><td>Remove <code>intake</code>, add <code>withdrawn</code>, close, comment</td></tr>
+            <tr><td>Versioned</td><td>Yes — each registration is a row, and requests are bound to one</td><td>No — one target per project</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>The GitLab token</h2>
+      <div class="branch">
+        <div class="branch__t">Checked at the input field, and only there</div>
+        <p>It must be printable ASCII. The token rides in the <code>PRIVATE-TOKEN</code> header, so a Korean character or a stray space throws at send time and leaves the attempt frozen in “sending” with no visible cause — the person then asks the receiving side about a problem that was in the text box. It is sealed before storage and never shown back; the screen says only that it is registered, and leaving the field untouched keeps the stored one.</p>
+      </div>
+      <div class="branch">
+        <div class="branch__t">It is deliberately not the clone token</div>
+        <p>Opening issues is a different permission from cloning a repository, and the two targets are different organisations' property. Keeping them apart means a leak of one does not hand over the other.</p>
+      </div>
+
+      <h2>When something is wrong, this is what you see</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Symptom</th><th>Likely cause</th></tr></thead>
+          <tbody>
+            <tr><td>Stuck at 전송중, no error</td><td>A 2xx arrived without the delivery key echoed — wrong host, a proxy, or a login page in front of the base URL</td></tr>
+            <tr><td><code>404</code> on send</td><td>Developer: that group ID does not exist over there</td></tr>
+            <tr><td><code>409</code> on send</td><td>Developer: the delivery key was already accepted under a different group</td></tr>
+            <tr><td><code>413</code> on send</td><td>Over the size caps — 20 MB per file, 25 MB per request</td></tr>
+            <tr><td>Send fails instantly with no HTTP call logged</td><td>GitLab: a non-ASCII character in the stored token (blocked at input now, but older rows predate that check)</td></tr>
+            <tr><td>Two issues for one request</td><td>GitLab with Elasticsearch search — the pre-send lookup missed a freshly created issue</td></tr>
+            <tr><td>Status never advances</td><td>GitLab: no state label, or more than one. Developer: their transitions are not implemented yet, so only <code>INTAKE</code> and <code>WITHDRAWN</code> are emitted today</td></tr>
+            <tr><td>The setting changed but nothing moved</td><td>Working as designed — already-sent requests stay bound to the channel they went out on</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <div class="note__t">With neither configured</div>
+        <p>The request falls back to a logging gateway: the package is built and left on disk, and the state stays “sending”. It is an escape hatch kept deliberately as a switch — and it is also what makes <a href="11-frd-test-samples.html">testing FRD work</a> safe, because with no channel registered nothing can leave the machine.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperRegistrationService.java"><span class="pill">DeveloperRegistrationService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperTarget.java"><span class="pill">DeveloperTarget</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperClient.java"><span class="pill">DeveloperClient</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperGateway.java"><span class="pill">DeveloperGateway</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevIssueTargetService.java"><span class="pill">DevIssueTargetService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevIssueGateway.java"><span class="pill">DevIssueGateway</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/LoggingDevHandoffGateway.java"><span class="pill">LoggingDevHandoffGateway</span></a>
+        <a href="../../../src/main/resources/templates/admin/project-detail.html"><span class="pill">project-detail.html</span></a>
+      </div>
+      <p>Canonical: <code>docs/developer-api-contract.md</code> — the wire format, the status table and the “GitLab issue link and existing requests” section. Narrative reference: <a href="../10-dev-request.html">Development request</a>. What happens once it lands: <a href="14-dev-side.html">On the dev side</a>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="08-srt-fast-track.html">← SRT fast track</a>
+        <a href="03-send-to-dev.html">Sending to dev →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

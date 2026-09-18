@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Development request · ADP Builder</title>
+<meta name="description" content="The deliverable. What the package contains and why it is laid out that way, what blocks a send versus what only warns, how it reaches GitLab, and how development status is tracked ">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Development request</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html" aria-current="page"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Handoff to dev</p>
+      <h1>Development request</h1>
+      <blockquote><p>The deliverable. What the package contains and why it is laid out that way, what blocks a send versus what only warns, how it reaches GitLab, and how development status is tracked afterwards.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.devrequest</code> (59 files) Canonical design: <code>docs/superpowers/specs/2026-08-22-dev-request-package-design.md</code> Screens: <code>artifacts/dev-requests.html</code>, <code>artifacts/dev-request.html</code>, <code>fragments/dev-delivery-progress.html</code></p>
+<blockquote><p>⭐ <strong>This is the contract with development.</strong> The test for any decision here is not "is it tidy" but <strong>"is there a blank field that we will argue about later"</strong>.</p></blockquote>
+<h2 id="a-package-not-a-document">A package, not a document<a class="anchor" href="#a-package-not-a-document" aria-hidden="true">#</a></h2>
+<p>A development request (<code>DR-</code>) is created automatically from a completed FRD or an SRT. <strong>There is no screen for writing an empty one by hand.</strong> It snapshots the requirements and the work results as they were at that moment.</p>
+<pre><code class="language-text">DR-003/
+├─ dev-request.md
+├─ expected-back.md
+├─ manifest.json
+├─ attachments/
+│  └─ &lt;files the planner attached&gt;
+└─ screens/
+   └─ &lt;system&gt;/
+      ├─ assets/                  one set of css · js · images
+      └─ &lt;screenId&gt;/
+         ├─ as-is.html   to-be.html
+         ├─ as-is.md     to-be.md
+         └─ changes.md</code></pre>
+<h3 id="why-there-is-a-system-layer">Why there is a system layer<a class="anchor" href="#why-there-is-a-system-layer" aria-hidden="true">#</a></h3>
+<p>Mockups are extracted from production, so they depend on <code>../assets/css/style.css</code>. Moving them to a flat <code>screens/&lt;screenId&gt;/</code> <strong>breaks every style when development opens them</strong>.</p>
+<p>One system layer makes <code>screens/&lt;system&gt;/&lt;screenId&gt;/to-be.html</code>'s <code>../assets/...</code> resolve to <code>screens/&lt;system&gt;/assets/...</code> on its own — <strong>without editing one character inside the file</strong>.</p>
+<ul>
+<li>⛔ Do not use a single <code>screens/assets/</code>. One FRD can touch screens in two systems (<code>FrdScreen.systemCode</code> is per screen) and the assets would collide.
+</li>
+<li>⛔ <strong>Do not select a skin — pour in the whole <code>core/&lt;system&gt;/assets/</code></strong> (the 2026-08-24 implementation reversed the original decision). Selecting would require rewriting links, and <code>SkinRewriter</code>'s own contract is "never modify the stored copy; substitute only in the response". More importantly, <strong>selecting code must hold skin folder names</strong> — not selecting deletes that question entirely, so <code>iks</code>/<code>tnj</code>-shaped strings never enter the code. <code>manifest.json</code> records <strong>where the assets came from</strong> (<code>assetRoots</code>), not what was chosen.
+</li></ul>
+<h3 id="every-name-is-ascii">Every name is ASCII<a class="anchor" href="#every-name-is-ascii" aria-hidden="true">#</a></h3>
+<p>Screen folders are <strong>screen IDs</strong> (<code>wv-card-list</code>); the human-readable screen name lives inside the MD.</p>
+<p>⛔ <strong>No Korean folder or file names.</strong> They used to be <code>개발요청서.md</code> / <code>변경내용.md</code>, relying on <code>java.util.zip</code>'s UTF-8 name plus the language-encoding bit — and that code's own comment admitted it <strong>could break in older tools</strong>. After receiving a real package the risk was removed. Nothing in the package has a Korean name now, and section 8 keeps the meaning by describing each file in one line.</p>
+<h3 id="four-files-per-screen">Four files per screen<a class="anchor" href="#four-files-per-screen" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>What</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr><td><code>as-is.html</code> · <code>as-is.md</code></td><td>The <strong>before</strong> side of the completion commit</td><td>⭐ The contract is "<strong>from what → to what</strong>". Given only to-be, development has to derive the diff itself, and later there is no basis to settle "it was always like that / no it wasn't". It is nearly free — the worktree already has it</td></tr>
+<tr><td><code>to-be.html</code></td><td>The <strong>after</strong> side</td><td>What it should look like</td></tr>
+<tr><td><code>to-be.md</code></td><td>Generated by AI before sending</td><td>Keeps the contract's field from being blank</td></tr>
+<tr><td><code>changes.md</code></td><td>That screen's change list</td><td>Carries what the mockup cannot say — reasons and cautions</td></tr>
+</tbody></table></div>
+<p>⛔ <strong>Do not put "the FRD document" in a screen folder.</strong> There is one FRD per work item, so per-screen copies would be N duplicates that drift. The FRD body lives in <code>dev-request.md</code>.</p>
+<h3 id="to-bemd-is-generated-before-sending"><code>to-be.md</code> is generated before sending<a class="anchor" href="#to-bemd-is-generated-before-sending" aria-hidden="true">#</a></h3>
+<p>Only screens the canvas AI touched have a <code>frd_screen_history.md</code>; mockup-only screens have <code>null</code>, which would leave the "feature definition to be changed" field <strong>mostly empty</strong>.</p>
+<p>So the AI writes it before sending, from three materials already in hand: <code>as-is.md</code>, the mockup before/after, and that screen's change list.</p>
+<ul>
+<li>⚠ <strong>A screen that already has an MD keeps it.</strong> What a human made through conversation is stronger and is never overwritten.
+</li>
+<li>⭐ <strong>FRD completion triggers it by itself</strong> (confirmed 2026-08-25) — at that moment the mockup is committed and all three materials are fixed. The user is not made to hunt for a button; the button remains only for <strong>re-running a failed screen</strong>. Completion still succeeds if it cannot be triggered, but <strong>a missing feature definition blocks sending</strong>.
+</li>
+<li>⚠ A simple-change FRD with no workbench has no <code>frd_screen_history</code> and therefore no material — empty is correct there.
+</li>
+<li>⛔ Do not go back to "always write the MD during screen work": it makes screen work heavy and forces an MD re-match on every edit, which <em>increases</em> the places where mockup and MD diverge.
+</li></ul>
+<h2 id="dev-requestmd-eleven-sections"><code>dev-request.md</code> — eleven sections<a class="anchor" href="#dev-requestmd-eleven-sections" aria-hidden="true">#</a></h2>
+<p><strong>The body is a regenerated artifact.</strong> The AI writes it; humans do not hand-edit it. So each section's material is pinned down. ⛔ <strong>Never create a section with no material</strong> — the AI will invent something to fill it.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>§</th>
+<th>Material</th>
+</tr></thead><tbody>
+<tr><td>Cover</td><td><code>label()</code> · <code>title</code> · <code>systemCode</code> · facets · FRD label · owner · created/sent times · the delivery key</td></tr>
+<tr><td>1. Request</td><td>The original text (<code>frd.sourceText()</code>) + the interview requirement summary confirmed before approval</td></tr>
+<tr><td>2. All requirements</td><td>Sequence · requirement · <strong>nature</strong> (develop / operate / out-of-scope) · notes</td></tr>
+<tr><td>3. Development scope</td><td><code>developmentRequirements()</code> (<code>DEVELOP</code>)</td></tr>
+<tr><td>4. Excluded scope</td><td><code>operationRequirements()</code> (<code>OPERATE</code>) + <code>excludedRequirements()</code> (<code>OUTSIDE</code>) + each <code>note</code></td></tr>
+<tr><td>5. Completion criteria</td><td><code>acceptanceCriteria()</code></td></tr>
+<tr><td>6. Needs confirmation</td><td><code>openIssues()</code></td></tr>
+<tr><td>7. Out-of-screen implementation</td><td>Backend items grouped by kind</td></tr>
+<tr><td>8. Per-screen artifact index</td><td>⭐ <strong>Generated from <code>manifest.json</code></strong></td></tr>
+<tr><td>9. Delivery information</td><td>Requested completion date · deployment date · planner notes</td></tr>
+<tr><td>10. Attachments</td><td>Name and size</td></tr>
+<tr><td>11. Return contract</td><td>Points at <code>expected-back.md</code></td></tr>
+</tbody></table></div>
+<p><strong>Section 4 is the heart of the contract.</strong> Disputes come less from "done / not done" than from <strong>"this was in scope / it wasn't"</strong>. <code>OPERATE</code> and <code>OUTSIDE</code> are already separated, with the reason in <code>note</code>.</p>
+<p>⛔ Do not copy the screen's layout into the MD — on <code>dev-request.html</code> this sits small in an <code>&lt;aside&gt;</code>; <strong>in the MD it is a large section immediately after the development scope</strong>.</p>
+<p>⛔ <strong>Section 8 is never hand-written</strong> — it is generated from the file list in <code>manifest.json</code>. Hand-writing it lets it drift from the <code>screens/</code> folder, and once drifted nobody knows which is right. That is exactly where "12 artifacts vs 14" split.</p>
+<p>⛔ <strong>Do not re-expand per-screen changes in the MD.</strong> The detail's source of truth is <code>screens/&lt;system&gt;/&lt;screenId&gt;/changes.md</code>; section 8 is an <strong>index only</strong>.</p>
+<h3 id="no-readme-in-the-package">No README in the package<a class="anchor" href="#no-readme-in-the-package" aria-hidden="true">#</a></h3>
+<p>Considered and <strong>rejected</strong> (2026-08-25). Three places already exist: what each file is → <strong>section 8</strong>; the machine-readable list, hashes, commit SHA and skins → <strong><code>manifest.json</code></strong>; what to return after development → <strong><code>expected-back.md</code></strong>.</p>
+<ul>
+<li>⛔ A README becomes a third copy that drifts from section 8.
+</li>
+<li>⛔ Its content is identical in every DR — static text copied N times, and when the layout changes <strong>all N already-sent copies become false</strong>, with no way to recall them.
+</li></ul>
+<h3 id="manifestjson-spec-versions"><code>manifest.json</code> spec versions<a class="anchor" href="#manifestjson-spec-versions" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Version</th>
+<th>Adds</th>
+</tr></thead><tbody>
+<tr><td>2</td><td><code>expected-back.md</code> as a required contract file</td></tr>
+<tr><td>3</td><td><code>expectedBack.testArtifacts</code> — machine-checkable mapping of returned test result files to TCs</td></tr>
+</tbody></table></div>
+<p>A reader of spec 2 treats the missing field as an empty list.</p>
+<h2 id="zero-screens-is-normal">Zero screens is normal<a class="anchor" href="#zero-screens-is-normal" aria-hidden="true">#</a></h2>
+<p>⚠ Backend-only and simple-change FRDs have <strong>no worktree and no commit</strong>. The package must stand without <code>screens/</code>, and <strong>any validation demanding "at least one screen" would make those FRDs permanently unsendable</strong>.</p>
+<h2 id="where-the-material-comes-from">Where the material comes from<a class="anchor" href="#where-the-material-comes-from" aria-hidden="true">#</a></h2>
+<p>⭐ <strong>The worktree is the material.</strong> <code>commitChanges</code> runs at completion and the worktree is <strong>not</strong> removed (<code>worktree remove</code> exists only in <code>reset</code> and <code>rollback</code>), so as-is (before the commit) and to-be (after it) come from the same place.</p>
+<p>⛔ <strong>Never add code that removes a worktree before delivery finishes</strong> — the material for the contract would be gone.</p>
+<h2 id="pre-send-checks-devrequestprecheck">Pre-send checks — <code>DevRequestPrecheck</code><a class="anchor" href="#pre-send-checks-devrequestprecheck" aria-hidden="true">#</a></h2>
+<p>⭐ <strong>Two layers is the point.</strong> Merged into one, it becomes either all-blocking (ambiguous cases can never ship) or all-warning (<strong>things development cannot use ship inside the contract</strong>).</p>
+<p>⛔ <strong>Builder does not write its own checker.</strong> Spec judgement is done by the checker shipped inside the planning repository (<code>CheckerCommand</code>). This class only translates that result into <em>blocking</em> or <em>warning</em>.</p>
+<p>⭐ <strong>The checker runs only when send is pressed</strong> (instruction, 2026-08-25). The detail screen uses <code>check()</code>, which reports only what the DB already knows; <code>checkForDelivery()</code> is the only caller that runs the checker. Running it on every open made the same screen look different each time the result expired.</p>
+<h2 id="sending">Sending<a class="anchor" href="#sending" aria-hidden="true">#</a></h2>
+<p>The transmission target is registered per project in group management — <strong>Developer 연결</strong> or <strong>GitLab 이슈로 전송</strong>. A project with neither registered shows <code>설정 필요</code>, which is the normal starting state; the fields, validation and history semantics are in <a href="04-project-setup.html">project setup</a>.</p>
+<h3 id="the-flow">The flow<a class="anchor" href="#the-flow" aria-hidden="true">#</a></h3>
+<pre><code class="language-text">기획자 presses 개발요청 보내기
+        │
+        ▼
+  CHECKING    전송 내용 확인      run the pre-send check NOW
+        │                        blocked → nothing is sent, 전송 전 확인 says why
+        ▼
+  PACKING     전달 자료 준비      build the package, zip it, write manifest.json
+        │
+        ▼
+  UPLOADING   개발팀에 전송       ONE call to the bound channel
+        │
+        ▼
+  CONFIRMING  접수 결과 확인      map the answer onto a state
+        │
+        ├── proof of receipt ─────────────▶ 전송완료
+        ├── cannot tell ──────────────────▶ 전송중   (re-send uses the SAME material)
+        └── proof it never arrived ───────▶ 대기     (re-send starts over)</code></pre>
+<p>Those four names are the stages the detail screen draws, from <code>DeliveryProgress.stages()</code>. <code>GET /{requestId}/delivery-progress</code> returns the fragment the screen polls.</p>
+<ol>
+<li><code>개발요청 보내기</code> runs the pre-send check <strong>at that moment</strong>. Opening the detail does not re-run it.
+</li>
+<li>If anything blocks, nothing is sent and <code>전송 전 확인</code> shows why. Fix it in the FRD work or the project settings.
+</li>
+<li>The send dialog takes notes for the development team, the expected completion date, the deployment date, a preceding development request and attachments. <strong>A preceding DR is never auto-selected merely because screens overlap.</strong>
+</li>
+<li>Builder prepares the package and sends it to the target registered on the project.
+</li>
+<li>A clear result becomes <code>전송완료</code>; an unconfirmable one stays <code>전송중</code>. <strong>An unclear state is never quietly reset to <code>대기</code>.</strong>
+</li></ol>
+<h3 id="which-channel-a-request-goes-to-and-when-that-is-decided">Which channel a request goes to, and when that is decided<a class="anchor" href="#which-channel-a-request-goes-to-and-when-that-is-decided" aria-hidden="true">#</a></h3>
+<p><code>DeveloperGateway</code> is <code>@Primary</code> and routes; <code>DevIssueGateway</code> is the GitLab implementation it falls back to.</p>
+<pre><code class="language-text">send(package, deliveryKey):
+    bound = targets.bound(requestId)         already tied to a Developer target?
+    if bound != null                     ──▶ send there, whatever the setting says now
+    current = targets.current(projectId)     is Developer the project&#x27;s current channel?
+    if current == null                   ──▶ DevIssueGateway  (GitLab issue)
+    targets.bind(requestId, current.id())    tie this request to that target — permanently
+                                         ──▶ send to Developer</code></pre>
+<p>⭐ <strong>The channel is chosen once, at first send, and then frozen onto the request.</strong> Changing the project setting afterwards never moves work already in flight, which is what makes status polling, withdrawal and result collection keep working against the address the package actually went to. This is the reason <code>adk_builder_developer_target</code> keeps retired rows instead of overwriting.</p>
+<h3 id="the-delivery-key-and-what-send-again-means">The delivery key, and what "send again" means<a class="anchor" href="#the-delivery-key-and-what-send-again-means" aria-hidden="true">#</a></h3>
+<p>Every development request has one <strong>delivery key</strong>, and <strong>re-sending reuses it</strong>. That is what lets the receiving side recognise a second attempt as the same request rather than a new one, and it is why <code>전송중</code> can be resolved by asking "do you have this key?" (<code>lookup</code>) instead of sending blindly.</p>
+<p>⚠ <strong><code>전송중</code> re-sends the original material, unchanged.</strong> <code>DeliveryJournal</code> freezes the input and the fingerprint on the first attempt; a retry from <code>전송중</code> reuses them. Only a request back at <code>대기</code> rebuilds from scratch. Re-sending after an edit would otherwise deliver something different under a key the far side has already seen.</p>
+<h3 id="reading-the-answer-deliveryoutcome">Reading the answer — <code>DeliveryOutcome</code><a class="anchor" href="#reading-the-answer-deliveryoutcome" aria-hidden="true">#</a></h3>
+<p>⭐ <strong>One rule decides everything: only proof that the other side never processed it means <code>대기</code>. If we cannot tell, it is <code>전송중</code>.</strong></p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Answer</th>
+<th>State</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr><td><code>200</code> / <code>201</code> <strong>with</strong> the delivery key echoed</td><td><code>SENT</code></td><td>Receipt is proven</td></tr>
+<tr><td><code>200</code> / <code>201</code> <strong>without</strong> the echo</td><td><code>SENDING</code></td><td>See below</td></tr>
+<tr><td><code>202</code></td><td><code>SENDING</code></td><td>"Accepted" is not "processed"</td></tr>
+<tr><td><code>400</code> <code>401</code> <code>403</code> <code>404</code> <code>413</code> <code>415</code> <code>422</code></td><td><code>NOT_SENT</code></td><td>The request itself was refused — the body never reached processing</td></tr>
+<tr><td><code>408</code> <code>429</code></td><td><code>SENDING</code></td><td>"Not now, later" — says nothing about whether it was handled</td></tr>
+<tr><td><code>3xx</code>, <code>5xx</code>, any other <code>2xx</code></td><td><code>SENDING</code></td><td>A moved address or a gateway giving up is not proof of non-processing</td></tr>
+<tr><td>DNS failure, connection refused, TLS failure</td><td><code>NOT_SENT</code></td><td><code>beforeBody()</code> — provably never arrived</td></tr>
+<tr><td>Timeout, disconnect before response</td><td><code>SENDING</code></td><td>⛔ <strong>not</strong> <code>beforeBody()</code> — it may already have been received</td></tr>
+</tbody></table></div>
+<blockquote><p>⛔ <strong>Do not "fix" the echo check.</strong> A <code>200</code> without the delivery key echoed back stays <code>전송중</code>, and that looks like a bug until you know why: <strong>corporate proxies and login pages also return <code>200</code>.</strong> Without our own key reflected in the body there is no evidence the package reached the far side at all. Deleting the <code>echoed</code> test would convert every proxy interception into a false <code>전송완료</code>.</p></blockquote>
+<p>⚠ <strong><code>409</code> is deliberately unresolved.</strong> It can mean "already have this one" — effectively sent — or an ordinary conflict, which is a failure. <code>docs/requests-to-dev.md</code> asked development on 2026-08-10 and no answer has come back, so the code routes it with the general <code>SENDING</code> fallback and says to fix the table once the meaning is agreed. <strong>Do not close this in documentation ahead of that answer.</strong></p>
+<h3 id="two-preconditions-for-any-of-the-above-being-true">Two preconditions for any of the above being true<a class="anchor" href="#two-preconditions-for-any-of-the-above-being-true" aria-hidden="true">#</a></h3>
+<p>These are not configuration preferences. The state mapping is only correct if both hold, and <strong>HTTP clients default the other way</strong>, so each must be actively switched off in the implementation.</p>
+<ol>
+<li>⛔ <strong>No silent retry.</strong> Clients and corporate proxies commonly re-fire on a dropped connection or a <code>502</code>. If that happens, nobody knows whether the package went once or twice.
+</li>
+<li>⛔ <strong>No automatic redirect following.</strong> A <code>302</code> on a <code>POST</code> makes many clients re-issue it as a <code>GET</code>, <strong>discarding the body</strong>, and then receive a final <code>2xx</code>. Builder would confirm <code>전송완료</code> having sent <strong>nothing</strong>. That is worse than sending twice, because a double send is at least visible.
+</li></ol>
+<h3 id="withdrawal">Withdrawal<a class="anchor" href="#withdrawal" aria-hidden="true">#</a></h3>
+<p><code>WITHDRAWN</code> is a state of its own, not a return to <code>대기</code>.</p>
+<p>⭐ <strong>It works only while the issue still carries the <code>intake</code> label</strong> — a label Builder sets, meaning development has not picked the work up. If development has started, their workflow has changed the label and the gateway refuses; we cannot undo someone else's work in progress.</p>
+<p>⛔ <strong>Never map a withdrawal back to <code>NOT_SENT</code>.</strong> The issue is still alive, so a request sitting at <code>대기</code> would be sent again and <strong>open a second issue</strong>. The delivery key is kept, and the receiving side treats a fresh submission under the same key after a withdrawal as a separate attempt.</p>
+<h3 id="delivery-states">Delivery states<a class="anchor" href="#delivery-states" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>State</th>
+<th>Meaning</th>
+<th>Available actions</th>
+</tr></thead><tbody>
+<tr><td><code>대기</code></td><td>Not yet sent</td><td>Sendable once the pre-send check passes. An FRD-sourced request can be deleted to return to FRD work</td></tr>
+<tr><td><code>전송중</code></td><td>Receipt unconfirmed, or the result needs checking</td><td><code>개발요청 다시 보내기</code> after a duplicate-issue check</td></tr>
+<tr><td><code>전송완료</code></td><td>Receipt confirmed</td><td>Track development status. Withdrawal is possible while development is still at intake</td></tr>
+<tr><td><code>취소</code></td><td>The planner withdrew it</td><td>Revise and send again</td></tr>
+</tbody></table></div>
+<p>If a receipt lookup returns <code>404</code>, the attempt is rolled back to <code>대기</code> with "개발팀에 접수 기록이 없어 대기로 되돌렸습니다" — the one failure that has no stored reason of its own, so <code>DeliveryProgress.failureMessage</code> supplies it rather than telling the reader to check a reason that is not there.</p>
+<h3 id="why-delivery-is-serial">Why delivery is serial<a class="anchor" href="#why-delivery-is-serial" aria-hidden="true">#</a></h3>
+<p><code>deliveryExecutor</code> is <strong>core 1, max 1</strong> with <code>builder.delivery.queue-capacity</code> (20). One send at a time, and a full queue is rejected back to the caller rather than silently dropped.</p>
+<p>⚠ <strong>The queue holds storage paths, not file bytes.</strong> That is what makes a depth of 20 affordable — twenty queued sends cost twenty paths, not twenty ZIPs in memory. Reading the pool size alone does not explain the capacity; the two settings only make sense together.</p>
+<p>Guard rails: <code>max-archive-bytes</code> (512 MB), <code>minimum-free-disk-bytes</code> (256 MB), plus asset-cache metadata size and TTL. Delivery deliberately does not occupy the AI or clone executors.</p>
+<p>Supporting classes: <code>DevRequestPackageBuilder</code>, <code>DevRequestPackageZipper</code>, <code>DevRequestManifest</code>, <code>DevRequestExpectedBack</code>, <code>DeliveryPrewarmer</code>, <code>DeliveryJournal</code>, <code>DeliveryRecovery</code>, <code>DeliveryAssetCache</code>, <code>DevIssueGateway</code>, <code>DeveloperGateway</code>, <code>DevHandoffGateway</code>.</p>
+<h2 id="development-status">Development status<a class="anchor" href="#development-status" aria-hidden="true">#</a></h2>
+<p><strong>Delivery state and development state are separate values.</strong> <code>DevelopmentStatusSynchronizer</code> polls GitLab issue labels every minute (<code>builder.dev-request-status.fixed-delay-ms: 60000</code>) and only ever moves the state <strong>forward</strong>.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Development state</th>
+<th>Meaning</th>
+<th>User action</th>
+</tr></thead><tbody>
+<tr><td><code>대기</code></td><td>Not sent, or status not yet determined</td><td>Check the delivery state and sync errors</td></tr>
+<tr><td><code>개발 접수</code></td><td>Development received it</td><td>Cancellation can be attempted <strong>only here</strong>. If development already took it, the cancellation is refused</td></tr>
+<tr><td><code>개발 진행 중</code></td><td>In progress</td><td>Follow the DR and the GitLab issue</td></tr>
+<tr><td><code>개발 완료</code></td><td>Completion confirmed from the label</td><td>Press <code>개발 결과 반영</code></td></tr>
+</tbody></table></div>
+<p><strong><code>개발 완료</code> does not mean automatic merge.</strong> The user must explicitly press <code>개발 결과 반영</code>; the button does not appear if the result was already applied or the state is not complete. See <a href="11-dev-result.html">Development result</a>.</p>
+<h2 id="routes">Routes<a class="anchor" href="#routes" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Route</th>
+<th>Action</th>
+</tr></thead><tbody>
+<tr><td><code>GET /{requestId}</code></td><td>Detail</td></tr>
+<tr><td><code>GET /{requestId}/download</code></td><td>Download the ZIP</td></tr>
+<tr><td><code>GET /{requestId}/progress</code></td><td>Poll delivery progress</td></tr>
+<tr><td><code>POST /{requestId}/send</code></td><td>Run the pre-send check and deliver</td></tr>
+<tr><td><code>POST /{requestId}/retry-delivery</code></td><td>Retry from <code>전송중</code></td></tr>
+<tr><td><code>POST /{requestId}/withdraw</code></td><td>Withdraw</td></tr>
+<tr><td><code>POST /{requestId}/return-to-frd</code></td><td>Delete the DR and go back to FRD work</td></tr>
+<tr><td><code>POST /{requestId}/merge</code></td><td>Apply the development result</td></tr>
+<tr><td><code>POST /{requestId}/comment</code></td><td>Planner comment</td></tr>
+</tbody></table></div>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="08-frd-completion.html">FRD completion</a> — what prepares the material
+</li>
+<li><a href="11-dev-result.html">Development result</a> — what comes back
+</li>
+<li><a href="19-checker.html">Spec checker</a> — what the pre-send check delegates to
+</li>
+<li><a href="17-tests.html">Unit &amp; integration tests</a> — what <code>expected-back.md</code> asks for
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="09-srt.html">← SRT fast track</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/10-dev-request.md</span>
+      <a href="11-dev-result.html">Development result →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

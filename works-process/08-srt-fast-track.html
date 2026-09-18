@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRT fast track · Work processes · ADP Builder</title>
+<meta name="description" content="The short path: register a small concrete change, let a cheap AI run restate it, and go straight to a development request on a hidden bridge FRD.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · SRT fast track</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html" aria-current="page"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 6</p>
+      <h1>SRT — the short path</h1>
+      <p class="wp-lede">빠른 개발요청 is for changes simple and concrete enough not to need screen design work. Either entry method <b>always</b> ends in a development request, and an SRT never converts into FRD work.</p>
+
+      <h2>Registration to request</h2>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Register — typed directly, or pulled from Flow</div><div class="flow__cmd">직접 입력: title ≤ 255, body ≤ 20,000 · 플로우 등록: digits only, ≤ 30</div></div>
+          <div class="flow__aside flow__aside--fail">The Flow field takes a <b>number, not a URL</b> — pasting a link fails. Claude must be connected, or registration is refused.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Two rows are written, not one</div><div class="flow__cmd">adk_builder_srt + a full bridge FRD, linked as bridge_frd_id (UNIQUE)</div></div>
+          <div class="flow__aside">The bridge FRD is born at <code>SCOPE_REVIEW</code> — past the interview — and never appears in the UI.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">The cheapest AI call in the product</div><div class="flow__cmd">sonnet · low effort · Read(&lt;inputDir&gt;/**) and nothing else · isolated from config, hooks and MCP</div></div>
+          <div class="flow__aside">Its job: is this a real development change, and if so, restate it as requirements plus completion criteria against a fixed schema.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Off-schema output is fed back once</div><div class="flow__cmd">reader rejects → rejection reason appended → asked once more → else AnalysisException</div></div>
+          <div class="flow__aside flow__aside--fail">Claude's raw error text never reaches the screen; the exception carries a message written for people.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">05</div>
+          <div><div class="flow__title">개발요청서 만들기</div><div class="flow__cmd">DevelopmentRequestService.createFromConfirmedScope(projectId, bridgeFrdId, …)</div></div>
+          <div class="flow__aside flow__aside--ok">The very call the FRD path uses — which is the whole point of the bridge.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">Why the SRT tables look thin</div>
+        <p>There is no <code>srt_requirement</code> table and there never should be. An SRT's requirements and completion criteria live as ordinary FRD item and note rows keyed by the bridge FRD, so SRT reuses the FRD machinery instead of duplicating it. Facets are written to the bridge FRD too, not to the SRT row.</p>
+      </div>
+
+      <h2>Five states, four on screen</h2>
+      <div class="states">
+        <span class="state">READY</span>
+        <span class="states__sep">→</span>
+        <span class="state">ANALYZING</span>
+        <span class="states__sep">→</span>
+        <span class="state state--ok">COMPLETE</span>
+        <span class="states__sep">or</span>
+        <span class="state state--bad">REJECTED</span>
+        <span class="state state--bad">FAILED</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Screen state</th><th>Condition</th><th>What the planner does</th></tr></thead>
+          <tbody>
+            <tr><td>분석 중</td><td><code>READY</code> or <code>ANALYZING</code></td><td>Wait; closing the screen preserves the registration</td></tr>
+            <tr><td>생성 대기</td><td><code>COMPLETE</code></td><td>Review, then press <code>개발요청서 만들기</code></td></tr>
+            <tr><td>확인 필요</td><td><code>REJECTED</code> or <code>FAILED</code></td><td>Revise a direct SRT; for a thin Flow original, improve it in Flow and register a new one</td></tr>
+            <tr><td>완료</td><td><code>devRequestId</code> is set</td><td>Open the development request and review before sending</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><code>devRequestId</code> is checked <b>before</b> the analysis state, which is what lets the completed state win. A test pins it: the delivery state does not overwrite the SRT state.</p>
+
+      <div class="note">
+        <div class="note__t">Two guards against double-running, and one against getting stuck</div>
+        <p>A set of in-flight SRT ids refuses a second request and returns the current status instead. And <code>status()</code> heals itself: if the row says <code>ANALYZING</code> but the id is not in that set, the analysis was lost to a restart or a rejected submission, so it is requested again rather than showing 분석 중 forever. A full executor queue parks the SRT in <code>FAILED</code> with a retry message — never left claimed.</p>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Do not shrink a scope to fit</div>
+        <p>A change that needs an interview or screen work belongs in an <a href="05-frd-wizard.html">FRD</a>. That is the one misuse the design names explicitly. Note also that updating a direct SRT resets the analysis to <code>READY</code> and clears the bridge FRD's items — and a Flow-registered SRT cannot be edited at all, because the original belongs to Flow.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/srt/SrtService.java"><span class="pill">SrtService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/srt/SrtAnalysisService.java"><span class="pill">SrtAnalysisService</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/srt/SrtAiAnalyzer.java"><span class="pill">SrtAiAnalyzer</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/srt/SrtAiAnalysisReader.java"><span class="pill">SrtAiAnalysisReader</span></a>
+      </div>
+      <p>Narrative reference: <a href="../09-srt.html">SRT fast track</a>. Canonical: <code>docs/superpowers/specs/2026-08-31-srt-fast-track-design.md</code>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="07-frd-completion.html">← FRD completion</a>
+        <a href="12-delivery-channel.html">Delivery channel →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

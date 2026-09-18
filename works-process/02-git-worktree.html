@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git &amp; worktrees · Work processes · ADP Builder</title>
+<meta name="description" content="The on-disk layout, how an FRD worktree is cut and reused, why there is no merge request, and the only four places allowed to push.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · Git &amp; worktrees</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html" aria-current="page"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 2</p>
+      <h1>Git and worktrees</h1>
+      <p class="wp-lede">Every path on this page is computed in one class, <code>ProjectPaths</code>, under <code>builder.data-root</code>. That matters more than it looks: after a restart the server has to recompute the same folder from the same ID and find the existing worktree again.</p>
+
+      <h2>What sits on disk</h2>
+      <div class="tree">&lt;data-root&gt;/projects/&lt;projectId&gt;/
+├─ <b>clone/</b>                        <i>the server clone — nobody works in here</i>
+├─ <b>worktrees/</b>frd-0000025/        <i>one FRD, one branch, one person</i>
+│            srt-0000004/        <i>an SRT fast track</i>
+│            dev-request-merge-… <i>cut for a merge, then removed</i>
+├─ received/                     <i>uploaded originals</i>
+└─ dev-request-packages/&lt;id&gt;/    <i>what goes out to the dev team</i></div>
+
+      <div class="note">
+        <div class="note__t">Two of those folders are outside the clone on purpose</div>
+        <p><code>received/</code> and <code>dev-request-packages/</code> sit <i>beside</i> the clone, never inside it. Anything inside the clone is something git can see, stage and push — and neither an uploaded original nor an outbound copy belongs in the planning team's repo.</p>
+      </div>
+
+      <h2>Cutting a worktree for one FRD</h2>
+      <p>Analysis and the AI interview only read the repo, so they need no worktree. The first write is the planner pressing <b>FRD 작업하기</b>, and that is where one is created.</p>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">The FRD must be in SCOPE_REVIEW</div><div class="flow__cmd">state check · owner check</div></div>
+          <div class="flow__aside">A worktree is the moment work becomes writable, so the state gate comes first.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">The clone and its default branch must be healthy</div><div class="flow__cmd">clone/.git present · branch resolvable</div></div>
+          <div class="flow__aside flow__aside--fail">Fails → the FRD stays in <code>SCOPE_REVIEW</code> and the screen says what to do.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">Create, or reuse what is already there</div><div class="flow__cmd">git worktree add -b frd/&lt;id&gt; &lt;folder&gt; HEAD — or worktree add &lt;folder&gt; &lt;branch&gt;</div></div>
+          <div class="flow__aside">Same branch and same folder already paired → reused, never recreated. Branch present without a folder → the folder is reattached to it.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Only now does the state change</div><div class="flow__cmd">FRD state → DRAFTING</div></div>
+          <div class="flow__aside flow__aside--ok">Git work and a database write cannot be one transaction, so the order is the safety.</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Branch</td><td><code>frd/{FRD DB ID}</code> — e.g. <code>frd/0000025</code></td></tr>
+            <tr><td>Folder</td><td><code>&lt;worktreeRoot&gt;/frd-{FRD DB ID}</code></td></tr>
+            <tr><td>Base</td><td>The clone's <code>HEAD</code> at the moment the button is pressed</td></tr>
+            <tr><td>Owner</td><td>The FRD's <code>owner_account_id</code> — one worktree, one person</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Named by DB ID, never by the display number</div>
+        <p><code>FRD-025</code> is for people and can change; <code>0000025</code> is the recovery key. If the folder exists but git does not know it, or it points at a different branch, nothing is overwritten or deleted — the screen reports that recovery is needed. And if the state flip fails after a <i>fresh</i> worktree was made, only that one is cleaned up: an older one may hold the planner's work.</p>
+      </div>
+
+      <h2>Closing the work</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">The worktree goes, the branch stays</p>
+          <p>A worktree survives <code>REVIEW</code>, and marking something done does not remove it. It is removed only after the commits are safely in the planning repo, and only when nothing is uncommitted. The branch is kept: it is the only record of what changed and why.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">to-be never merges into <code>pages/</code></p>
+          <p><code>core/&lt;system&gt;/pages/</code> on the default branch holds <b>as-is</b> — what the running system actually looks like. Facts arrive there through the development result. Merging a planner's drawing in would make the next FRD read it as reality. Writing that file <i>inside</i> a worktree branch is fine and expected.</p>
+        </div>
+      </div>
+
+      <h2>Getting commits out</h2>
+      <div class="chain">
+        <div class="chain__box">
+          <div class="chain__k">IDENTITY</div>
+          <div class="chain__t">Shared account pushes</div>
+          <div class="chain__d">One builder account holds the credential; planners never need a GitLab account or a personal token.</div>
+        </div>
+        <div class="chain__box">
+          <div class="chain__k">ATTRIBUTION</div>
+          <div class="chain__t">The planner is the author</div>
+          <div class="chain__d">In git the author and the pusher are different things, and an author needs only a name and an email.</div>
+        </div>
+        <div class="chain__box chain__box--out">
+          <div class="chain__k">NOT USED</div>
+          <div class="chain__t">No merge request</div>
+          <div class="chain__d">Nobody reviews the planning repo. An unmerged MR keeps work off the default branch and off other planners' screens, and the cleanup that removes worktrees never runs.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">One push at a time, enforced by a single worker</div>
+        <p>A short database lock cannot do it: once released, another request grabs it while git is still running. Holding a transaction across the whole git run would drain the connection pool, and a rollback would erase the record of commits that already went out. With one server, one worker is the cheapest correct answer — so there is no “how many times do we retry a rejected push” question: nobody is ahead of you in the queue.</p>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">If content collides, the later person redoes the whole thing</div>
+        <p>Queueing prevents two pushes at once, not two people editing the same file. One conflicting file out of three means the whole work item is redone — leaving the conflicted part for the planner produces a screen they cannot resolve, and showing them git is where they stop. Collisions come from two directions: inside the builder (requirements, definitions, the IA of one system) and from a planning-team member editing directly in GitLab, which can touch <i>any</i> file.</p>
+      </div>
+
+      <h2>The only four places that push</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Class</th><th>What it pushes</th></tr></thead>
+          <tbody>
+            <tr><td><code>IaPublisher</code></td><td>The confirmed menu tree (IA) snapshot</td></tr>
+            <tr><td><code>DevRequestBranchMerger</code></td><td>The merge of a completed FRD into the default branch, and the branch cleanup that follows</td></tr>
+            <tr><td><code>DevResultApplyWorker</code></td><td>The development result applied back into the planning repo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Three classes, four call sites. Everything else in the codebase commits into a worktree and stops there.</p>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/project/ProjectPaths.java"><span class="pill">ProjectPaths</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/git/GitCommand.java"><span class="pill">GitCommand</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/frd/FrdWorkspace.java"><span class="pill">FrdWorkspace</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/project/ProjectRepositoryLocks.java"><span class="pill">ProjectRepositoryLocks</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/ia/IaPublisher.java"><span class="pill">IaPublisher</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevRequestBranchMerger.java"><span class="pill">DevRequestBranchMerger</span></a>
+      </div>
+      <p>Narrative reference: <a href="../git.html">Git layer</a>. Canonical decisions: <code>docs/frd-worktree-lifecycle-design.md</code> and <code>docs/superpowers/specs/2026-08-07-push-design.md</code>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="01-project-setup.html">← Project setup</a>
+        <a href="05-frd-wizard.html">FRD wizard →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

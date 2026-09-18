@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notifications · ADP Builder</title>
+<meta name="description" content="The in-app notification list: what raises one, why publishing can never fail the work that raised it, and how a batch of screen drafts collapses into a single entry.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Notifications</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html" aria-current="page"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Platform</p>
+      <h1>Notifications</h1>
+      <blockquote><p>The in-app notification list: what raises one, why publishing can never fail the work that raised it, and how a batch of screen drafts collapses into a single entry.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.notification</code> Table: <code>adk_builder_notification</code> (<code>V88</code>) Routes: <code>POST /notifications/{id}/read</code>, <code>POST /notifications/read-all</code></p>
+<h2 id="why-it-exists">Why it exists<a class="anchor" href="#why-it-exists" aria-hidden="true">#</a></h2>
+<p>Every long job in Builder runs behind the screen — the interview, screen drafts, completion, repository refresh. A planner can close the browser and come back. The notification list is what tells them what happened while they were away.</p>
+<h2 id="kinds">Kinds<a class="anchor" href="#kinds" aria-hidden="true">#</a></h2>
+<p><code>Notification.Kind</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Kind</th>
+<th>Raised by</th>
+</tr></thead><tbody>
+<tr><td><code>FRD_ANALYSIS</code></td><td>Interview / analysis turn finished, or failed</td></tr>
+<tr><td><code>SCREEN_DRAFT</code></td><td>A screen draft — or a whole batch of them — finished</td></tr>
+<tr><td><code>SCREEN_EDIT</code></td><td>A per-screen chat edit finished</td></tr>
+<tr><td><code>FRD_COMPLETION</code></td><td>An FRD completion run reached an outcome</td></tr>
+<tr><td><code>REPOSITORY</code></td><td>Planning-repository clone or refresh</td></tr>
+</tbody></table></div>
+<p>Each row carries an account, a kind, a <code>source_key</code>, a title, a body and a target path. Constraints in <code>V88</code>: the id must match <code>^[0-9]{7}$</code>, the target path must be internal, and <code>(account_id, source_key)</code> is <strong>unique</strong> — the same event cannot notify the same person twice.</p>
+<h2 id="publishing-never-breaks-the-work">Publishing never breaks the work<a class="anchor" href="#publishing-never-breaks-the-work" aria-hidden="true">#</a></h2>
+<p><code>NotificationPublisher</code> records the notification <strong>in a separate transaction and swallows its own exceptions</strong>:</p>
+<pre><code class="language-java">try {
+    notifications.publish(accountId, kind, sourceKey, title, body, targetPath);
+} catch (RuntimeException failure) {
+    log.warn(&quot;알림을 저장하지 못했습니다. accountId={} sourceKey={}&quot;, accountId, sourceKey, failure);
+}</code></pre>
+<p>⭐ That is the whole design: <strong>a failure to notify must never roll back or fail the real work</strong>. A missed notification is a nuisance; a rolled-back FRD completion because a notification insert hit a unique constraint would be a disaster.</p>
+<p><code>NotificationDestinationResolver</code> computes the target path so the notification links to the right screen.</p>
+<h2 id="the-interceptor">The interceptor<a class="anchor" href="#the-interceptor" aria-hidden="true">#</a></h2>
+<p><code>NotificationInterceptor</code> is registered on <code>/**</code> and puts the signed-in user's notifications into the model in <code>postHandle</code>.</p>
+<p>⚠ <strong>It only does this for HTML screens.</strong> The status-polling endpoints (<code>/status</code>, <code>/progress</code>, <code>/analysis-status</code>, …) fire every few seconds; querying notifications on each one would be pure load. This is the same discipline as <code>ClaudeConnectionProbe.cached()</code> — see <a href="05-claude-cli-runtime.html">Claude CLI runtime</a>.</p>
+<h2 id="screen-draft-batches">Screen draft batches<a class="anchor" href="#screen-draft-batches" aria-hidden="true">#</a></h2>
+<p><code>ScreenDraftBatchService</code> + <code>adk_builder_screen_draft_batch</code> / <code>_batch_item</code>.</p>
+<p>Drafting all screens of an FRD produces N results. Without batching, the planner would get N notifications for one action. The batch <strong>collects the results of several screen drafts into one FRD notification</strong> — while still keeping per-screen items so a partial failure is visible.</p>
+<p>This is also what makes "3 of 7 screens failed" expressible, instead of seven separate rows the planner has to reconcile by hand.</p>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="07-frd-workbench.html">FRD workbench</a> — where batch drafting is started
+</li>
+<li><a href="08-frd-completion.html">FRD completion</a> — completion notifications
+</li>
+<li><a href="01-architecture.html">Architecture</a> — the async worker pattern these sit on top of
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="git.html">← Git layer</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/20-notification.md</span>
+      <a href="25-flow.html">Flow integration →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

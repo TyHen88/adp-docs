@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generated artifacts · Work processes · ADP Builder</title>
+<meta name="description" content="The green zone: which artifacts Builder generates and which development returns, the one generation shape all three share, and the capture limits.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · Generated artifacts</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html" aria-current="page"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Underneath</p>
+      <h1>The green zone — generated artifacts</h1>
+      <p class="wp-lede">Five keys in the green block of the left menu. <b>Two arrive from development; three Builder generates itself</b>, and all three generated ones read the same material: the screen HTML and screen MD refreshed by the as-is resync, plus the menu tree.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Artifact</th><th>Origin</th></tr></thead>
+          <tbody>
+            <tr><td>단위테스트 결과</td><td>Development returns it</td></tr>
+            <tr><td>통합테스트 시나리오</td><td>Development returns it</td></tr>
+            <tr><td>기능명세서 — feature spec</td><td><b>Builder generates it</b></td></tr>
+            <tr><td>화면설계서 — screen design</td><td><b>Builder generates it</b></td></tr>
+            <tr><td>사용자 매뉴얼 — user manual</td><td><b>Builder generates it</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">The as-is resync must arrive first</div>
+        <p>All three generated documents are written from the refreshed as-is material. Without the <a href="04-dev-result.html">development result</a> flow, there is nothing to generate from. And the requirements traceability matrix was deleted on the day the green zone opened — do not revive the <code>matrix</code> key.</p>
+      </div>
+
+      <h2>One shape, three documents</h2>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">A detail screen is opened</div><div class="flow__cmd">/functional-specs · /screen-designs · /user-manual — {systemCode}/{screenId}</div></div>
+          <div class="flow__aside">Generation is triggered by opening the document, not by a schedule.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Is there a current document, and did its inputs change?</div><div class="flow__cmd">STALE_MARGIN 5 min</div></div>
+          <div class="flow__aside flow__aside--ok">No change → the existing revision is shown and nothing runs.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">Claim it and hand off</div><div class="flow__cmd">state = RUNNING → @Async worker → claude with a JSON schema</div></div>
+          <div class="flow__aside">The schema enforces shape; the reader keeps only the meaning checks.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Only a valid result is promoted to a revision</div><div class="flow__cmd">DONE — or FAILED, RETRY_DELAY 2 min, MAX_ATTEMPTS 2</div></div>
+          <div class="flow__aside flow__aside--fail">Evidence IDs that do not exist, move targets that do not exist, duplicates: rejected.</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="note__t">Schema first, reader second</div>
+        <p>Shape rules live in the JSON schema so malformed output fails <i>before</i> it is parsed; the reader only checks meaning. That split is what keeps the reader small — and what makes “this evidence ID exists” a check worth running, since the material is frozen at generation time.</p>
+      </div>
+
+      <h2>The three, briefly</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">기능명세서 — feature spec</p>
+          <p>Not a new artifact type: it is the place that shows the as-is screen MD. It does not re-read the screen list — the solution sweep already walks the index, the MDs and the git history in one cached pass, and reading again would read the same few hundred screens twice. It writes nothing to the planning repository.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">화면설계서 — screen design</p>
+          <p>Only the screen being opened is generated. Playwright Chromium captures the default screen and its variants: up to 40 callouts, viewport 1600 wide, 16,000 px tall at most, 12 MB per capture and 60 MB per bundle, 12 variants. FRD markers are pulled into the document — which is why marker text written in the workbench is worth writing well.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">사용자 매뉴얼 — user manual</p>
+          <p>Model <code>sonnet</code>, at least one step required, titles ≤ 200 characters. The 60,000-character whole-response cap cannot be expressed in the schema, so it lives in the reader beside the evidence check.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">States</p>
+          <p><code>RUNNING</code> · <code>DONE</code> · <code>FAILED</code> for all three — the manual labels them 만드는 중, 최신, 생성 실패. Until a screen stands, the menu key shows 준비 중.</p>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch__t">Full Chromium, not the shell build</div>
+        <p>Install with <code>--with-deps chromium</code> and <b>without</b> <code>--only-shell</code>. Without full Chromium everything else keeps working and existing revisions stay readable — only <i>new</i> screen-design and user-manual revisions fail, which makes this an easy thing to misdiagnose.</p>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/featurespec/FeatureSpecWorker.java"><span class="pill">FeatureSpecWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/screendesign/ScreenDesignWorker.java"><span class="pill">ScreenDesignWorker</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/screendesign/ScreenCaptureRunner.java"><span class="pill">ScreenCaptureRunner</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/usermanual/UserManualWorker.java"><span class="pill">UserManualWorker</span></a>
+      </div>
+      <p>Narrative reference: <a href="../16-green-zone.html">Green-zone artifacts</a> and <a href="../17-tests.html">Unit &amp; integration tests</a>. Canonical: <code>docs/superpowers/specs/2026-08-27-feature-spec-generation-design.md</code>, <code>2026-08-27-screen-design-generation-design.md</code>.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="09-ai-run.html">← AI runs</a>
+        <a href="13-data-root.html">The data root →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

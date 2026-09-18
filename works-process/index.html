@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work processes · ADP Builder</title>
+<meta name="description" content="Eleven process maps for ADP Builder: project setup, git and worktrees, the FRD wizard, the workbench, completion, SRT, the delivery channel, sending to development, the dev side, the result, AI runs, generated artifacts and the on-disk data root.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html" aria-current="page"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Work processes</p>
+      <h1>How the work actually moves</h1>
+      <p class="wp-lede">Twelve process maps, plus the on-disk layout and a set of samples for exercising them. Each map follows a single action — from the button a person presses to the last thing written to disk or sent over the network — and names, at every step, what fails and what that step is protecting. The narrative reference pages are one level up; these are the diagrams.</p>
+
+      <h2>End to end</h2>
+      <div class="chain">
+        <a class="chain__box" href="01-project-setup.html">
+          <div class="chain__k">STAGE 1</div>
+          <div class="chain__t">Set up</div>
+          <div class="chain__d">A GitLab planning repo is registered, verified and cloned; worktrees are cut from that clone. Nothing downstream exists until this lands.</div>
+        </a>
+        <a class="chain__box" href="05-frd-wizard.html">
+          <div class="chain__k">STAGE 2</div>
+          <div class="chain__t">Work on an FRD</div>
+          <div class="chain__d">A typed sentence becomes a scope, the scope becomes screens and documents, and completion closes the work safely. Small changes take the SRT short path instead.</div>
+        </a>
+        <a class="chain__box" href="03-send-to-dev.html">
+          <div class="chain__k">STAGE 3</div>
+          <div class="chain__t">Hand it over</div>
+          <div class="chain__d">The request is checked, baked into a package, zipped and sent — to Developer or as a GitLab issue, depending on the channel the project chose.</div>
+        </a>
+        <a class="chain__box" href="04-dev-result.html">
+          <div class="chain__k">STAGE 4</div>
+          <div class="chain__t">Take it back</div>
+          <div class="chain__d">Status is polled, the returned archive is validated, and a planner decides whether it merges into the default branch.</div>
+        </a>
+      </div>
+
+      <div class="note">
+        <div class="note__t">One work unit, all the way through</div>
+        <p><code>FRD 1 = one work item = one git worktree = one person</code>. Every process below is either preparing that worktree, filling it, or emptying it into someone else's hands.</p>
+      </div>
+
+      <h2>The lifecycle — one page per action</h2>
+      <div class="cards">
+        <a class="card" href="01-project-setup.html">
+          <span class="card__num">STAGE 1</span>
+          <span class="card__title">Project setup &amp; the GitLab repo</span>
+          <span class="card__desc">Four fields, a one-second probe, a background clone — and the three things that run the moment the clone lands.</span>
+        </a>
+        <a class="card" href="02-git-worktree.html">
+          <span class="card__num">STAGE 1</span>
+          <span class="card__title">Git &amp; worktrees</span>
+          <span class="card__desc">The on-disk layout, how an FRD worktree is cut and reused, why there is no merge request, and the only four pushes.</span>
+        </a>
+        <a class="card" href="05-frd-wizard.html">
+          <span class="card__num">STAGE 2</span>
+          <span class="card__title">FRD wizard</span>
+          <span class="card__desc">Direct input, the turn-based AI interview that survives a closed browser, scope review, and the two ways out.</span>
+        </a>
+        <a class="card" href="06-frd-workbench.html">
+          <span class="card__num">STAGE 2</span>
+          <span class="card__title">FRD workbench</span>
+          <span class="card__desc">The drafting loop: the AI draft, the suggestion menu, direct edits, markers, history and the write lock.</span>
+        </a>
+        <a class="card" href="07-frd-completion.html">
+          <span class="card__num">STAGE 2</span>
+          <span class="card__title">FRD completion</span>
+          <span class="card__desc">The probe, the write lock, the isolated merge, AI conflict resolution — and what is deliberately left out of the wait.</span>
+        </a>
+        <a class="card" href="08-srt-fast-track.html">
+          <span class="card__num">STAGE 2</span>
+          <span class="card__title">SRT fast track</span>
+          <span class="card__desc">The short path for small concrete changes, and the hidden bridge FRD that lets it reuse the FRD machinery.</span>
+        </a>
+        <a class="card" href="12-delivery-channel.html">
+          <span class="card__num">STAGE 3</span>
+          <span class="card__title">Delivery channel</span>
+          <span class="card__desc">The two transmission methods, why connections are versioned rather than overwritten, and why the channel freezes at first send.</span>
+        </a>
+        <a class="card" href="03-send-to-dev.html">
+          <span class="card__num">STAGE 3</span>
+          <span class="card__title">Sending to development</span>
+          <span class="card__desc">Precheck, package layout, ZIP, the eleven multipart fields, and how an HTTP answer becomes a delivery state.</span>
+        </a>
+        <a class="card" href="14-dev-side.html">
+          <span class="card__num">STAGE 3</span>
+          <span class="card__title">On the dev side</span>
+          <span class="card__desc">The far side of the POST: what they validate, what appears in their inbox, what they open, and exactly what must come back.</span>
+        </a>
+        <a class="card" href="04-dev-result.html">
+          <span class="card__num">STAGE 4</span>
+          <span class="card__title">Development result</span>
+          <span class="card__desc">Polling instead of a callback, eight statuses folded into four, archive validation, and the merge a person must ask for.</span>
+        </a>
+      </div>
+
+      <h2>Underneath every one of them</h2>
+      <div class="cards">
+        <a class="card" href="09-ai-run.html">
+          <span class="card__num">SHARED</span>
+          <span class="card__title">AI runs</span>
+          <span class="card__desc">The <code>claude</code> CLI as a child process: claiming the work, the planner's own credential, the command line, isolation, timeouts.</span>
+        </a>
+        <a class="card" href="10-green-zone.html">
+          <span class="card__num">SHARED</span>
+          <span class="card__title">Generated artifacts</span>
+          <span class="card__desc">The green zone: which documents Builder generates, which development returns, and the one generation shape all three share.</span>
+        </a>
+        <a class="card" href="13-data-root.html">
+          <span class="card__num">SHARED</span>
+          <span class="card__title">The data root</span>
+          <span class="card__desc">Every folder the server writes outside the database: which class makes it, what nests inside, why it is kept or deleted, and what you may remove.</span>
+        </a>
+      </div>
+
+      <h2>Trying it out</h2>
+      <div class="cards">
+        <a class="card" href="11-frd-test-samples.html">
+          <span class="card__num">SAMPLES</span>
+          <span class="card__title">FRD test samples</span>
+          <span class="card__desc">Five paste-ready requirement bodies that between them walk every branch of FRD work, what each proved when it was run, and what to check at each stage.</span>
+        </a>
+      </div>
+
+      <h2>Reading the diagrams</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>What you see</th><th>What it means</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>A numbered row</td><td>One ordered step: a git command, an HTTP call, or a state change</td></tr>
+            <tr><td>Grey text on the right</td><td>What that step costs you, or what it protects</td></tr>
+            <tr><td>Red text on the right</td><td>What happens when that step fails</td></tr>
+            <tr><td>A red callout</td><td>A trap that has already been hit at least once</td></tr>
+            <tr><td>A purple callout</td><td>A rule that must not be broken</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>What is not here</h2>
+      <p>Accounts and first login, document intake, the IA publish, screen-ID assignment, the spec checker and notifications are described on the reference pages only. They are covered as <i>mechanisms</i> rather than as an action a person takes, so a process map would repeat the reference page rather than add to it.</p>
+
+      <div class="branch">
+        <div class="branch__t">These pages are hand-written</div>
+        <p><code>tools/build_html.py</code> globs <code>*.md</code> in <code>docs/adp/</code> only, so it neither builds nor overwrites this folder — a page added here has to be added to the sidebar of every page by hand. Editing rules are in <a href="README.md">README.md</a>.</p>
+      </div>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="../index.html">← Full documentation</a>
+        <a href="01-project-setup.html">Project setup →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>

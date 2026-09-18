@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRT fast track · ADP Builder</title>
+<meta name="description" content="The short path for small, concrete changes: register a request — typed directly or pulled from Flow — and go straight to a development request, with no interview and no screen work">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">SRT fast track</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html" aria-current="page"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">FRD work</p>
+      <h1>SRT fast track</h1>
+      <blockquote><p>The short path for small, concrete changes: register a request — typed directly or pulled from Flow — and go straight to a development request, with no interview and no screen work. Every SRT quietly builds an internal FRD to travel on.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.srt</code> (10 files), with <code>flow</code> for the API key and <code>intake.FlowPostGateway</code> for fetching. Canonical design: <code>docs/superpowers/specs/2026-08-31-srt-fast-track-design.md</code>. Screens: <code>artifacts/srts.html</code> (list), <code>artifacts/srt.html</code> (detail + registration layer).</p>
+<h2 id="what-srt-is-for">What SRT is for<a class="anchor" href="#what-srt-is-for" aria-hidden="true">#</a></h2>
+<pre><code class="language-text">직접 입력 ─┐
+           ├ AI tidies the request → create the development request
+플로우 등록 ┘</code></pre>
+<p>SRT (빠른 개발요청) is for changes <strong>simple and concrete enough not to need screen design work</strong>. Either entry method <strong>always</strong> produces a development request; an SRT never converts into FRD work.</p>
+<p>⛔ <strong>Do not shrink a scope that needs an FRD interview or screen work so that it fits into an SRT.</strong> That is the one misuse the design names explicitly.</p>
+<blockquote><p><strong>Why this exists.</strong> Until 2026-09-02 the FRD fast track covered "a simple change to one existing screen". That was moved out of the FRD flow entirely and became this menu. The FRD fast track now means <strong>backend-only changes and nothing else</strong> — see <a href="06-frd-wizard.html">FRD wizard</a>. The decision is recorded as the 2026-09-02 revision block in <code>docs/superpowers/specs/2026-08-18-frd-fast-track-design.md</code>, not in the SRT spec, which is where to look when the question is "how does this differ from the FRD fast track?".</p></blockquote>
+<h2 id="the-bridge-frd-the-mechanism-everything-rests-on">The bridge FRD — the mechanism everything rests on<a class="anchor" href="#the-bridge-frd-the-mechanism-everything-rests-on" aria-hidden="true">#</a></h2>
+<p><strong>Registering an SRT creates two rows, not one.</strong> Alongside the <code>adk_builder_srt</code> row, <code>SrtService.register</code> inserts a full <code>adk_builder_frd</code> row and links it as <code>bridge_frd_id</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Field on the bridge FRD</th>
+<th>Value</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr><td><code>sourceKind</code></td><td><code>Frd.SourceKind.SRT</code></td><td>How every downstream reader tells an SRT apart from real FRD work</td></tr>
+<tr><td><code>sourceRef</code></td><td>the SRT label, <code>SRT-003</code></td><td>Traceability back to the SRT</td></tr>
+<tr><td><code>state</code></td><td><code>SCOPE_REVIEW</code></td><td>It skips the wizard entirely — it is born past the interview</td></tr>
+<tr><td><code>noScreenReason</code></td><td>"SRT는 화면 선택 없이 개발요청서로 전환합니다."</td><td>Recorded so a reader knows the absence of screens is intended, not missing work</td></tr>
+<tr><td><code>sourceText</code></td><td>the SRT content</td><td>The analysis input</td></tr>
+</tbody></table></div>
+<p>Nothing in the UI shows this FRD. It exists so that <strong>SRT reuses the FRD machinery instead of duplicating it</strong> — the development request is built by <code>DevelopmentRequestService.createFromConfirmedScope(projectId, bridgeFrdId, …)</code>, the very call the FRD path uses, and the requirements and completion criteria live as ordinary <code>FrdItem</code> and <code>FrdAnalysisNote</code> rows against that FRD.</p>
+<p><code>adk_builder_srt.bridge_frd_id</code> carries a <strong>UNIQUE</strong> constraint, so one FRD can never back two SRTs.</p>
+<blockquote><p><strong>This is why the SRT tables look thin.</strong> There is no <code>srt_requirement</code> table and there never should be. Search for where an SRT's requirements are stored and the answer is <code>adk_builder_frd_item</code> keyed by the bridge FRD. <code>SrtService.storedAnalysisOf</code> reads them back and reassembles a <code>SrtAiAnalysis</code> from those rows.</p></blockquote>
+<h2 id="registering">Registering<a class="anchor" href="#registering" aria-hidden="true">#</a></h2>
+<p>Claude must be connected — registration is refused without it, on both the page and the JSON route. Registration opens as a centred layer over the list.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Method</th>
+<th>Input</th>
+<th>Server rule</th>
+</tr></thead><tbody>
+<tr><td><code>직접 입력</code></td><td>Title + request body</td><td>Title ≤ 255, content ≤ 20000, neither blank after trimming</td></tr>
+<tr><td><code>플로우 등록</code></td><td>Flow business number</td><td><strong>Digits only</strong> (<code>^[0-9]+$</code>), ≤ 30 chars. Builder pulls title, body and attachments through the API</td></tr>
+</tbody></table></div>
+<p>⚠ <strong>The Flow field takes a number, not a URL.</strong> The input carries <code>pattern=&quot;[0-9]{4,12}&quot; maxlength=&quot;12&quot;</code>, but that is only the browser's hint — <code>SrtService.registerFlow</code> re-checks <code>^[0-9]+$</code> against a 30-character limit and rejects anything else. Pasting a Flow URL fails.</p>
+<p>A Flow registration also <strong>re-reads the fetched post and stores it as <code>source_json</code></strong>, deliberately dropping the comment list before saving. The stored copy is what the detail screen renders, so the user never has to go back to Flow to read the original.</p>
+<p>If the project uses the facet axis, applicable facets are chosen here and written to the <strong>bridge FRD</strong> (<code>FrdFacet</code>), not to the SRT row. <code>chosenFacets</code> follows the same rule as FRD registration: an empty selection or the <code>__ALL__</code> marker expands to every facet on the project, and anything not registered on the project is rejected. Facet definition and its constraints are in <a href="04-project-setup.html">Project setup</a>.</p>
+<p>The user does <strong>not</strong> re-enter development-request fields and does <strong>not</strong> choose a processing path.</p>
+<h2 id="states">States<a class="anchor" href="#states" aria-hidden="true">#</a></h2>
+<p><code>Srt.AnalysisState</code> is <code>READY</code> · <code>ANALYZING</code> · <code>COMPLETE</code> · <code>REJECTED</code> · <code>FAILED</code>, constrained in the database as well as in Java.</p>
+<pre><code class="language-text">  register / update
+        |
+        v
+     READY ──(SrtAnalysisService.request)──&gt; ANALYZING
+                                               |
+                         eligible ─────────────┼───────────── not eligible
+                                               |                     |
+                                               v                     v
+                                           COMPLETE              REJECTED
+                                               |            (AI says: not a dev change)
+                            개발요청서 만들기    |
+                                               v                  FAILED
+                                        dev_request_id set     (timeout, busy,
+                                               |                unreadable output,
+                                               v                queue full)
+                                            완료</code></pre>
+<p><strong>The screen collapses five states into four</strong>, and <code>devRequestId</code> wins over everything:</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Screen state</th>
+<th>Condition</th>
+<th>What the user does</th>
+</tr></thead><tbody>
+<tr><td><code>분석 중</code></td><td><code>READY</code> or <code>ANALYZING</code></td><td>Wait. Closing the screen preserves the registration</td></tr>
+<tr><td><code>생성 대기</code></td><td><code>COMPLETE</code></td><td>Review the requirements and criteria, then press <code>개발요청서 만들기</code></td></tr>
+<tr><td><code>확인 필요</code></td><td><code>REJECTED</code> or <code>FAILED</code></td><td>Revise a direct SRT and update it; for a thin Flow original, improve it in Flow and register a <strong>new</strong> SRT. A transient failure can just be retried</td></tr>
+<tr><td><code>완료</code></td><td><code>devRequestId != null</code></td><td>Open the development request and review before sending</td></tr>
+</tbody></table></div>
+<p><code>Srt.stateLabel()</code> checks <code>devRequestId</code> <strong>before</strong> the enum, which is what makes the completed state override the analysis state. A test pins this: <em>the development-request delivery state does not overwrite the SRT state</em>.</p>
+<p><strong>Updating a direct SRT resets the analysis.</strong> <code>SrtService.update</code> rewrites the SRT and the bridge FRD, deletes the FRD's items and notes, re-writes the source requirement, and sets the state back to <code>READY</code> — so the next status poll starts a fresh analysis. A Flow-registered SRT <strong>cannot be edited at all</strong>; the original belongs to Flow.</p>
+<h2 id="the-ai-analysis">The AI analysis<a class="anchor" href="#the-ai-analysis" aria-hidden="true">#</a></h2>
+<p><code>SrtAnalysisService</code> owns the transitions; <code>SrtAiAnalyzer</code> runs Claude; <code>SrtAiAnalysisReader</code> parses the output.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Setting</th>
+<th>Value</th>
+</tr></thead><tbody>
+<tr><td>Model</td><td><code>sonnet</code>, hardcoded in <code>SrtAiAnalyzer.MODEL</code></td></tr>
+<tr><td>Effort</td><td><code>low</code></td></tr>
+<tr><td>Tools</td><td><code>Read(&lt;inputDir&gt;/**)</code> only</td></tr>
+<tr><td>Timeout</td><td><code>builder.ai-run-timeout</code></td></tr>
+<tr><td>Executor</td><td><code>aiExecutor</code> — the shared AI pool, see <a href="05-claude-cli-runtime.html">Claude CLI runtime</a></td></tr>
+</tbody></table></div>
+<p>This is the cheapest AI call in the product: a small model at low effort, allowed to read one directory and nothing else. The job is to decide whether the text is a real development change and, if so, to restate it as requirements plus completion criteria against a fixed JSON schema.</p>
+<p><strong>It asks twice at most.</strong> If the reader rejects the first output as off-schema, the analyzer appends the rejection reason to the prompt and asks once more; a second failure raises <code>AnalysisException</code>. A test pins both halves: <em>the reader's rejection is fed back and asked once more</em>, and <em>the schema caps the reader's list limits first</em>.</p>
+<p><strong>Claude's raw errors never reach the screen.</strong> <code>AnalysisException</code> carries a written-for-humans message — Claude not connected, timed out, busy, credential lost, or "could not read the analysis result". A test pins exactly this: <em>Claude API error text is not exposed in the SRT screen exception</em>.</p>
+<p><strong>Analysis runs isolated</strong> — config, hooks and MCP are all cut, pinned by <em>SRT analysis runs with config, hooks and MCP disconnected</em>.</p>
+<h3 id="two-guards-against-double-running">Two guards against double-running<a class="anchor" href="#two-guards-against-double-running" aria-hidden="true">#</a></h3>
+<ul>
+<li><code>SrtAnalysisService</code> keeps a <code>ConcurrentHashMap.newKeySet()</code> of SRT ids. <code>running.add(srtId)</code> fails for a second caller, so a duplicate request returns the current status instead of launching a second Claude.
+</li>
+<li><code>status()</code> is <strong>self-healing</strong>: if the row says <code>READY</code>/<code>ANALYZING</code> but the id is not in <code>running</code>, the analysis was lost — a restart, or a rejected submission — so it calls <code>request()</code> again rather than leaving the SRT stuck in "분석 중" forever.
+</li></ul>
+<p>If the executor queue is full, <code>TaskRejectedException</code> is caught, the id is removed from <code>running</code>, and the SRT is parked in <code>FAILED</code> with a retry message. It is never left claimed.</p>
+<p><code>completeAnalysis</code> refuses to store a result that is ineligible, has a blank comment, or has empty requirements or criteria — so <code>COMPLETE</code> always means there is something to build a request from.</p>
+<h2 id="creating-the-development-request">Creating the development request<a class="anchor" href="#creating-the-development-request" aria-hidden="true">#</a></h2>
+<p>Pressing <code>개발요청서 만들기</code> runs asynchronously through <code>SrtCompletionService</code>, which hands off to the same <code>FrdCompletionService</code> the FRD path uses.</p>
+<pre><code class="language-text">confirm the stored AI analysis
+  → lock the SRT row (selectByIdForUpdate)
+  → confirm the bridge FRD and that its sourceKind is SRT
+  → confirm the SRT text has not changed since analysis
+  → prepare the workspace         (worktrees/srt-&lt;srtId&gt;, branch srt/&lt;srtId&gt;)
+  → create the development request (createFromConfirmedScope)
+  → connect it                     (connectRequest)
+  → generate documents and verification material
+  → go to the development request detail</code></pre>
+<p><strong>The text is re-compared before anything is created.</strong> <code>prepareDevelopmentRequest</code> takes the analysed title and content as arguments and throws if they no longer match the stored row — "AI 분석 중 SRT 내용이 변경됐습니다. 다시 생성해 주세요." Without it, an edit landing mid-analysis would produce a request describing text nobody approved.</p>
+<p><strong>It is idempotent at the front.</strong> If <code>devRequestId</code> is already set, the method returns the SRT untouched rather than creating a second request. <code>SrtCompletionService.request</code> is <code>synchronized</code> and keeps a per-SRT progress map, so a double click cannot start two runs.</p>
+<p><strong>A failed creation rolls back the workspace it made.</strong> Pinned by <em>if creating the development request fails, the worktree made this time is reverted</em>. The SRT content survives; the user reads the error and presses the button again.</p>
+<p>⚠ <strong>A development request number appearing does not mean the work is done.</strong> A test states it directly: <em>even once the development-request number exists, it is still "분석 중" until the FRD preparation finishes</em>. The completion state comes from <code>SrtCompletionService</code>, not from the presence of an id.</p>
+<h2 id="routes">Routes<a class="anchor" href="#routes" aria-hidden="true">#</a></h2>
+<p>All under <code>/projects/{projectId}/artifacts/srts</code>, and the list and detail are one screen — the detail is a layer.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Route</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr><td><code>GET /</code></td><td>List, with search over SRT number, title and Flow number</td></tr>
+<tr><td><code>POST /</code> (<code>Accept != application/json</code>)</td><td>Register from the form</td></tr>
+<tr><td><code>POST /</code> (<code>Accept = application/json</code>)</td><td>Register from the layer, returns <code>RegistrationStatus</code></td></tr>
+<tr><td><code>GET /{srtId}/analysis-status</code></td><td>Poll the analysis, returns <code>RegistrationStatus</code></td></tr>
+<tr><td><code>POST /{srtId}/dev-request</code> (form / JSON)</td><td>Create the development request</td></tr>
+<tr><td><code>GET /{srtId}/dev-request-status</code></td><td>Poll creation, returns <code>CompletionStatus</code></td></tr>
+<tr><td><code>POST /{srtId}/update</code></td><td>Edit a direct SRT before a request exists</td></tr>
+<tr><td><code>POST /{srtId}/delete</code></td><td>Delete before a request exists</td></tr>
+</tbody></table></div>
+<p>The same path serves HTML and JSON, split on the <code>Accept</code> header, so the layer can post without a second endpoint.</p>
+<h2 id="ownership">Ownership<a class="anchor" href="#ownership" aria-hidden="true">#</a></h2>
+<p><strong>Whoever registers an SRT owns it.</strong> Others can open and read the detail but cannot update, delete, or create its development request. Two tests cover both halves — <em>another worker's SRT renders in read-only mode</em>, and <em>another worker's change is refused at the server</em> — so the restriction is not merely a hidden button.</p>
+<h2 id="deleting">Deleting<a class="anchor" href="#deleting" aria-hidden="true">#</a></h2>
+<p>Only before a development request exists. <code>SrtService.delete</code> removes the SRT row and the bridge FRD together.</p>
+<blockquote><p><strong>The worktree is cleaned before the rows are deleted, and the order is load-bearing.</strong> <code>ArtifactWorktreePaths</code> resolves the <code>srt-</code> folder and the <code>srt/</code> branch by looking the SRT up through <code>selectByBridgeFrdId</code>. Delete the row first and that lookup fails, leaving an orphaned worktree nobody can name. The code carries a <code>⛔</code> saying exactly this.</p>
+<p>⚠ <strong>A failed cleanup does not block the delete</strong> — it is logged and the deletion proceeds, pinned by <em>the SRT delete proceeds even when worktree cleanup fails</em>. An undeletable folder must not strand a row the user asked to remove.</p></blockquote>
+<h2 id="flow-integration">Flow integration<a class="anchor" href="#flow-integration" aria-hidden="true">#</a></h2>
+<p><code>FlowPostGateway</code> / <code>HttpFlowPostGateway</code> fetch the post. The key is sealed in <code>adk_builder_flow_api_key</code>, registered by a super administrator through <code>관리 → 시스템 관리</code>, and <strong>never written into a configuration file</strong>. Timeout is <code>builder.flow.timeout</code>, 20s.</p>
+<p>If the key is missing or the fetch fails, registration returns to the layer <strong>with the typed business number preserved</strong> — pinned by <em>when the Flow original cannot be fetched, it returns to the registration layer with the business number kept</em>. Re-typing a number after a network blip is exactly the friction that makes people give up on a form.</p>
+<h2 id="disk-footprint">Disk footprint<a class="anchor" href="#disk-footprint" aria-hidden="true">#</a></h2>
+<p>An SRT gets its own worktree at <code>worktrees/srt-&lt;srtId&gt;</code> on branch <code>srt/&lt;srtId&gt;</code>, from <code>ProjectPaths.srtWorktree</code> and <code>ArtifactWorktreePaths</code>.</p>
+<p>⛔ <strong>The folder prefix and the branch prefix must agree.</strong> <code>ArtifactWorktreePaths</code> carries a warning that a <code>srt-</code> folder on a <code>frd/</code> branch is a state nothing downstream can interpret. Both are decided from the same lookup for that reason.</p>
+<p>This naming is also how <code>DevResultReceiver</code> tells an SRT-sourced return from an FRD-sourced one, using the same rule the sender applies in <code>DevRequestPackageBuilder.usesWorkspace</code>. See <a href="11-dev-result.html">development result</a>.</p>
+<h2 id="the-table">The table<a class="anchor" href="#the-table" aria-hidden="true">#</a></h2>
+<p><code>adk_builder_srt</code> — measured against the live schema at v95.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>varchar(7)</code> PK</td><td><code>CHECK (id ~ &#x27;^[0-9]{7}$&#x27;)</code>, allocated by <code>IdSequence</code></td></tr>
+<tr><td><code>project_id</code></td><td><code>varchar(7)</code></td><td></td></tr>
+<tr><td><code>number</code></td><td><code>integer</code></td><td><code>CHECK (number &gt; 0)</code>, UNIQUE per project, rendered as <code>SRT-%03d</code></td></tr>
+<tr><td><code>source_kind</code></td><td><code>text</code></td><td><code>DIRECT</code> or <code>FLOW</code></td></tr>
+<tr><td><code>flow_task_number</code></td><td><code>varchar(30)</code></td><td></td></tr>
+<tr><td><code>title</code> / <code>content</code></td><td><code>varchar(255)</code> / <code>text</code></td><td>both <code>CHECK</code>-trimmed non-empty</td></tr>
+<tr><td><code>source_json</code></td><td><code>text</code></td><td>The stored Flow post; null for a direct SRT</td></tr>
+<tr><td><code>owner_account_id</code></td><td><code>varchar(7)</code></td><td>The owner</td></tr>
+<tr><td><code>bridge_frd_id</code></td><td><code>varchar(7)</code></td><td><strong>UNIQUE</strong>, FK to <code>adk_builder_frd</code></td></tr>
+<tr><td><code>dev_request_id</code></td><td><code>varchar(7)</code></td><td><strong>UNIQUE</strong>, FK to <code>adk_builder_dev_request</code></td></tr>
+<tr><td><code>analysis_state</code></td><td><code>text</code></td><td><code>CHECK</code> over the five states, default <code>READY</code></td></tr>
+<tr><td><code>analysis_message</code></td><td><code>text</code></td><td>The rejection reason or failure text shown on screen</td></tr>
+</tbody></table></div>
+<p><strong>One check constraint encodes the entry rule in the database</strong>: <code>source_kind = &#x27;DIRECT&#x27; AND flow_task_number IS NULL</code> <strong>OR</strong> <code>source_kind = &#x27;FLOW&#x27; AND btrim(flow_task_number) &lt;&gt; &#x27;&#x27;</code>. A Flow SRT without a number, or a direct SRT carrying one, cannot be stored at all.</p>
+<p>Both <code>bridge_frd_id</code> and <code>dev_request_id</code> being UNIQUE is what guarantees the one-to-one chain <strong>SRT → bridge FRD → development request</strong>.</p>
+<h2 id="code-map">Code map<a class="anchor" href="#code-map" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>File</th>
+<th>Role</th>
+</tr></thead><tbody>
+<tr><td><code>srt/SrtService.java</code></td><td>Registration, the bridge FRD, update, delete, analysis storage, request preparation</td></tr>
+<tr><td><code>srt/Srt.java</code></td><td>The record, two enums, and the four screen labels</td></tr>
+<tr><td><code>srt/SrtAnalysisService.java</code></td><td>Async analysis, the <code>running</code> guard, self-healing status</td></tr>
+<tr><td><code>srt/SrtAiAnalyzer.java</code></td><td>The Claude call — model, isolation, one retry</td></tr>
+<tr><td><code>srt/SrtAiAnalysisReader.java</code></td><td>Parses and validates the structured output</td></tr>
+<tr><td><code>srt/SrtAiAnalysis.java</code></td><td>Eligibility, rejection reason, comment, requirements, criteria</td></tr>
+<tr><td><code>srt/SrtCompletionService.java</code></td><td>Async development-request creation, progress map</td></tr>
+<tr><td><code>srt/SrtController.java</code></td><td>The eight routes, HTML and JSON on the same paths</td></tr>
+<tr><td><code>srt/SrtMapper.java</code></td><td>Including <code>selectByIdForUpdate</code> and <code>selectByBridgeFrdId</code></td></tr>
+<tr><td><code>srt/SourceAttachment.java</code></td><td>Flow attachment display, with a fallback name</td></tr>
+</tbody></table></div>
+<h2 id="what-the-tests-guarantee">What the tests guarantee<a class="anchor" href="#what-the-tests-guarantee" aria-hidden="true">#</a></h2>
+<p>Test names here are Korean sentences stating the guarantee. Translated:</p>
+<p><strong><code>SrtServiceTest</code></strong> — a direct SRT waits after registration and the create request returns to the detail immediately · async registration returns analysis state and detail URL as JSON · facets chosen at registration are preserved on the internal FRD · an SRT can be edited and deleted before the development request exists · another worker can only read · a write request on an SRT-born development request still reaches the controller · the screen state collapses into four · the delivery state does not overwrite the SRT state · <strong>delete cleans the worktree before deleting the row</strong> · <strong>delete proceeds even when worktree cleanup fails</strong> · a Flow-registered SRT cannot be edited.</p>
+<p><strong><code>SrtAnalysisServiceTest</code></strong> — a registered SRT is analysed and the result stored · when it is not a development request, the "needs review" reason is stored.</p>
+<p><strong><code>SrtAiAnalyzerTest</code></strong> — the original is sent to Claude and a structured result read back · Claude API error text is not exposed in the screen exception · analysis runs with config, hooks and MCP disconnected · the instruction treats the whole input folder as material and states comment and language on rejection · a reader rejection is fed back and asked once more.</p>
+<p><strong><code>SrtAiAnalysisReaderTest</code></strong> — a development request yields tidied requirements and completion criteria · an unrelated request yields a rejection reason with empty definitions · claiming eligible while leaving criteria empty is rejected · the schema caps the reader's list limits first.</p>
+<p><strong><code>SrtCompletionServiceTest</code></strong> — an SRT also gets the same post-request AI preparation as an FRD · no request is created when the stored analysis cannot be confirmed · it stays "분석 중" until FRD preparation finishes even after a request number exists · a failed creation reverts the worktree made in that attempt.</p>
+<p><strong><code>SrtControllerTest</code></strong> — an empty list still renders the menu and the registration layer model · the layer does not open without a connected Claude · registration is refused without Claude, including the async route · a failed Flow fetch returns the layer with the number preserved · successful registration starts analysis and returns to the detail · pressing create prepares the request · an AI rejection returns to the detail with the reason preserved.</p>
+<p>Plus <code>SrtFlowTest</code> and <code>SrtTemplateContractTest</code>.</p>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-hidden="true">#</a></h2>
+<ol>
+<li><strong>Do not add SRT-specific requirement tables.</strong> Requirements and criteria belong to the bridge FRD as <code>FrdItem</code> and <code>FrdAnalysisNote</code>. That is what lets the development request be built by the same call the FRD path uses.
+</li>
+<li><strong>Do not delete the SRT row before cleaning its worktree.</strong> Path and branch resolution reads the row; deleting first orphans the folder.
+</li>
+<li><strong>Do not let the folder prefix and branch prefix diverge.</strong> <code>srt-</code> folder with a <code>frd/</code> branch is uninterpretable downstream.
+</li>
+<li><strong>Do not surface Claude's raw error text.</strong> <code>AnalysisException</code> messages are written for the person reading the screen.
+</li>
+<li><strong>Do not skip the text re-comparison before creating a request.</strong> An edit landing mid-analysis would otherwise produce a request for text nobody approved.
+</li>
+<li><strong>Do not treat a present <code>devRequestId</code> as "finished".</strong> Preparation continues after the id exists.
+</li>
+<li><strong>Do not accept a Flow URL where a business number is expected.</strong> The server takes digits only; the browser pattern is a hint, not the rule.
+</li>
+<li><strong>Do not let a rejected executor submission leave an SRT claimed.</strong> <code>running.remove</code> in the failure path is why a queue-full SRT can be retried.
+</li></ol>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="10-dev-request.html">Development request</a> — what an SRT produces
+</li>
+<li><a href="06-frd-wizard.html">FRD wizard</a> — the longer path, and the backend-only fast track
+</li>
+<li><a href="05-claude-cli-runtime.html">Claude CLI runtime</a> — the executor, isolation and timeouts
+</li>
+<li><a href="04-project-setup.html">Project setup</a> — registering the Flow API key, and facets
+</li>
+<li><a href="11-dev-result.html">Development result</a> — how an SRT-sourced return is recognised
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="08-frd-completion.html">← FRD completion</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/09-srt.md</span>
+      <a href="10-dev-request.html">Development request →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

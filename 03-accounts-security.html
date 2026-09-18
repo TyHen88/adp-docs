@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accounts &amp; security · ADP Builder</title>
+<meta name="description" content="Who can log in, the two gates a new user must pass, how the filter chain is configured, and how secrets are sealed.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/adp.css">
+<script src="assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Accounts &amp; security</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Documentation">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+<p class="sidebar__label">Start here</p>
+<ul class="sidebar__list">
+<li><a href="index.html"><span>Overview map</span></a></li>
+<li><a href="00-overview.html"><span>What ADP Builder is</span></a></li>
+<li><a href="01-architecture.html"><span>Architecture</span></a></li>
+<li><a href="02-data-model.html"><span>Data model</span></a></li>
+<li><a href="works-process/index.html"><span>Work processes</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Platform</p>
+<ul class="sidebar__list">
+<li><a href="03-accounts-security.html" aria-current="page"><span>Accounts &amp; security</span></a></li>
+<li><a href="04-project-setup.html"><span>Project setup</span></a></li>
+<li><a href="05-claude-cli-runtime.html"><span>Claude CLI runtime</span></a></li>
+<li><a href="git.html"><span>Git layer</span></a></li>
+<li><a href="20-notification.html"><span>Notifications</span></a></li>
+<li><a href="25-flow.html"><span>Flow integration</span></a></li>
+<li><a href="26-large-repository.html"><span>Large repos &amp; perf</span></a></li>
+<li><a href="27-concurrent-edit.html"><span>Concurrent editing</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">FRD work</p>
+<ul class="sidebar__list">
+<li><a href="06-frd-wizard.html"><span>FRD wizard</span></a></li>
+<li><a href="07-frd-workbench.html"><span>FRD workbench</span></a></li>
+<li><a href="08-frd-completion.html"><span>FRD completion</span></a></li>
+<li><a href="09-srt.html"><span>SRT fast track</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Handoff to dev</p>
+<ul class="sidebar__list">
+<li><a href="10-dev-request.html"><span>Development request</span></a></li>
+<li><a href="11-dev-result.html"><span>Development result</span></a></li>
+<li><a href="17-tests.html"><span>Unit &amp; integration tests</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Reference material</p>
+<ul class="sidebar__list">
+<li><a href="12-ia.html"><span>IA (menu tree)</span></a></li>
+<li><a href="13-solution-mockup.html"><span>Solution templates</span></a></li>
+<li><a href="14-design-guide.html"><span>Design guide</span></a></li>
+<li><a href="15-business-language.html"><span>Policy &amp; terms</span></a></li>
+<li><a href="16-green-zone.html"><span>Green-zone artifacts</span></a></li>
+<li><a href="18-screen-id.html"><span>Screen IDs</span></a></li>
+<li><a href="19-checker.html"><span>Spec checker</span></a></li>
+<li><a href="24-document-intake.html"><span>Intake &amp; doc reading</span></a></li>
+</ul></div>
+<div class="sidebar__group">
+<p class="sidebar__label">Working on it</p>
+<ul class="sidebar__list">
+<li><a href="21-operations.html"><span>Install &amp; operations</span></a></li>
+<li><a href="22-conventions.html"><span>Conventions</span></a></li>
+<li><a href="23-glossary.html"><span>Glossary</span></a></li>
+</ul></div>
+  </nav>
+  <main class="main">
+    <article class="doc">
+      <p class="doc__eyebrow">Platform</p>
+      <h1>Accounts &amp; security</h1>
+      <blockquote><p>Who can log in, the two gates a new user must pass, how the filter chain is configured, and how secrets are sealed.</p></blockquote>
+<p>Package: <code>com.bizplay.builder.account</code>, <code>com.bizplay.builder.secret</code>, <code>com.bizplay.builder.web</code>, <code>com.bizplay.builder.config.SecurityConfig</code></p>
+<h2 id="roles">Roles<a class="anchor" href="#roles" aria-hidden="true">#</a></h2>
+<p>There are two, and only two.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Role</th>
+<th>Can do</th>
+</tr></thead><tbody>
+<tr><td><strong>기획자</strong> (planner)</td><td>Open ready projects, run the full FRD → DR flow, manage IA and the reference artifacts</td></tr>
+<tr><td><strong>슈퍼 관리자</strong> (super administrator)</td><td>Everything a planner can, plus project registration, user registration, and system administration (the Flow API key)</td></tr>
+</tbody></table></div>
+<p>Accounts are created by a super administrator in <code>관리 → 사용자 관리</code>. Fields: login ID, name, email, role, temporary password (8 characters).</p>
+<blockquote><p>⚠ <strong><code>README.md</code> says the name and email become the git commit author. The code does not do that</strong> (measured 2026-09-17). No git call reads <code>Account.getName()</code> or <code>getEmail()</code>; every commit hardcodes <code>user.name</code> and <code>user.email=builder@localhost</code> — <code>Builder</code> for FRD, IA and completion commits, <code>빌더 개발완료</code> and <code>빌더 개발결과</code> for the development-result paths. The account name is used for <strong>on-screen authorship only</strong> (for example <code>SrtService</code>). Treat the README line as stale until someone decides which behaviour is intended.</p></blockquote>
+<blockquote><p>A super administrator <strong>never registers Claude credentials on a user's behalf.</strong> Each user connects their own Claude Code account. See <a href="05-claude-cli-runtime.html">Claude CLI runtime</a>.</p></blockquote>
+<h2 id="bootstrap">Bootstrap<a class="anchor" href="#bootstrap" aria-hidden="true">#</a></h2>
+<p><code>SuperAccountBootstrap</code> creates the first super administrator from configuration at startup:</p>
+<pre><code class="language-yaml">builder:
+  super-account-login-id: admin
+  super-account-password: temporary-password-for-first-login</code></pre>
+<p>After the first login is complete, replace that password in the configuration file with a separate, hard-to-guess value and re-check the file permissions (<code>chmod 600</code>). It exists only to create the first account.</p>
+<h2 id="the-two-gates">The two gates<a class="anchor" href="#the-two-gates" aria-hidden="true">#</a></h2>
+<p><code>FirstLoginFilter</code> runs immediately after <code>UsernamePasswordAuthenticationFilter</code>. It has an order, and the order matters.</p>
+<pre><code class="language-text">login succeeds
+  → gate 1: must change password?   → redirect to /password  (open: /login /logout /password)
+  → gate 2: Claude connected?       → redirect to /claude/connect
+                                       (open: the above + /claude/connect, /start, /skip)
+  → the application</code></pre>
+<ul>
+<li>Gate 1 must be passed before gate 2 is even reachable.
+</li>
+<li>Gate 2 can be deferred with <code>나중에 연결</code> (connect later), which sets a <strong>session</strong> flag (<code>claude.connection.skipped</code>). Login and ordinary browsing work; AI features do not.
+</li>
+<li><strong>Static resources bypass both gates.</strong> Without that exemption a gated user's CSS request is bounced too, and the password and connect screens render bare. The path list has a single source of truth — <code>StaticResources</code> — used by both the filter and <code>SecurityConfig</code>.
+</li></ul>
+<h2 id="filter-chain">Filter chain<a class="anchor" href="#filter-chain" aria-hidden="true">#</a></h2>
+<p><code>SecurityConfig</code> (<code>@EnableMethodSecurity</code>):</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Setting</th>
+<th>Value</th>
+</tr></thead><tbody>
+<tr><td>Password hashing</td><td><code>BCryptPasswordEncoder</code></td></tr>
+<tr><td>Public paths</td><td><code>/login</code>, <code>StaticResources.patterns()</code>, <code>DesignGuideArtifactController.URL_PATTERN</code>, and error dispatches</td></tr>
+<tr><td>Everything else</td><td><code>authenticated()</code></td></tr>
+<tr><td>Login</td><td>Form login at <code>/login</code>, <code>defaultSuccessUrl(&quot;/projects&quot;, true)</code> — <strong>always</strong> the project list, never the previously requested URL</td></tr>
+<tr><td>Logout</td><td>Back to <code>/login</code></td></tr>
+</tbody></table></div>
+<h3 id="frame-options-are-deliberately-narrow">Frame options are deliberately narrow<a class="anchor" href="#frame-options-are-deliberately-narrow" aria-hidden="true">#</a></h3>
+<p>Several screens embed <strong>our own</strong> files in an <code>iframe</code>: the solution-template detail, the FRD workbench preview, the screen comparison layer, the design frame, and the user-manual view. The default <code>DENY</code> blocks those, producing a <strong>blank preview panel while the server returns 200</strong> — a failure that leaves no trace in the logs.</p>
+<p>So the configuration disables the global <code>frameOptions</code> and adds two targeted header writers:</p>
+<ul>
+<li><code>SAMEORIGIN</code> for exactly the preview matchers (<code>SolutionPreviewController</code>, <code>FrdController.PREVIEW_URL_PATTERN</code>, <code>FrdController.HISTORY_PREVIEW_URL_PATTERN</code>, <code>FrdCanvasController.COMPARE_URL_PATTERN</code>, <code>DesignFrameController</code>, <code>UserManualController</code>)
+</li>
+<li><code>DENY</code> for everything else
+</li></ul>
+<blockquote><p>⛔ <strong>Do not widen this to "SAMEORIGIN everywhere".</strong> Keeping the loosened area narrowed to preview and comparison paths is the entire value of those two lines. Preventing the preview from running foreign scripts is a separate mechanism — <code>iframe sandbox</code> and CSP sandbox handle that.</p></blockquote>
+<h2 id="secret-sealing">Secret sealing<a class="anchor" href="#secret-sealing" aria-hidden="true">#</a></h2>
+<p><code>SecretSealer</code> encrypts anything that must not be readable in the database.</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Property</th>
+<th>Value</th>
+</tr></thead><tbody>
+<tr><td>Algorithm</td><td><code>AES/GCM/NoPadding</code></td></tr>
+<tr><td>Key</td><td><code>builder.secret-key-base64</code> — <strong>exactly 32 bytes</strong>, validated at startup; a wrong length refuses to boot</td></tr>
+<tr><td>Stored form</td><td><code>Sealed</code> — nonce + ciphertext</td></tr>
+</tbody></table></div>
+<p>What is sealed: <strong>per-account Claude credentials</strong>, <strong>GitLab tokens</strong>, the <strong>Flow API key</strong>.</p>
+<pre><code class="language-bash">openssl rand -base64 32</code></pre>
+<blockquote><p>⚠ <strong>Changing the key in production makes every previously sealed value unreadable.</strong> Back up the operational key alongside the data, and store it separately from ordinary artifact backups, with restricted access.</p></blockquote>
+<h2 id="temporary-passwords">Temporary passwords<a class="anchor" href="#temporary-passwords" aria-hidden="true">#</a></h2>
+<p><code>TemporaryPasswords</code> generates the 8-character value a super administrator hands to a new user. It can be reissued from the user-detail screen when a user loses it. A reissue sets <code>mustChangePassword</code>, so gate 1 catches them at the next login.</p>
+<p><code>AccountLoginRecorder</code> writes <code>last_login_at</code> (migration <code>V89</code>), which is what the account list shows as the dormancy signal.</p>
+<h2 id="what-never-goes-in-an-error-report">What never goes in an error report<a class="anchor" href="#what-never-goes-in-an-error-report" aria-hidden="true">#</a></h2>
+<p>When reporting a problem, send <strong>the time, the project name, the FRD number and the on-screen error text</strong>. Never passwords, API keys, GitLab tokens or Claude credentials.</p>
+<h2 id="related">Related<a class="anchor" href="#related" aria-hidden="true">#</a></h2>
+<ul>
+<li><a href="05-claude-cli-runtime.html">Claude CLI runtime</a> — how a user's own credentials are used to run AI
+</li>
+<li><a href="04-project-setup.html">Project setup</a> — GitLab tokens, per-project scope
+</li>
+<li><a href="21-operations.html">Install &amp; operations</a> — configuration file permissions, key rotation caveats
+</li></ul>
+    </article>
+    <footer class="doc-footer">
+      <a href="works-process/index.html">← Work processes</a>
+      <span class="doc-footer__spacer"></span>
+      <span class="pill">source: docs/adp/03-accounts-security.md</span>
+      <a href="04-project-setup.html">Project setup →</a>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

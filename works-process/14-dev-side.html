@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On the dev side · Work processes · ADP Builder</title>
+<meta name="description" content="What happens on the far side of the POST: what DEVELOPER validates, what appears in their inbox, what they open, what they must return, and in what shape.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237657ac'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='15' font-weight='bold' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/adp.css">
+<link rel="stylesheet" href="assets/flow.css">
+<script src="../assets/adp.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar__brand" href="../index.html"><span class="topbar__mark">ADP</span><span>Builder docs</span></a>
+  <span class="topbar__crumb">Work processes · On the dev side</span>
+  <span class="topbar__spacer"></span>
+  <button class="topbar__btn nav-toggle" data-nav-toggle aria-expanded="false">Menu</button>
+  <button class="topbar__btn" data-theme-toggle title="Switch light / dark">Theme</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" aria-label="Work processes">
+    <input class="sidebar__search" data-nav-search type="search" placeholder="Filter pages…" aria-label="Filter pages">
+    <div class="sidebar__group">
+      <p class="sidebar__label">Work processes</p>
+      <ul class="sidebar__list">
+        <li><a href="index.html"><span>Process map</span></a></li>
+        <li><a href="01-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="02-git-worktree.html"><span>Git &amp; worktrees</span></a></li>
+        <li><a href="05-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="06-frd-workbench.html"><span>FRD workbench</span></a></li>
+        <li><a href="07-frd-completion.html"><span>FRD completion</span></a></li>
+        <li><a href="08-srt-fast-track.html"><span>SRT fast track</span></a></li>
+        <li><a href="12-delivery-channel.html"><span>Delivery channel</span></a></li>
+        <li><a href="03-send-to-dev.html"><span>Sending to dev</span></a></li>
+        <li><a href="14-dev-side.html" aria-current="page"><span>On the dev side</span></a></li>
+        <li><a href="04-dev-result.html"><span>Development result</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Underneath</p>
+      <ul class="sidebar__list">
+        <li><a href="09-ai-run.html"><span>AI runs</span></a></li>
+        <li><a href="10-green-zone.html"><span>Generated artifacts</span></a></li>
+        <li><a href="13-data-root.html"><span>The data root</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Trying it out</p>
+      <ul class="sidebar__list">
+        <li><a href="11-frd-test-samples.html"><span>FRD test samples</span></a></li>
+      </ul>
+    </div>
+    <div class="sidebar__group">
+      <p class="sidebar__label">Reference docs</p>
+      <ul class="sidebar__list">
+        <li><a href="../index.html"><span>Full documentation</span></a></li>
+        <li><a href="../04-project-setup.html"><span>Project setup</span></a></li>
+        <li><a href="../git.html"><span>Git layer</span></a></li>
+        <li><a href="../06-frd-wizard.html"><span>FRD wizard</span></a></li>
+        <li><a href="../10-dev-request.html"><span>Development request</span></a></li>
+        <li><a href="../23-glossary.html"><span>Glossary</span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="main">
+    <article class="doc wp">
+      <p class="doc__eyebrow">Process 9</p>
+      <h1>On the dev side — what happens when it lands</h1>
+      <p class="wp-lede">This is the far side of one HTTP call. Builder does not own that codebase, so everything on this page is one of two things: <b>what Builder sends and will accept back</b>, which is ours, or <b>measured behaviour of DEVELOPER</b>, which is theirs and dated. Where the two disagree, the code on our side and the returned archive are what decide.</p>
+
+      <h2>The intake call, from their side of the wire</h2>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">A multipart POST arrives with eleven fields and a ZIP</div><div class="flow__cmd">POST {base}/intake · no auth header · groupId is the connection identity</div></div>
+          <div class="flow__aside">There is no token, so an unknown group is the one thing that can reject the caller outright.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">They validate before accepting</div><div class="flow__cmd">title ≤ 500 · body required · ZIP must begin with PK · file ≤ 20 MB, request ≤ 25 MB</div></div>
+          <div class="flow__aside flow__aside--fail">400 input error · 404 unknown group · 409 the delivery key belongs to another group · 413 too large — each as <code>{"message":"…"}</code>.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">A new work request is created, or the existing one is returned</div><div class="flow__cmd">201 new · 200 an active request with that delivery key already exists</div></div>
+          <div class="flow__aside flow__aside--ok">Both answer <code>{"deliveryKey":"DRK-0000005"}</code> — the echo Builder needs before it will call the send complete.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">04</div>
+          <div><div class="flow__title">Their admin account gets a notification</div><div class="flow__cmd">「[DR-005] {title} 접수」 → /requests/{id}</div></div>
+          <div class="flow__aside">Only on 201. A resend answers 200 and raises nothing, so nobody is pinged twice for the same work.</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>What they check</th></tr></thead>
+          <tbody>
+            <tr><td><code>title</code></td><td>Required, 500 characters or fewer — and it carries <b>no</b> DR number, because the number travels separately</td></tr>
+            <tr><td><code>body</code></td><td>Required. Structured JSON, UTF-8</td></tr>
+            <tr><td><code>file</code></td><td>Required. First two bytes <code>PK</code>; 20 MB per file, 25 MB per request</td></tr>
+            <tr><td><code>requestNumber</code> · <code>workNumber</code></td><td>Required, 20 characters or fewer — <code>DR-005</code>, and <code>FRD-002</code> or <code>SRT-003</code></td></tr>
+            <tr><td><code>workType</code></td><td>Required: <code>FRD</code> or <code>SRT</code></td></tr>
+            <tr><td><code>deliveryKey</code></td><td>Required, matching <code>DRK-[0-9]{7}</code></td></tr>
+            <tr><td><code>groupId</code></td><td>Required. An unknown group is a 404</td></tr>
+            <tr><td>the two dates · <code>plannerName</code></td><td>Optional; empty strings allowed. The name feeds their inbox's planner column and filter</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>What they actually look at</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">The inbox row</p>
+          <p>The work request appears in their 작업 수신함, identified by <b>delivery key</b> rather than DR number — DR numbers restart at 1 in every project, so they are not unique over there. The planner's name is a column and a filter, which is why Builder sends it even though a development request has no owner column of its own.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">The detail view — from the JSON, not the markdown</p>
+          <p><code>body</code> is the same material our detail screen draws, laid out in the same sections: basic info, the original request, scope, per-screen changes, out-of-screen implementation, items to confirm, acceptance criteria, the file tree, and what must come back. It is JSON so they render the same view instead of re-interpreting prose.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">The ZIP, for everything visual</p>
+          <p><code>dev-request.md</code> is the same content as prose; <code>manifest.json</code> lists every file with size and sha256; <code>screens/&lt;system&gt;/&lt;screenId&gt;/</code> holds <code>as-is</code> and <code>to-be</code> as HTML and MD side by side, plus <code>changes.md</code>. The asset folder is copied whole, so opening a to-be file renders with styles and no rewriting.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">Why as-is travels too</p>
+          <p>The contract is “from this, to that”. Sending only to-be would make them diff it themselves and leave nothing to settle a later argument about what the screen used to do.</p>
+        </div>
+      </div>
+
+      <h2>What they must send back</h2>
+      <p>Section 11 of <code>dev-request.md</code> states it plainly: fill in <code>expected-back.md</code> with the actual implementation result, keep to the shapes <code>manifest.json</code> declares, and report anything that was not in the plan as a separate review item there. The tree it prints is the reply's shape:</p>
+      <div class="tree">DR-007/
+├─ manifest.json                     <i>the machine contract — mirrors what was sent</i>
+├─ expected-back.md                  <i>the same file, filled in with what was really done</i>
+├─ artifacts/
+│  ├─ unit-test.md                   <i>when the request had out-of-screen items</i>
+│  └─ integration-test.md            <i>when the request had acceptance criteria</i>
+└─ changes/
+   ├─ summary.json                   <i>what changed</i>
+   └─ files/&lt;repo&gt;/&lt;original path in that repo&gt;</div>
+      <div class="branch">
+        <div class="branch__t">Only four things are allowed in the reply archive</div>
+        <p><code>manifest.json</code>, <code>expected-back.md</code>, <code>changes/**</code> and <code>artifacts/**</code>. Anything else is rejected on arrival. The screen axis and the domain axis were <b>removed from the return contract</b> in September 2026: what development returns is “what changed” and “the verdict on the acceptance criteria”, and the artifacts for the planning repository are built by the side that knows that repository.</p>
+      </div>
+      <div class="branch">
+        <div class="branch__t">The published API contract still shows the removed keys</div>
+        <p><code>docs/developer-api-contract.md</code>'s <code>body</code> example still lists <code>expectedBack.screens[]</code>, <code>domains[]</code> and <code>domainPayload</code>. Those are dead text from before the replacement — the code emits <code>backendChanges[]</code> and <code>testArtifacts[]</code> only, and the class carrying them says in as many words that leaving the old wording around had already made both repositories read the old contract as current. <b>Trust the code and the validator.</b></p>
+      </div>
+
+      <h3>Tests come back as documents, never as code</h3>
+      <p>Builder does not know the operational source system, so it cannot read development's code. Both test kinds arrive as markdown at fixed paths, and <b>Builder writes the questions first</b> — TC number, condition, action, expected result go out inside <code>expected-back.md</code>. Development fills in only the actual result, the verdict and the evidence, which is what lets the screens count returned results per test case.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rule</th><th>What the validator requires</th></tr></thead>
+          <tbody>
+            <tr><td>Contract match</td><td>The manifest's test-return contract must equal the one that was sent — kinds present, no duplicates, same paths and counts</td></tr>
+            <tr><td>Required files</td><td>A required artifact must exist and must not be empty</td></tr>
+            <tr><td>Target headings</td><td><code>### N. &lt;target&gt;</code></td></tr>
+            <tr><td>Test-case headings</td><td><code>#### TC-NNN …</code> — three digits</td></tr>
+            <tr><td>Verdicts</td><td>Exactly one of 성공 · 실패 · 미수행</td></tr>
+            <tr><td>Placeholders</td><td>A field still holding <code>&lt;something&gt;</code>, or left blank, is rejected — an unfilled template is not a result</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>This applies to <code>specVersion</code> 3 packages. A spec-3 result with no return contract to compare against is refused outright, and spec-2 packages had no test contract at all, so they are read as an empty list rather than as a failure.</p>
+
+      <h2>How Builder learns any of this happened</h2>
+      <div class="note">
+        <div class="note__t">They never call us</div>
+        <p>There is no inbound API into Builder. Builder polls status and results itself, every 60 seconds by default, keyed by delivery key — and each request keeps polling the connection version it was actually sent with.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Their status</th><th>Meaning on their side</th><th>What Builder records</th></tr></thead>
+          <tbody>
+            <tr><td><code>INTAKE</code></td><td>Received</td><td>개발 접수</td></tr>
+            <tr><td><code>WAITING</code> · <code>DEVELOPING</code> · <code>DEVELOPED</code> · <code>REVIEWING</code></td><td>Queued, in development, developed, in review</td><td>개발 진행 중 — all four fold to one</td></tr>
+            <tr><td><code>COMPLETED</code></td><td>Review passed, and their 완료 처리 uploaded the result ZIP</td><td>개발 완료</td></tr>
+            <tr><td><code>REJECTED</code></td><td>Sent back, with a reason of 1–4,000 characters</td><td>개발 반려, reason shown on the detail screen</td></tr>
+            <tr><td><code>WITHDRAWN</code></td><td>Builder withdrew it</td><td><b>Nothing</b> — the state is left alone and the poll is recorded as failed</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>An unknown code changes nothing and is logged as a failed cycle. A status that moves backwards, or changes after completion or rejection, is refused the same way: the existing state is kept and an error recorded. As measured, only <code>INTAKE</code> and <code>WITHDRAWN</code> are emitted today — the other six are names both sides agreed on for when their transitions are implemented.</p>
+
+      <h3>Picking up the result</h3>
+      <div class="flow">
+        <div class="flow__step">
+          <div class="flow__num">01</div>
+          <div><div class="flow__title">Ask for the list</div><div class="flow__cmd">GET {base}/intake/{deliveryKey}/results → [{id, body, zip}], newest first, [] when none</div></div>
+          <div class="flow__aside">Builder reads <code>id</code> and <code>zip</code> only; <code>body</code> is for people. An item missing either is skipped.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">02</div>
+          <div><div class="flow__title">Only the newest batch is applied</div><div class="flow__cmd">id is monotonic · a re-delivery is a NEW item</div></div>
+          <div class="flow__aside flow__aside--fail">Changing the contents under an existing <code>id</code> means Builder treats it as already applied and skips it. Same batch with a different ZIP is recorded as an error.</div>
+        </div>
+        <div class="flow__arrow" aria-hidden="true">↓</div>
+        <div class="flow__step">
+          <div class="flow__num">03</div>
+          <div><div class="flow__title">Download, then validate before extracting</div><div class="flow__cmd">≤ 2,000 entries · ≤ 10 MB per file · ≤ 100 MB total · attachment host must be the registered one</div></div>
+          <div class="flow__aside">The manifest's <code>devRequestId</code> accepts the label or the internal id — development sees <code>DR-007</code>, so demanding the id would reject correct replies.</div>
+        </div>
+      </div>
+
+      <h2>Two things the other side cannot do for us</h2>
+      <div class="grid2">
+        <div class="panel">
+          <p class="panel__t">They cannot un-send a withdrawal</p>
+          <p>Withdrawal is accepted only while the request is still at <code>INTAKE</code>, checked atomically on their side: 200 with <code>status: WITHDRAWN</code>, 404 for an unknown key or a mismatched number, 409 once development has moved past intake. Builder treats anything other than 200 as “not confirmed” and keeps the request where it was.</p>
+        </div>
+        <div class="panel">
+          <p class="panel__t">They cannot approve a merge</p>
+          <p><code>COMPLETED</code> says the work is finished over there. It says nothing about whether the planning repository should change — a planner must press 개발 결과 반영 for that. See <a href="04-dev-result.html">Development result</a>.</p>
+        </div>
+      </div>
+
+      <h2>Where this lives in the code</h2>
+      <div class="sources">
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperClient.java"><span class="pill">DeveloperClient</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DeveloperIntakeBody.java"><span class="pill">DeveloperIntakeBody</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevRequestExpectedBack.java"><span class="pill">DevRequestExpectedBack</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevRequestDocumentWriter.java"><span class="pill">DevRequestDocumentWriter</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevResultArchiveValidator.java"><span class="pill">DevResultArchiveValidator</span></a>
+        <a href="../../../src/main/java/com/bizplay/builder/devrequest/DevTestResultValidator.java"><span class="pill">DevTestResultValidator</span></a>
+      </div>
+      <p>Canonical: <code>docs/developer-api-contract.md</code> for the wire format (with the caveat above), <code>docs/superpowers/specs/2026-09-11-dev-result-incremental-extraction-design.md</code> for the return contract. Their own documentation lives in the DEVELOPER repository, which this one deliberately does not reference by section.</p>
+
+      <footer class="doc-footer">
+        <span class="pill">hand-written · not generated</span>
+        <span class="doc-footer__spacer"></span>
+        <a href="03-send-to-dev.html">← Sending to dev</a>
+        <a href="04-dev-result.html">Development result →</a>
+      </footer>
+    </article>
+  </main>
+</div>
+</body>
+</html>
